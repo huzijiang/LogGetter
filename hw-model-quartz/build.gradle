@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':hw-model-common')
+    compile group: 'org.apache.shiro', name: 'shiro-core', version:'1.4.0'
+    compile(group: 'org.quartz-scheduler', name: 'quartz', version:'2.3.0') {
+        exclude(module: 'c3p0')
+    }
+}
+description = '定时器'

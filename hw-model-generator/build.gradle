@@ -1,0 +1,6 @@
+dependencies {
+    compile project(':hw-model-common')
+    compile group: 'org.apache.shiro', name: 'shiro-core', version:'1.4.0'
+    compile group: 'org.apache.velocity', name: 'velocity', version:'1.7'
+}
+description = '代码生成'

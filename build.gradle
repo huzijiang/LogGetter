@@ -1,0 +1,50 @@
+buildscript {
+
+  ext {
+    SpringBootVersionn = "2.1.1.RELEASE"
+  }
+
+  repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${SpringBootVersionn}")
+  }
+}
+
+
+subprojects {
+  
+  apply plugin: 'java'
+
+  apply plugin: 'maven'
+
+  apply plugin: 'org.springframework.boot'
+
+  // 依赖 和  buildscript 中 classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE") 配合使用呢
+  apply plugin: 'io.spring.dependency-management'
+
+  group = 'com.suixingpay.hw'
+  version = '1.0.0'
+  description = '随行付 凡云 平台   后台管理系统 '
+
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+
+  repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+  }
+
+  //这里一定得要。在多模块下，不然编译失败，因为不会把信赖模块给打包。
+  jar {
+    enabled = true
+  }
+  
+  dependencies {
+    // 是配置文件有提示
+    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+  }
+}

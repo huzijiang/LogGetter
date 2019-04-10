@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':hw-model-common')
+    compile(group: 'mysql', name: 'mysql-connector-java', version:'8.0.13') {
+        exclude(module: 'protobuf-java')
+    }
+}
+
+description = '管理系统代码'
