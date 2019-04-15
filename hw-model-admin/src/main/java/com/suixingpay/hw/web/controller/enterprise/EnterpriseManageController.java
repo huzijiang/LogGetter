@@ -10,6 +10,7 @@ import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.system.domain.Enterprise;
 import com.suixingpay.hw.system.domain.EnterpriseUser;
+import com.suixingpay.hw.system.domain.SysUser;
 import com.suixingpay.hw.system.service.IEnterpriseService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -270,13 +271,5 @@ public class EnterpriseManageController extends BaseController
             return toAjax(enterpriseService.deleteEnterpriseByEnterpriseId(id));
     }
 
-    /**
-     * 校验用户名
-     */
-    @PostMapping("/checkEnterpriseIdUnique")
-    @ResponseBody
-    public int checkEnterpriseIdUnique(int enterpriseId)
-    {
-        return enterpriseService.checkEnterpriseIdUnique(enterpriseId);
-    }
+
 }

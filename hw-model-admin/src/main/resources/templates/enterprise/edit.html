@@ -18,9 +18,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业地址：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业所在地：</label>
                         <div class="col-sm-8">
-                            <input name="address" autocomplete="off" placeholder="请输入企业地址" class="form-control" type="text" maxlength="30" required>
+                            <input name="address" autocomplete="off" placeholder="请输入企业所在地" class="form-control" type="text" maxlength="30" required>
                         </div>
                     </div>
                 </div>
@@ -28,16 +28,16 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业身份证号：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>社会统一信用代码：</label>
                         <div class="col-sm-8">
-                            <input name="uscd" autocomplete="off" placeholder="请输入企业身份证号" class="form-control" type="text" maxlength="11" required>
+                            <input name="uscd" autocomplete="off" placeholder="请输入社会统一信用代码" class="form-control" type="text" maxlength="11">
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="col-sm-8">
-                            头像:<input name="logo"  onclick="submitHandlerlogo()" type="file" id="image">
+                            企业logo:<input name="logo"  onclick="submitHandlerlogo()" type="file" id="image">
                         </div>
                     </div>
                 </div>
@@ -55,8 +55,24 @@
 	<script>
         var prefix = ctx + "enterprise";
         var enterpriseId = $("#enterpriseId").val();
+        $("#form-enterprise-edit").validate({
+            onkeyup: false,
+            rules:{
+                name:{
+                    minlength: 2,
+                    maxlength: 80
+                },
+                address:{
+                    minlength: 2,
+                    maxlength: 80
+                }
+            },
+            focusCleanup: true
+        });
         
         function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-enterprise-edit").serializeArray();
             $("#enterpriseId").val(enterpriseId);
             var formElement = document.querySelector("#form-enterprise-edit");
             var formData = new FormData(formElement);
@@ -68,11 +84,12 @@
                 contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
                 success: function(result){
                     if (result.code == web_status.SUCCESS) {
-                        window.location.href = prefix + "/successful" + "?enterpriseId="+result.enterpriseId;
+                        window.location.href = prefix + "/enterprise";
                     }
                 }
             });
             return false;
+            }
 	    }
         function submitHandlerlogo() {
             var formElement = document.querySelector("#form-enterprise-edit");

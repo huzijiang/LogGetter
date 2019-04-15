@@ -12,7 +12,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>姓名：</label>
                         <div class="col-sm-8">
-                            <input name="name" autocomplete="off" placeholder="请输入姓名" class="form-control" type="text" maxlength="30" required>
+                            <input name="name" autocomplete="off" placeholder="请输入姓名" class="form-control" type="text" maxlength="10" required>
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>账号：</label>
                         <div class="col-sm-8">
-                            <input name="account" autocomplete="off" placeholder="请输入账号" class="form-control" type="text" maxlength="30" required>
+                            <input name="account" autocomplete="off" placeholder="请输入账号" class="form-control" type="text" maxlength="20" required>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>密码：</label>
                         <div class="col-sm-8">
-                            <input name="password" autocomplete="off" placeholder="请输入密码" class="form-control" type="text" maxlength="11" required>
+                            <input name="password" autocomplete="off" placeholder="请输入密码" class="form-control" type="text" maxlength="40" required>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>手机号：</label>
                         <div class="col-sm-8">
-                            <input name="phone" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入手机号" required>
+                            <input name="phone" autocomplete="off" class="form-control " type="text" maxlength="11" placeholder="请输入手机号">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>邮箱：</label>
                         <div class="col-sm-8">
-                            <input name="email" autocomplete="off" placeholder="请输入邮箱" class="form-control" type="text" maxlength="11" required>
+                            <input name="email" autocomplete="off" placeholder="请输入邮箱" class="form-control" type="text" maxlength="32">
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>工号：</label>
                         <div class="col-sm-8">
-                            <input name="jobNumber" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入工号" required>
+                            <input name="jobNumber" autocomplete="off" class="form-control " type="text" maxlength="20" placeholder="请输入工号">
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>微信号：</label>
                         <div class="col-sm-8">
-                            <input name="wxOpenId" autocomplete="off" placeholder="请输入微信号" class="form-control" type="text" maxlength="11" required>
+                            <input name="wxOpenId" autocomplete="off" placeholder="请输入微信号" class="form-control" type="text" maxlength="40">
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>qq号：</label>
                         <div class="col-sm-8">
-                            <input name="qicq" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入qq号" required>
+                            <input name="qicq" autocomplete="off" class="form-control " type="text" maxlength="15" placeholder="请输入qq号">
                         </div>
                     </div>
                 </div>
@@ -101,27 +101,77 @@
     <script th:src="@{/ajax/libs/select/select2.js}"></script>
 	<script>
 	    var prefix = ctx + "enterprise";
+        $("#form-enterprise-addUser").validate({
+            onkeyup: false,
+            rules:{
+                name:{
+                    minlength: 2,
+                    maxlength: 10
+                },
+                password:{
+                    minlength: 6,
+                    maxlength: 40
+                },
+                account:{
+                    email:true,
+                    remote: {
+                        url: prefix + "/checkEmailUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            name: function () {
+                                return $.common.trim($("#account").val());
+                            }
+                        },
+                        dataFilter: function (data, type) {
+                            return $.validate.unique(data);
+                        }
+                    }
+                },
+                email:{
+                    email:true
+                },
+                phone:{
+                    isPhone:true
+                }
+            },
+            messages: {
+                "account": {
+                    remote: "用户已经存在"
+                },
+                "email": {
+                    remote: "Email已经存在"
+                },
+                "phone":{
+                    remote: "手机号码已经存在"
+                }
+            },
+            focusCleanup: true
+        });
 
         var urlParam = decodeURI(window.location.href.split("?")[1]);
         var enterpriseId = urlParam.split("enterpriseId=")[1];
 
         function submitHandler() {
-            $("#enterpriseId").val(enterpriseId);
-            var formElement = document.querySelector("#form-enterprise-addUser");
-            var formData = new FormData(formElement);
-            $.ajax({
-                url: ctx + "enterprise/addUser",
-                data: formData,
-                type: 'POST',
-                processData: false,  // 告诉jQuery不要去处理发送的数据
-                contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
-                success: function(result){
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href = prefix + "/enterprise";
+            if ($.validate.form()) {
+                var data = $("#form-enterprise-addUser").serializeArray();
+                $("#enterpriseId").val(enterpriseId);
+                var formElement = document.querySelector("#form-enterprise-addUser");
+                var formData = new FormData(formElement);
+                $.ajax({
+                    url: ctx + "enterprise/addUser",
+                    data: formData,
+                    type: 'POST',
+                    processData: false,  // 告诉jQuery不要去处理发送的数据
+                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                    success: function (result) {
+                        if (result.code == web_status.SUCCESS) {
+                            window.location.href = prefix + "/enterprise";
+                        }
                     }
-                }
-            });
-            return false;
+                });
+                return false;
+            }
 	    }
         function submitHandlerlogo() {
             var formElement = document.querySelector("#form-enterprise-addUser");
