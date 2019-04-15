@@ -26,7 +26,7 @@
 								企业管理员编号：<input type="text" name="admin"/>
 							</li>
 							<li>
-								<button class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</button>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 							</li>
 						</ul>
@@ -60,12 +60,12 @@
 	
 	<div th:include="include :: footer"></div>
 	<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
-	<script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>
+	<!--<script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>-->
 	<script th:inline="javascript">
 		var editFlag = [[${@permission.hasPermi('enterprise:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('enterprise:remove')}]];
 		// var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
-		var datas = [[${@dict.getType('sys_normal_disable')}]];
+		// var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "enterprise";
 
 		$(function() {
@@ -151,16 +151,16 @@
 
 	</script>
 </body>
-<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">
-	<div class="col-xs-offset-1">
-		<input type="file" id="file" name="file"/>
-		<div class="mt10 pt5">
-			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
-			 &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
-		</div>
-		<font color="red" class="pull-left mt10">
-			提示：仅允许导入“xls”或“xlsx”格式文件！
-		</font>
-	</div>
-</form>
+<!--<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">-->
+	<!--<div class="col-xs-offset-1">-->
+		<!--<input type="file" id="file" name="file"/>-->
+		<!--<div class="mt10 pt5">-->
+			<!--<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
+			 <!--&nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
+		<!--</div>-->
+		<!--<font color="red" class="pull-left mt10">-->
+			<!--提示：仅允许导入“xls”或“xlsx”格式文件！-->
+		<!--</font>-->
+	<!--</div>-->
+<!--</form>-->
 </html>
