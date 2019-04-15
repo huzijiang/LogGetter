@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body>
+    <div class="form-content">
+        <form id="form-enterprise-addUser" class="form-horizontal"   enctype="multipart/form-data">
+            <input type="hidden" id="enterpriseId" name="enterpriseId">
+            <h4 class="form-header h4">管理员信息</h4>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="name" autocomplete="off" placeholder="请输入姓名" class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>账号：</label>
+                        <div class="col-sm-8">
+                            <input name="account" autocomplete="off" placeholder="请输入账号" class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>密码：</label>
+                        <div class="col-sm-8">
+                            <input name="password" autocomplete="off" placeholder="请输入密码" class="form-control" type="text" maxlength="11" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>手机号：</label>
+                        <div class="col-sm-8">
+                            <input name="phone" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入手机号" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>邮箱：</label>
+                        <div class="col-sm-8">
+                            <input name="email" autocomplete="off" placeholder="请输入邮箱" class="form-control" type="text" maxlength="11" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>工号：</label>
+                        <div class="col-sm-8">
+                            <input name="jobNumber" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入工号" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>微信号：</label>
+                        <div class="col-sm-8">
+                            <input name="wxOpenId" autocomplete="off" placeholder="请输入微信号" class="form-control" type="text" maxlength="11" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>qq号：</label>
+                        <div class="col-sm-8">
+                            <input name="qicq" autocomplete="off" class="form-control " type="text" maxlength="50" placeholder="请输入qq号" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            微信头像:<input name="wxChatHead" onclick="submitHandlerlogo()" type="file" id="image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+     <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+     </div>
+	 <div th:include="include::footer"></div>
+
+    <script th:src="@{/ajax/libs/select/select2.js}"></script>
+	<script>
+	    var prefix = ctx + "enterprise";
+
+        var urlParam = decodeURI(window.location.href.split("?")[1]);
+        var enterpriseId = urlParam.split("enterpriseId=")[1];
+
+        function submitHandler() {
+            $("#enterpriseId").val(enterpriseId);
+            var formElement = document.querySelector("#form-enterprise-addUser");
+            var formData = new FormData(formElement);
+            $.ajax({
+                url: ctx + "enterprise/addUser",
+                data: formData,
+                type: 'POST',
+                processData: false,  // 告诉jQuery不要去处理发送的数据
+                contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                success: function(result){
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href = prefix + "/enterprise";
+                    }
+                }
+            });
+            return false;
+	    }
+        function submitHandlerlogo() {
+            var formElement = document.querySelector("#form-enterprise-addUser");
+            var formData = new FormData(formElement);
+            console.log(formData)
+            $.ajax({
+                url: ctx + "enterprise/addwxChatHead",
+                data: formData,
+                type: 'POST',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (result) {
+                    console.log(result);
+                }
+            })
+        }
+
+    </script>
+</body>
+</html>

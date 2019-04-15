@@ -151,12 +151,14 @@
 			},
             // 搜索-默认第一个form
             search: function(formId) {
+            	debugger;
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
     		    var params = $("#" + $.table._option.id).bootstrapTable('getOptions');
     		    params.queryParams = function(params) {
                     var search = {};
                     $.each($("#" + currentId).serializeArray(), function(i, field) {
                         search[field.name] = field.value;
+                        alert("dada"+field.value)
                     });
                     search.pageSize = params.limit;
                     search.pageNum = params.offset / params.limit + 1;
@@ -643,7 +645,7 @@
             },
             // 删除信息
             remove: function(id) {
-            	$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+        		$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
                     var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
                     if($.table._option.type == table_type.bootstrapTreeTable) {
                     	$.operate.get(url);
@@ -653,6 +655,19 @@
 	                }
             	});
             	
+            },
+            // 删除信息
+            removeenterprise: function(id) {
+                $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+                    var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+                    if($.table._option.type == table_type.bootstrapTreeTable) {
+                        $.operate.get(url);
+                    } else {
+                        var data = { "id": id };
+                        $.operate.submit(url, "post", "json", data);
+                    }
+                });
+
             },
             // 批量删除信息
             removeAll: function() {
@@ -667,6 +682,20 @@
         			$.operate.submit(url, "post", "json", data);
         		});
             },
+            // 批量删除信息
+            removeAllenterprise: function() {
+                var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                if (rows.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
+                    var url = $.table._option.removeUrl;
+                    var data = { "id": rows.join() };
+                    $.operate.submit(url, "post", "json", data);
+                });
+            },
+
             // 清空信息
             clean: function() {
             	$.modal.confirm("确定清空所有" + $.table._option.modalName + "吗？", function() {
@@ -753,22 +782,25 @@
         	    };
         	    $.ajax(config)
             },
+
             // 保存选项卡信息
             saveTab: function(url, data) {
-            	var config = {
-        	        url: url,
-        	        type: "post",
-        	        dataType: "json",
-        	        data: data,
-        	        beforeSend: function () {
-        	        	$.modal.loading("正在处理中，请稍后...");
-        	        },
-        	        success: function(result) {
-        	        	$.operate.successTabCallback(result);
-        	        }
-        	    };
-        	    $.ajax(config)
+                var config = {
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                    },
+                    success: function(result) {
+                        console.log(result);
+                        $.operate.successTabCallback(result);
+                    }
+                };
+                $.ajax(config)
             },
+
             // 保存结果弹出msg刷新table表格
             ajaxSuccess: function (result) {
             	if (result.code == web_status.SUCCESS && $.table._option.type == table_type.bootstrapTable) {
@@ -793,6 +825,7 @@
             },
             // 成功回调执行事件（父窗体静默更新）
             successCallback: function(result) {
+
                 if (result.code == web_status.SUCCESS) {
                 	var parent = window.parent;
                     if (parent.$.table._option.type == table_type.bootstrapTable) {
@@ -831,8 +864,10 @@
                     $.modal.alertError(result.msg);
                 }
                 $.modal.closeLoading();
-            }
+            },
         },
+
+
         // 校验封装处理
         validate: {
         	// 判断返回标识是否唯一 false 不存在 true 存在
