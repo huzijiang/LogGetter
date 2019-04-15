@@ -46,5 +46,6 @@ subprojects {
     // 是配置文件有提示
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    compileOnly('org.projectlombok:lombok')
   }
 }

@@ -674,6 +674,27 @@
 	            	$.operate.submit(url, "post", "json", "");
             	});
             },
+
+			// 报告分析：页面展示
+			analysisTab: function(id) {
+				$.modal.openTab("分析" + $.table._option.modalName, $.operate.analysisUrl(id));
+			},
+			// 报告分析：跳转的地址处理
+			analysisUrl: function(id) {
+				var url = "/404.html";
+				if ($.common.isNotEmpty(id)) {
+					url = $.table._option.analysisUrl.replace("{id}", id);
+				} else {
+					var id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+					if (id.length == 0) {
+						$.modal.alertWarning("请至少选择一条记录");
+						return;
+					}
+					url = $.table._option.analysisUrl.replace("{id}", id);
+				}
+				return url;
+			},
+
             // 添加信息
             add: function(id) {
                 $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id));
