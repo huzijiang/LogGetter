@@ -158,7 +158,6 @@
                     var search = {};
                     $.each($("#" + currentId).serializeArray(), function(i, field) {
                         search[field.name] = field.value;
-                        alert("dada"+field.value)
                     });
                     search.pageSize = params.limit;
                     search.pageNum = params.offset / params.limit + 1;
