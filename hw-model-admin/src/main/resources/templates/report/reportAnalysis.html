@@ -5,52 +5,37 @@
 <head th:include="include :: header"></head>
 <link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
 <style>
-    .echarts-container{
-        height:350px;
-    }
     .echarts-row{
         margin: 10px;height:330px;background: #fff;border-radius: 6px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);
     }
     .echarts-col{
         padding-top: 10px;padding-left: 10px;
     }
+    .baseInfo-row{
+        margin: 10px;height:330px;background: #fff;border-radius: 6px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);
+    }
 </style>
 <body class="gray-bg">
-
-<div class="container ui-layout-center echarts-container">
-<!--    <div class="row echarts-row">
-        <div class="col-md-6 echarts-col">
-            <div class="echarts-panel">
-                &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;
-                <div id="echarts1" style="width: 400px;height:300px;margin: 0 auto;"></div>
-                <textarea rows="3" style="min-width: 90%" placeholder="填入分析内容..."></textarea>
-            </div>
-        </div>
-        <div class="col-md-6 echarts-col">
-            <div class="echarts-panel">
-                &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;
-                <div id="echarts2" style="width: 400px;height:300px;margin: 0 auto;"></div>
-                <textarea rows="3" style="min-width: 90%" placeholder="填入分析内容..."></textarea>
-            </div>
+<div class="container ui-layout-center">
+    <div class="row echarts-row">
+        <div class="col-md-12 echarts-col">
+            <h2><p class="enterpriseNameArea"></p></h2>
+            <hr>
+            <p class="reportDescContentArea"></p>
         </div>
     </div>
-    <div class="row echarts-row">
-        <div class="col-md-6 echarts-col">
-            <div class="echarts-panel">
-                &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;
-                <div id="echarts3" style="width: 400px;height:300px;margin: 0 auto;"></div>
-                <textarea rows="3" style="min-width: 90%" placeholder="填入分析内容..."></textarea>
-            </div>
+    <div class="echarts-container">
+        <div id="tipDiv" style="display: none;text-align: center;">
+            <h3>暂时任何没有指标！</h3>
         </div>
-        <div class="col-md-6 echarts-col">
-            <div class="echarts-panel">
-                &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;
-                <div id="echarts4" style="width: 400px;height:300px;margin: 0 auto;"></div>
-                <textarea rows="3" style="min-width: 90%" placeholder="填入分析内容..."></textarea>
-            </div>
-        </div>
-    </div>-->
+    </div>
+
+    <div style="float: bottom;margin-bottom: 10px;text-align: center;">
+        <button class="btn btn-success" onclick="reportPublish()" th:style="${reportTargetDataList[0].enterpriseTargetDataId == null} ? 'display:none;'">发布</button>
+        <button class="btn btn-danger" onclick="closeItem()">取消</button>
+    </div>
 </div>
+
 
 <div th:include="include :: footer"></div>
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
@@ -58,31 +43,49 @@
 <script th:src="@{/saas/js/echarts.min.js}"></script>
 <script th:inline="javascript">
 
+
     $(function() {
         var panehHidden = false;
         if ($(this).width() < 769) {
             panehHidden = true;
         }
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
-        generateTargetPanel();
-        loopShowTargetData();
+
+        var reportTargetDataList = [[${reportTargetDataList}]];
+        console.log("reportTargetDataList: ", reportTargetDataList);
+        initData(reportTargetDataList);
+        if (reportTargetDataList[0].enterpriseTargetDataId != null) {
+            generateTargetPanel(reportTargetDataList);
+            loopShowTargetData(reportTargetDataList);
+        }else {
+            $("#tipDiv").css("display","block");
+        }
     });
+
+    /**
+     * 初始化数据
+     */
+    function initData(reportTargetDataList) {
+        var enterpriseName = reportTargetDataList[0].enterpriseName;
+        var reportDescContent = reportTargetDataList[0].reportDescContent;
+        $(".enterpriseNameArea").html(enterpriseName == null ? "某公司":enterpriseName + "-报告概述：");
+        $(".reportDescContentArea").html(reportDescContent == null ? "无":reportDescContent);
+
+    }
 
     /**
      * 生成每个指标所在的面板区域
      */
-    function generateTargetPanel() {
+    function generateTargetPanel(reportTargetDataList) {
         var echartsContainer = document.getElementsByClassName('echarts-container')[0];
 
-        for (var count = 0; count < 8; count++) {
+        for (var count = 0; count < reportTargetDataList.length; count++) {
 
             var echartsRowDiv = document.createElement("div");
             echartsRowDiv.setAttribute("class","row echarts-row");
-            //echartsRowDiv.setAttribute("style", "width: 600px;height:320px;border:2px solid red");
 
             var echartsColDiv = document.createElement("div");
             echartsColDiv.setAttribute("class","col-md-12 echarts-col");
-            //echartsColDiv.setAttribute("style", "border:2px solid green");
 
             var echartsDiv = document.createElement("div");
             echartsDiv.setAttribute("id", "echarts" + count);
@@ -96,51 +99,86 @@
             textAreaElement.setAttribute("style", "min-width: 100%;height: 100%;");
             textAreaElement.setAttribute("placeholder", "填入分析内容...");
             textAreaElement.setAttribute("id", "textarea"+count);
-            textAreaElement.setAttribute("key-reportId", "对应的reportId"+count);
+            textAreaElement.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
 
             echartsContainer.appendChild(echartsRowDiv);
             echartsRowDiv.appendChild(echartsColDiv);
             echartsColDiv.appendChild(echartsDiv);
-            textareaDiv.appendChild(textAreaElement)
+            textareaDiv.appendChild(textAreaElement);
             echartsColDiv.appendChild(textareaDiv);
         }
-
     }
 
     /**
      * 循环展示各个指标
      */
-    function loopShowTargetData() {
+    function loopShowTargetData(reportTargetDataList) {
         var echartsArray = [];
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < reportTargetDataList.length; i++) {
             echartsArray.push(echarts.init(document.getElementById('echarts'+i)));
         }
-        for (var i = 0; i < 8; i++) {
-            var option = {
-                title: {
-                    text: 'ECharts 入门示例'
-                },
-                color: ['#2f4554'],
-                tooltip: {},
-                legend: {
-                    data:['销量']
-                },
-                xAxis: {
-                    data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-                },
-                yAxis: {},
-                series: [{
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }]
-            };
+        for (var i = 0; i < reportTargetDataList.length; i++) {
+            var option = eval('(' + reportTargetDataList[i].targetDataFullContent + ')');
             echartsArray[i].setOption(option);
         }
     }
 
+    /**
+     * 发布报告
+     */
+    function reportPublish() {
+        var reportTargetDataList = [[${reportTargetDataList}]];
+        var enterpriseReportId = reportTargetDataList[0].reportId;
+        console.log("enterpriseReportId : ", enterpriseReportId);
+        var itemArray = [];
+        var flag = false;
+        for (var i = 0; i < reportTargetDataList.length; i++) {
+            var resultTextareaElement = document.getElementById("textarea" + i);
+            if (resultTextareaElement.value == '') {
+                $.modal.alertWarning("请将每个指标对应的分析内容填写完整！");
+                flag = true;
+                break;
+            }
+            var item = {
+                "enterpriseTargetDataId": resultTextareaElement.getAttribute("key-targetDataId"),
+                "targetDataPublishContent": resultTextareaElement.value
+            };
+            itemArray.push(item);
+        }
+        if (!flag) {
+            var jsonData = {"enterpriseReportId": enterpriseReportId, "paramData": itemArray};
+            console.log("jsonData:", JSON.stringify(jsonData));
+            $.ajax({
+                url: ctx + "report/publish",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(jsonData),
+                success: function (result) {
+                    if (result.code == web_status.SUCCESS) {
+                        window.location.href=ctx + "report/list";
+                        closeItem();
+                    }else {
+                        $.modal.alertWarning(result.msg);
+                    }
+                    // if (result.code == web_status.SUCCESS) {
+                    //     var parent = window.parent;
+                    //     if (parent.$.table._option.type == table_type.bootstrapTable) {
+                    //         $.modal.close();
+                    //         parent.$.modal.msgSuccess(result.msg);
+                    //         parent.$.table.refresh();
+                    //     } else {
+                    //         $.modal.msgReload("发布成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+                    //     }
+                    // } else {
+                    //     $.modal.alertError(result.msg);
+                    // }
+                    // $.modal.closeLoading();
+                    // $.modal.enable();
+                }
+            });
+        }
+    }
+
 </script>
-
-
 </body>
 </html>
