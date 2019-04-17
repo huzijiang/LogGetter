@@ -116,7 +116,7 @@ public class ReportManageController extends BaseController {
     }
 
     /**
-     * 更细报告应用状态
+     * 更新报告应用状态
      *
      * @param reportId
      * @param state
