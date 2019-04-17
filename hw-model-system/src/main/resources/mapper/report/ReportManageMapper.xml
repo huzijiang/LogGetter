@@ -3,12 +3,102 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.hw.report.mapper.ReportManageMapper">
-    <resultMap id="resultMap" type="com.suixingpay.hw.report.domain.ReportInfo">
-
+    <resultMap id="reportInfoList" type="com.suixingpay.hw.report.domain.ReportInfo">
+        <id     property="reportId"         column="enterprise_report_id" />
+        <result property="reportName"       column="report_name" />
+        <result property="enterpriseId"     column="enterprise_id" />
+        <result property="reportTemplateId" column="report_template_id" />
+        <result property="state"            column="state" />
+        <result property="publishState"     column="publish_state" />
+        <result property="makeDate"         column="make_date" />
+        <result property="makeCycle"        column="make_cycle" />
+        <result property="enterpriseName"   column="name" />
     </resultMap>
 
-    <select id="selectReportInfoList" resultMap="resultMap">
+    <resultMap id="targetDataList" type="com.suixingpay.hw.report.domain.ReportInfo">
+        <id     property="reportId"               column="enterprise_report_id" />
+        <result property="enterpriseTargetDataId" column="enterprise_target_data_id" />
+        <result property="reportDescContent"      column="reportDescContent" />
+        <result property="enterpriseName"         column="name" />
+        <result property="targetDataFullContent"  column="targetDataFullContent" />
+    </resultMap>
 
+    <sql id="listColumn">
+        report.enterprise_report_Id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id,
+        ent.name
+    </sql>
+
+    <select id="selectReportInfoList" parameterType="com.suixingpay.hw.report.domain.ReportInfo" resultMap="reportInfoList">
+        select <include refid="listColumn"/>
+        from t_enterprise_report report
+        left join t_enterprise ent on report.enterprise_id = ent.enterprise_id
+        where 1 = 1
+        <if test="reportId != null and reportId != ''">
+             AND report.enterprise_report_id like concat('%', #{reportId}, '%')
+        </if>
+        <if test="reportName != null and reportName != ''">
+            AND report.report_name like concat('%', #{reportName}, '%')
+        </if>
+        <if test="enterpriseId != null and enterpriseId != ''">
+            AND report.enterprise_id like concat('%', #{enterpriseId}, '%')
+        </if>
+        <if test="reportTemplateId != null and reportTemplateId != ''">
+            AND report.report_template_id like concat('%', #{reportTemplateId}, '%')
+        </if>
+        <if test="state != null and state != ''">
+            AND report.state like concat('%', #{state}, '%')
+        </if>
+        <if test="publishState != null and publishState != ''">
+            AND report.publish_state like concat('%', #{publishState}, '%')
+        </if>
+        <if test="makeDate != null and makeDate != ''">
+            AND report.make_date like concat('%', #{makeDate}, '%')
+        </if>
+        <if test="makeCycle != null and makeCycle != ''">
+            AND report.make_cycle like concat('%', #{makeCycle}, '%')
+        </if>
+        <if test="enterpriseName != null and enterpriseName != ''">
+            AND ent.name like concat('%', #{enterpriseName}, '%')
+        </if>
     </select>
+
+    <select id="selectReportTargetDataList" parameterType="java.lang.Integer" resultMap="targetDataList">
+        select report.enterprise_report_Id,
+               target.enterprise_target_data_id,
+               reportPub.content as reportDescContent,
+               ent.name,
+               targetFullCon.content as targetDataFullContent
+        from t_enterprise_report report
+               left join t_enterprise ent on report.enterprise_id = ent.enterprise_id
+               left join t_enterprise_report_publish_info reportPub on report.enterprise_report_Id = reportPub.enterprise_report_Id
+               left join t_report_template reportTemp on report.report_template_id = reportTemp.report_template_id
+               left join t_enterprise_report_target_data_relation reportWithTarget on report.enterprise_report_Id = reportWithTarget.enterprise_report_Id
+               left join t_enterprise_target_data target on reportWithTarget.enterprise_target_data_id = target.enterprise_target_data_id
+               left join t_enterprise_target_data_full_content targetFullCon on target.enterprise_target_data_id = targetFullCon.enterprise_target_data_id
+        where 1=1
+        <if test="reportId != null and reportId != ''">
+            AND report.enterprise_report_id like concat('%', #{reportId}, '%')
+        </if>
+    </select>
+
+    <insert id="batchInsertTargetDataPublishInfo" parameterType="java.util.Map">
+        insert into t_enterprise_target_data_publish_info
+        (
+        target_publish_info_id, enterprise_target_data_id, content
+        )
+        VALUES
+        <foreach collection="params" item="value" index="key" separator=",">
+              (#{key}, #{value.enterpriseTargetDataId},#{value.targetDataPublishContent})
+        </foreach>
+    </insert>
+
+    <update id="updateReportPublishState">
+        update t_enterprise_report
+        <set>
+            <if test="publisher != null and publisher != ''">publisher = #{publisher},</if>
+            publish_state = '01'
+        </set>
+        where enterprise_report_id = #{enterpriseReportId}
+    </update>
 
 </mapper>
