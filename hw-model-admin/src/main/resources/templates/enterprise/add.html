@@ -28,9 +28,9 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>社会统一信用代码：</label>
+                        <label class="col-sm-4 control-label">社会统一信用代码：</label>
                         <div class="col-sm-8">
-                            <input name="uscd" autocomplete="off" placeholder="请输入社会统一信用代码" class="form-control" type="text" maxlength="20">
+                            <input name="uscd" oninput="value=value.replace(/[^\d]/g,'')" autocomplete="off" placeholder="请输入社会统一信用代码" class="form-control" type="text" maxlength="20">
                         </div>
                     </div>
                 </div>

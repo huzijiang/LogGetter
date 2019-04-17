@@ -187,7 +187,7 @@ public class EnterpriseManageController extends BaseController
         String account = request.getParameter("account");
         String password = request.getParameter("password");
         String phone = request.getParameter("phone");
-        String email = request.getParameter("email");
+        String email = request.getParameter("account");
         String jobNumber = request.getParameter("jobNumber");
         String wxOpenId = request.getParameter("wxOpenId");
         String qicq = request.getParameter("qicq");
