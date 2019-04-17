@@ -46,19 +46,22 @@
             AND report.report_template_id like concat('%', #{reportTemplateId}, '%')
         </if>
         <if test="state != null and state != ''">
-            AND report.state like concat('%', #{state}, '%')
+            AND report.state = #{state}
         </if>
         <if test="publishState != null and publishState != ''">
-            AND report.publish_state like concat('%', #{publishState}, '%')
+            AND report.publish_state = #{publishState}
         </if>
-        <if test="makeDate != null and makeDate != ''">
-            AND report.make_date like concat('%', #{makeDate}, '%')
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(make_date,'%Y-%m-%d') &gt;= date_format(#{params.beginTime},'%Y-%m-%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(make_date,'%Y-%m-%d') &lt;= date_format(#{params.endTime},'%Y-%m-%d')
         </if>
         <if test="makeCycle != null and makeCycle != ''">
-            AND report.make_cycle like concat('%', #{makeCycle}, '%')
+            AND report.make_cycle = #{makeCycle}
         </if>
         <if test="enterpriseName != null and enterpriseName != ''">
-            AND ent.name like concat('%', #{enterpriseName}, '%')
+            AND ent.name = #{enterpriseName}
         </if>
     </select>
 

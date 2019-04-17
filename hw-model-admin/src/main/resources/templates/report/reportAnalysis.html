@@ -147,7 +147,8 @@
         if (!flag) {
             var jsonData = {"enterpriseReportId": enterpriseReportId, "paramData": itemArray};
             console.log("jsonData:", JSON.stringify(jsonData));
-            $.ajax({
+            $.operate.publishReport(ctx + "report/publish", jsonData);
+            /*$.ajax({
                 url: ctx + "report/publish",
                 type: "POST",
                 contentType: "application/json",
@@ -174,7 +175,7 @@
                     // $.modal.closeLoading();
                     // $.modal.enable();
                 }
-            });
+            });*/
         }
     }
 
