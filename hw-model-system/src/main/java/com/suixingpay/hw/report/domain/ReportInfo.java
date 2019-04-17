@@ -4,6 +4,7 @@ import com.suixingpay.hw.report.po.ReportInfoPo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -44,4 +45,21 @@ public class ReportInfo extends ReportInfoPo implements Serializable {
      * 报告各个指标对应的发布内容的编号
      */
     private Integer targetPublishInfoId;
+
+    /** 请求参数 */
+    private Map<String, Object> params;
+
+    public Map<String, Object> getParams()
+    {
+        if (params == null)
+        {
+            params = new HashMap<>();
+        }
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params)
+    {
+        this.params = params;
+    }
 }

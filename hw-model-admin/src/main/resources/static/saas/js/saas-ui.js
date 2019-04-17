@@ -813,12 +813,29 @@
                         $.modal.loading("正在处理中，请稍后...");
                     },
                     success: function(result) {
-                        console.log(result);
                         $.operate.successTabCallback(result);
                     }
                 };
                 $.ajax(config)
             },
+
+			// 报告发布|入库
+			publishReport: function(url, data) {
+				var config = {
+					url: url,
+					type: "post",
+					//dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify(data),
+					beforeSend: function () {
+						$.modal.loading("正在处理中，请稍后...");
+					},
+					success: function(result) {
+						$.operate.successTabCallback(result);
+					}
+				};
+				$.ajax(config)
+			},
 
             // 保存结果弹出msg刷新table表格
             ajaxSuccess: function (result) {

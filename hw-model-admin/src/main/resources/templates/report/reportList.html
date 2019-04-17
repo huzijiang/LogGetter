@@ -13,7 +13,11 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            企业名称：<input type="text" name="enterpriseName"/>
+                            企业名称：
+                            <select name="enterpriseName">
+                                <option value="">所有</option>
+                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.name}"></option>
+                            </select>
                         </li>
                         <li>
                             企业编号：<input type="text" name="enterpriseId"/>
@@ -28,15 +32,17 @@
                             报告模版编号：<input type="text" name="reportTemplateId"/>
                         </li>
                         <li>
-                            报告状态：<select name="state" th:with="type=${@dict.getType('sys_normal_disable')}">
+                            报告状态：<select name="state">
                             <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            <option value="00">启用</option>
+                            <option value="01">停用</option>
                         </select>
                         </li>
                         <li>
-                            发布状态：<select name="publishState" th:with="type=${@dict.getType('sys_normal_disable')}">
+                            发布状态：<select name="publishState">
                             <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            <option value="00">已发布</option>
+                            <option value="01">未发布</option>
                         </select>
                         </li>
                         <li>
@@ -84,7 +90,6 @@
         }
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
         queryReportList();
-
     });
 
     function queryReportList() {
@@ -94,9 +99,7 @@
             sortName: "makeDate",
             sortOrder: "desc",
             modalName: "报告",
-            columns: [{
-                checkbox: true
-            },
+            columns: [
                 {
                     field: 'enterpriseId',
                     title: '企业编号'
@@ -122,7 +125,7 @@
                     title: '报告状态',
                     align: 'center',
                     formatter: function (value, row, index) {
-                        //return reportStateTools(row);
+                        return reportStateTools(row);
                     }
                 },
                 {
@@ -157,24 +160,26 @@
     /* 报告状态显示 */
     function reportStateTools(row) {
         if (row.state == 01) {
-            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="reportEnable(\'' + row.reportId + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-off text-info fa-2x \" onclick="reportEnable(\'' + row.reportId + '\')"></i> ';
         } else {
-            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="reportDisable(\'' + row.reportId + '\')"></i> ';
+            return '<i class=\"fa fa-toggle-on text-info fa-2x \" onclick="reportDisable(\'' + row.reportId + '\')"></i> ';
         }
     }
 
     /* 报告：停用 */
     function reportDisable(reportId) {
-        $.modal.confirm("确认要停用该报告吗？", function() {
-            $.operate.post("report/changeReportState", { "reportId": reportId, "state": '01' });
-        })
+        $.modal.alertWarning("抱歉，该功能暂时未启用");
+        // $.modal.confirm("确定启用该报告？", function() {
+        //     $.operate.post("report/changeReportState", { "reportId": reportId, "state": '01' });
+        // })
     }
 
     /* 报告：启用 */
     function reportEnable(reportId) {
-        $.modal.confirm("确认要启用该报告吗？", function() {
-            $.operate.post("report/changeReportState", { "reportId": reportId, "state": '00' });
-        })
+        $.modal.alertWarning("抱歉，该功能暂时未启用");
+        // $.modal.confirm("确定停用该报告？", function() {
+        //     $.operate.post("report/changeReportState", { "reportId": reportId, "state": '00' });
+        // })
     }
 
     /* 报告发布状态：显示 */
