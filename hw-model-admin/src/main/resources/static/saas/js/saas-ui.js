@@ -151,7 +151,6 @@
 			},
             // 搜索-默认第一个form
             search: function(formId) {
-            	debugger;
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
     		    var params = $("#" + $.table._option.id).bootstrapTable('getOptions');
     		    params.queryParams = function(params) {
