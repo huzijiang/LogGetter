@@ -94,21 +94,27 @@ public class ReportManageController extends BaseController {
         logger.info(">>>报告发布[{}]", jsonStr);
         try {
             Map<String, Object> map = JsonUtils.fromJson(jsonStr);
-
             Integer enterpriseReportId = (Integer) map.get("enterpriseReportId");
+            String reportPublishContent = (String) map.get("reportPublishContent");
+
             Map<Integer, TargetDataInfo> mapParam = new HashMap<>();
+            List<TargetDataInfo> targetDataInfoList = new ArrayList<>();
 
             JSONArray jsonArray = (JSONArray) map.get("paramData");
             for (int i = 0; i < jsonArray.size(); i++) {
                 TargetDataInfo targetDataInfo = new TargetDataInfo();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                targetDataInfo.setPublisher(ShiroUtils.getUserId().intValue());
                 targetDataInfo.setEnterpriseTargetDataId(Integer.parseInt((String) jsonObject.get("enterpriseTargetDataId")));
                 targetDataInfo.setTargetDataPublishContent((String) jsonObject.get("targetDataPublishContent"));
                 mapParam.put((Integer) IdUtil.getManyId("t_enterprise_target_data_publish_info",1).get(0), targetDataInfo);
+                targetDataInfoList.add(targetDataInfo);
             }
 
             reportManageService.batchInsertTargetDataPublishInfo(mapParam);
             reportManageService.updateReportPublishState(ShiroUtils.getLoginName(), enterpriseReportId);
+            reportManageService.updateEnterpriseTargetDataPublishState(targetDataInfoList);
+            reportManageService.insertEnterpriseReportPublishInfo((Integer) IdUtil.getManyId("t_enterprise_report_publish_info",1).get(0), reportPublishContent, enterpriseReportId);
         }catch (Exception e) {
             return AjaxResult.error("发布指标出现异常！请联系相关人员解决！");
         }

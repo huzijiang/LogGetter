@@ -104,4 +104,23 @@
         where enterprise_report_id = #{enterpriseReportId}
     </update>
 
+    <update id="updateEnterpriseTargetDataPublishState" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update t_enterprise_target_data
+            <set>
+                publisher = #{item.publisher, jdbcType=INTEGER},
+                publish_date = sysdate(),
+                publish_state = '01'
+            </set>
+            where enterprise_target_data_id = #{item.enterpriseTargetDataId, jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <insert id="insertEnterpriseReportPublishInfo">
+        insert into t_enterprise_report_publish_info
+            (report_publish_info_id, content, enterprise_report_Id)
+        values
+            (#{reportPublishInfoId, jdbcType=INTEGER}, #{reportPublishContent, jdbcType=CHAR}, #{enterpriseReportId, jdbcType=INTEGER})
+    </insert>
+
 </mapper>

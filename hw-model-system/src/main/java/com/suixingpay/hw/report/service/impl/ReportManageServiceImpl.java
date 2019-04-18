@@ -42,4 +42,15 @@ public class ReportManageServiceImpl implements IReportManageService {
     public int updateReportPublishState(String publisher, Integer enterpriseReportId) {
         return reportManageMapper.updateReportPublishState(publisher, enterpriseReportId);
     }
+
+    @Override
+    public int updateEnterpriseTargetDataPublishState(List<TargetDataInfo> targetDataInfoList) {
+        return reportManageMapper.updateEnterpriseTargetDataPublishState(targetDataInfoList);
+    }
+
+    @Override
+    public int insertEnterpriseReportPublishInfo(Integer reportPublishInfoId, String reportPublishContent,
+            Integer enterpriseReportId) {
+        return reportManageMapper.insertEnterpriseReportPublishInfo(reportPublishInfoId, reportPublishContent, enterpriseReportId);
+    }
 }

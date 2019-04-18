@@ -46,6 +46,11 @@ public class ReportInfo extends ReportInfoPo implements Serializable {
      */
     private Integer targetPublishInfoId;
 
+    /**
+     * 报告发布内容
+     */
+    private String reportPublishContent;
+
     /** 请求参数 */
     private Map<String, Object> params;
 

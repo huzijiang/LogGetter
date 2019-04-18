@@ -21,7 +21,9 @@
         <div class="col-md-12 echarts-col">
             <h2><p class="enterpriseNameArea"></p></h2>
             <hr>
-            <p class="reportDescContentArea"></p>
+            <div>
+                <textarea id="reportPublishContent" rows="12" style="resize:none;min-width: 100%;height: 100%;" placeholder="请填写报告分析结果..."></textarea>
+            </div>
         </div>
     </div>
     <div class="echarts-container">
@@ -95,7 +97,7 @@
 
             var textAreaElement = document.createElement("textarea");
             textAreaElement.setAttribute("row", "30");
-            textAreaElement.setAttribute("style", "min-width: 100%;height: 100%;");
+            textAreaElement.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
             textAreaElement.setAttribute("placeholder", "填入分析内容...");
             textAreaElement.setAttribute("id", "textarea"+count);
             textAreaElement.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
@@ -144,38 +146,15 @@
             };
             itemArray.push(item);
         }
+        var reportPublishContent = document.getElementById("reportPublishContent").value;
+        if (reportPublishContent == '') {
+            $.modal.alertWarning("请填写报告分析结果！");
+            flag = true;
+        }
         if (!flag) {
-            var jsonData = {"enterpriseReportId": enterpriseReportId, "paramData": itemArray};
+            var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":reportPublishContent, "paramData": itemArray};
             console.log("jsonData:", JSON.stringify(jsonData));
             $.operate.publishReport(ctx + "report/publish", jsonData);
-            /*$.ajax({
-                url: ctx + "report/publish",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(jsonData),
-                success: function (result) {
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href=ctx + "report/list";
-                        closeItem();
-                    }else {
-                        $.modal.alertWarning(result.msg);
-                    }
-                    // if (result.code == web_status.SUCCESS) {
-                    //     var parent = window.parent;
-                    //     if (parent.$.table._option.type == table_type.bootstrapTable) {
-                    //         $.modal.close();
-                    //         parent.$.modal.msgSuccess(result.msg);
-                    //         parent.$.table.refresh();
-                    //     } else {
-                    //         $.modal.msgReload("发布成功,正在刷新数据请稍后……", modal_status.SUCCESS);
-                    //     }
-                    // } else {
-                    //     $.modal.alertError(result.msg);
-                    // }
-                    // $.modal.closeLoading();
-                    // $.modal.enable();
-                }
-            });*/
         }
     }
 

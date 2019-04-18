@@ -40,4 +40,20 @@ public interface IReportManageService {
      * @return  变更数
      */
     int updateReportPublishState(String publisher, Integer enterpriseReportId);
+
+    /**
+     * 更新报告指标发布状态
+     * @param targetDataInfoList 指标信息列表
+     * @return 变更数
+     */
+    int updateEnterpriseTargetDataPublishState(List<TargetDataInfo> targetDataInfoList);
+
+    /**
+     * 保存报告发布内容
+     * @param reportPublishInfoId   报告发布内容编号
+     * @param reportPublishContent  报告发布内容
+     * @param enterpriseReportId    报告编号
+     * @return  变更数
+     */
+    int insertEnterpriseReportPublishInfo(Integer reportPublishInfoId,  String reportPublishContent, Integer enterpriseReportId);
 }

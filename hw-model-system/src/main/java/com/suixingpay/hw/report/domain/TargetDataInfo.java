@@ -1,5 +1,6 @@
 package com.suixingpay.hw.report.domain;
 
+import com.suixingpay.hw.report.po.TargetDataInfoPo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * @create: 2019-04-16 13:32
  **/
 @Data
-public class TargetDataInfo implements Serializable {
+public class TargetDataInfo extends TargetDataInfoPo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -18,8 +19,5 @@ public class TargetDataInfo implements Serializable {
      */
     private String targetDataPublishContent;
 
-    /**
-     * 报告各个指标对应的发布内容的编号
-     */
-    private Integer enterpriseTargetDataId;
+
 }
