@@ -268,6 +268,19 @@
                 });
                 return actions.join('');
             },
+
+			// 回显方云数据字典
+			selectFangCloudDictLabel: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, fangCloudDict) {
+					if (fangCloudDict.value == ('' + value)) {
+						actions.push("<span>" + fangCloudDict.valueDesc + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
             // 显示表格指定列
             showColumn: function(column) {
                 $("#" + $.table._option.id).bootstrapTable('showColumn', column);

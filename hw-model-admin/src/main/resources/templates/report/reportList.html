@@ -46,9 +46,9 @@
                         </select>
                         </li>
                         <li>
-                            报告生成周期：<select name="makeCycle" th:with="type=${@dict.getType('sys_normal_disable')}">
+                            报告生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('ReportMakeCycle')}">
                             <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                         </select>
                         </li>
                         <li class="select-time">
@@ -82,6 +82,7 @@
 
 <script th:inline="javascript">
     var analysisFlag = [[${@permission.hasPermi('report:analysis')}]];
+    var datas = [[${@fangCloudDict.getType('ReportMakeCycle')}]];
 
     $(function() {
         var panehHidden = false;
@@ -141,7 +142,11 @@
                 },
                 {
                     field: 'makeCycle',
-                    title: '报告生成周期'
+                    title: '报告生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(datas, value);
+                    }
                 },
                 {
                     title: '操作',
