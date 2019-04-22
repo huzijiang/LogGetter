@@ -25,7 +25,8 @@
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-enterprise-add").serializeArray();
-                window.location.href = prefix + "/addUser"+"?"+urlParam;
+                $.modal.openTab("添加管理员" , prefix + "/addUser"+"?"+urlParam);
+                // window.location.href = prefix + "/addUser"+"?"+urlParam;
             }
 
 	    }

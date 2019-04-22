@@ -17,7 +17,11 @@
 								企业id：<input type="text" name="enterpriseId"/>
 							</li>
 							<li>
-								名称：<input type="text" name="name"/>
+								名称：
+								<select name="name">
+									<option value="">所有</option>
+									<option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.name}"></option>
+								</select>
 							</li>
 							<li>
 								社会统一信用编码：<input type="text" name="uscd"/>
@@ -41,7 +45,7 @@
 	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:edit">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAllenterprise()" shiro:hasPermission="enterprise:remove">
+	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeEnterprise()" shiro:hasPermission="enterprise:remove">
 	                <i class="fa fa-remove"></i> 删除
 	            </a>
 	            <!--<a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">-->
@@ -90,7 +94,7 @@
 		        // sortName: "createDate",
 		        // sortOrder: "desc",
 		        modalName: "企业",
-                modalName1: "用户",
+                modalName1: "管理员",
 		        columns: [{
 		            checkbox: true
 		        },

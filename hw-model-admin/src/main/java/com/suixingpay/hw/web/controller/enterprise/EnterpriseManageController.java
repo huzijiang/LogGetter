@@ -46,8 +46,11 @@ public class EnterpriseManageController extends BaseController
 
     @RequiresPermissions("enterprise:view")
     @GetMapping()
-    public String Enterprise()
+    public String Enterprise(Map modelMap)
     {
+        // 获取所有企业名称
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        modelMap.put("enterpriseList", enterpriseList);
         return prefix + "/enterprise";
     }
 

@@ -73,7 +73,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="col-sm-8">
-                            微信头像:<input name="wxChatHead" onclick="submitHandlerlogo()" type="file" id="image">
+                            微信头像:<input name="wxChatHead" onchange="submitHandlerlogo()" type="file" id="image" accept="image/*"  multiple="multiple" >
+                            <img id="showImg" style="width: 80px;height: 80px">
                         </div>
                     </div>
                 </div>
@@ -155,8 +156,8 @@
                     contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
                     success: function (result) {
                         if (result.code == web_status.SUCCESS) {
-                            if (result.code == web_status.SUCCESS) {
-                                var topWindow = $(window.parent.document);
+                            debugger
+                                var topWindow = $(window.parent.parent.document);
                                 var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
                                 var $contentWindow = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow)[0].contentWindow;
                                 $.modal.close();
@@ -173,12 +174,20 @@
                             }
                             $.modal.closeLoading();
                         }
-                    }
                 });
                 return false;
             }
 	    }
         function submitHandlerlogo() {
+            var _name, _fileName, personsFile;
+            personsFile = document.getElementById("image");
+            _name = personsFile.value;
+            _fileName = _name.substring(_name.lastIndexOf(".") + 1).toLowerCase();
+            if (_fileName !== "png" && _fileName !== "jpg" && _fileName !== "gif" && _fileName !== "jpeg") {
+                alert("上传图片格式不正确，请重新上传");
+            }else {
+                document.getElementById("showImg").src = window.URL.createObjectURL(image.files[0]);
+            }
             var formElement = document.querySelector("#form-enterprise-addUser");
             var formData = new FormData(formElement);
             console.log(formData)

@@ -38,7 +38,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="col-sm-8">
-                            企业logo:<input name="logo" type="file"  onclick="submitHandlerlogo()"  id="image">
+                            企业logo:<input name="logo" type="file" accept="image/*"  onchange="submitHandlerlogo()"  multiple="multiple" id="image">
+                            <img id="showImg" style="width: 80px;height: 80px">
                         </div>
                     </div>
                 </div>
@@ -93,6 +94,15 @@
         }
 
         function submitHandlerlogo() {
+            var _name, _fileName, personsFile;
+            personsFile = document.getElementById("image");
+            _name = personsFile.value;
+            _fileName = _name.substring(_name.lastIndexOf(".") + 1).toLowerCase();
+            if (_fileName !== "png" && _fileName !== "jpg" && _fileName !== "gif" && _fileName !== "jpeg") {
+                alert("上传图片格式不正确，请重新上传");
+            }else {
+                document.getElementById("showImg").src = window.URL.createObjectURL(image.files[0]);
+            }
             var formElement = document.querySelector("#form-enterprise-add");
             var formData = new FormData(formElement);
                 $.ajax({

@@ -683,7 +683,7 @@
             // 批量删除信息
             removeAll: function() {
         		var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-        		if (rows.length == 0) {
+        		if (rows.length == 1) {
         			$.modal.alertWarning("请至少选择一条记录");
         			return;
         		}
@@ -693,11 +693,11 @@
         			$.operate.submit(url, "post", "json", data);
         		});
             },
-            // 批量删除信息
-            removeAllenterprise: function() {
+            // 删除企业信息
+            removeEnterprise: function() {
                 var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
-                if (rows.length == 0) {
-                    $.modal.alertWarning("请至少选择一条记录");
+                if (rows.length != 1) {
+                    $.modal.alertWarning("现在不支持批量删除,请选择一条记录");
                     return;
                 }
                 $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function() {
@@ -750,6 +750,7 @@
             },
             // 添加访问地址
             addUrl: function(id) {
+        		console.log(id);
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);
                 return url;
             },
