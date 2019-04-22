@@ -58,7 +58,7 @@ public class EnterpriseManageController extends BaseController
     {
         startPage();
         List<Enterprise> list = enterpriseService.selectEnterpriseList(enterprise);
-            return getDataTable(list);
+        return getDataTable(list);
     }
 
     @RequiresPermissions("enterprise:likelist")
@@ -104,7 +104,7 @@ public class EnterpriseManageController extends BaseController
         String image = "";
         BASE64Encoder encoder = new BASE64Encoder();
         try {
-            image =  "<img src=\"data:image/png;base64,"+encoder.encode(file.getBytes())+"\""+" />";
+            image = encoder.encode(file.getBytes());
             } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,7 +130,7 @@ public class EnterpriseManageController extends BaseController
         String image = "";
         BASE64Encoder encoder = new BASE64Encoder();
         try {
-            image =  "<img src=\"data:image/png;base64,"+encoder.encode(file.getBytes())+"\""+" />";
+            image = encoder.encode(file.getBytes());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,7 +150,7 @@ public class EnterpriseManageController extends BaseController
         String image = "";
         BASE64Encoder encoder = new BASE64Encoder();
         try {
-            image =  "<img style=\"height: 10px;width: 10px\" src=\"data:image/png;base64,"+encoder.encode(file.getBytes())+"\""+" />";
+            image = encoder.encode(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -177,7 +177,7 @@ public class EnterpriseManageController extends BaseController
         String image = "";
         BASE64Encoder encoder = new BASE64Encoder();
         try {
-            image =  "<img style=\"height: 1px;width: 1px\" src=\"data:image/png;base64,"+encoder.encode(file.getBytes())+"\""+" />";
+            image =  encoder.encode(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -248,7 +248,7 @@ public class EnterpriseManageController extends BaseController
         String image = "";
         BASE64Encoder encoder = new BASE64Encoder();
         try {
-            image =  "<img src=\"data:image/png;base64,"+encoder.encode(file.getBytes())+">";
+            image = encoder.encode(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -269,6 +269,4 @@ public class EnterpriseManageController extends BaseController
             enterpriseService.deleteEnterpriseUserByEnterpriseId(id);
             return toAjax(enterpriseService.deleteEnterpriseByEnterpriseId(id));
     }
-
-
 }
