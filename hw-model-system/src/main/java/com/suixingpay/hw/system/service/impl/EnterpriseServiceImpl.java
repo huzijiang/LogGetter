@@ -35,11 +35,6 @@ public class EnterpriseServiceImpl implements IEnterpriseService
     }
 
     @Override
-    public List<Enterprise> selectEnterpriseByMessage(Enterprise enterprise) {
-        return enterpriseMapper.selectEnterpriseByMessage(enterprise);
-    }
-
-    @Override
     public Enterprise selectEnterpriseByAdmin(int admin) {
         return enterpriseMapper.selectEnterpriseByAdmin(admin);
     }

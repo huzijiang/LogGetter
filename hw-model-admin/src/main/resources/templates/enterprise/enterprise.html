@@ -8,6 +8,7 @@
 
 <body class="gray-bg">
 	<div class="container-div ui-layout-center">
+		<!--模糊查询模块-->
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="enterprise-form">
@@ -18,6 +19,7 @@
 							</li>
 							<li>
 								名称：
+								<!--接收在后台查询到的所有企业名称的结果，已选择器方式显示，供选择-->
 								<select name="name">
 									<option value="">所有</option>
 									<option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.name}"></option>
@@ -48,14 +50,8 @@
 	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeEnterprise()" shiro:hasPermission="enterprise:remove">
 	                <i class="fa fa-remove"></i> 删除
 	            </a>
-	            <!--<a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">-->
-		            <!--<i class="fa fa-upload"></i> 导入-->
-		        <!--</a>-->
-	            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">-->
-		            <!--<i class="fa fa-download"></i> 导出-->
-		        <!--</a>-->
 	        </div>
-	        
+	        <!--查询结果显示table-->
 	        <div class="col-sm-12 select-table table-striped">
 			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -64,14 +60,12 @@
 	
 	<div th:include="include :: footer"></div>
 	<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
-	<!--<script th:src="@{/ajax/libs/jquery-ztree/3.5/js/jquery.ztree.all-3.5.js}"></script>-->
 	<script th:inline="javascript">
 		var editFlag = [[${@permission.hasPermi('enterprise:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('enterprise:remove')}]];
-		// var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
-		// var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "enterprise";
 
+        //对查询结果显示的table进行控制
 		$(function() {
 		    var panehHidden = false;
 		    if ($(this).width() < 769) {
@@ -79,7 +73,6 @@
 		    }
 		    $('body').layout({ initClosed: panehHidden, west__size: 185 });
             queryCustomerList();
-		    //queryDeptTree();
 		});
 
 		function queryCustomerList() {
@@ -88,13 +81,7 @@
 		        createUrl: prefix + "/add",
 		        updateUrl: prefix + "/edit/{id}",
 		        removeUrl: prefix + "/remove",
-		        // exportUrl: prefix + "/export",
-		        // importUrl: prefix + "/importData",
-		        // importTemplateUrl: prefix + "/importTemplate",
-		        // sortName: "createDate",
-		        // sortOrder: "desc",
 		        modalName: "企业",
-                modalName1: "管理员",
 		        columns: [{
 		            checkbox: true
 		        },
@@ -105,7 +92,6 @@
 		        {
 		            field: 'name',
 		            title: '企业名称',
-		            // sortable: true
 		        },
 		        {
 		            field: 'address',
@@ -119,10 +105,6 @@
                     field: 'admin',
 		        	title: '企业管理员账号',
 		        },
-		        // {
-		        //     field: 'logo',
-		        //     title: '企业头像'
-		        // },
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -130,26 +112,13 @@
 		                var actions = [];
 		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.enterpriseId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.removeenterprise(\'' + row.enterpriseId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-		               // actions.push('<a class="btn btn-info btn-xs ' + resetPwdFlag + '" href="#" onclick="resetPwd(\'' + row.enterpriseId + '\')"><i class="fa fa-key"></i>重置</a>');
 		                return actions.join('');
 		            }
 		        }]
 		    };
+		    //对页面所有进行初始化
 		    $.table.init(options);
 		}
-
 	</script>
 </body>
-<!--<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">-->
-	<!--<div class="col-xs-offset-1">-->
-		<!--<input type="file" id="file" name="file"/>-->
-		<!--<div class="mt10 pt5">-->
-			<!--<input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
-			 <!--&nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
-		<!--</div>-->
-		<!--<font color="red" class="pull-left mt10">-->
-			<!--提示：仅允许导入“xls”或“xlsx”格式文件！-->
-		<!--</font>-->
-	<!--</div>-->
-<!--</form>-->
 </html>

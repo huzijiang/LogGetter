@@ -1,30 +1,22 @@
 package com.suixingpay.hw.web.controller.enterprise;
 
-import com.mchange.util.Base64Encoder;
-import com.suixingpay.hw.common.annotation.Log;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
-import com.suixingpay.hw.common.enums.BusinessType;
-import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.system.domain.Enterprise;
 import com.suixingpay.hw.system.domain.EnterpriseUser;
-import com.suixingpay.hw.system.domain.SysUser;
 import com.suixingpay.hw.system.service.IEnterpriseService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +36,11 @@ public class EnterpriseManageController extends BaseController
     @Autowired
     private IEnterpriseService enterpriseService;
 
+    /**
+     * 跳转到企业录入页面
+     * @param modelMap
+     * @return
+     */
     @RequiresPermissions("enterprise:view")
     @GetMapping()
     public String Enterprise(Map modelMap)
@@ -54,6 +51,11 @@ public class EnterpriseManageController extends BaseController
         return prefix + "/enterprise";
     }
 
+    /**
+     * 查询企业信息
+     * @param enterprise
+     * @return
+     */
     @RequiresPermissions("enterprise:list")
     @PostMapping("/list")
     @ResponseBody
@@ -64,15 +66,6 @@ public class EnterpriseManageController extends BaseController
         return getDataTable(list);
     }
 
-    @RequiresPermissions("enterprise:likelist")
-    @PostMapping("/likelist")
-    @ResponseBody
-    public TableDataInfo likelist(Enterprise enterprise)
-    {
-        startPage();
-        List<Enterprise> list = enterpriseService.selectEnterpriseByMessage(enterprise);
-        return getDataTable(list);
-    }
     /**
      * 新增企业页面
      */
@@ -160,13 +153,14 @@ public class EnterpriseManageController extends BaseController
         return image;
     }
     /**
-     * 新增用户页面
+     * 新增用户管理员页面
      */
     @GetMapping("/addUser")
     public String addUser()
     {
         return prefix + "/addUser";
     }
+
     /**
      * 新增企业用户管理员
      */
@@ -225,7 +219,7 @@ public class EnterpriseManageController extends BaseController
         return prefix + "/edit";
     }
     /**
-     * 修改保存用户
+     * 修改企业
      */
     @RequiresPermissions("enterprise:edit")
     @PostMapping("/edit")
@@ -256,6 +250,9 @@ public class EnterpriseManageController extends BaseController
         return toAjax(enterpriseService.updateEnterpriseInfo(enterprise));
     }
 
+    /**
+     * 删除企业
+     */
     @RequiresPermissions("enterprise:remove")
     @PostMapping("/remove")
     @ResponseBody

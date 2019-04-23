@@ -100,31 +100,20 @@
     <script th:src="@{/ajax/libs/select/select2.js}"></script>
 	<script>
 	    var prefix = ctx + "enterprise";
-        console.log(window.location.href);
-        var urlParam = decodeURI(window.location.href.split("?")[1]);
-        console.log(urlParam);
-        var enterpriseId = urlParam.split("enterpriseId=")[1];
-        console.log(enterpriseId);
 
-        function getElementByAttr(tag,attr,value)
-        {
-            var aElements=document.getElementsByTagName(tag);
-            var aEle=[];
-            for(var i=0;i<aElements.length;i++)
-            {
-                if(aElements[i].getAttribute(attr)==value)
-                    aEle.push( aElements[i] );
-            }
-            return aEle;
-        }
-
+        //点击设置管理员按钮
         function submit() {
-           // $(".layui-this" , parent.document).children("i").before(' 添加管理员');
             if ($.validate.form()) {
+                //隐藏成功提示的div
                 document.getElementById("success").style.display="none";
+
+                //显示添加管理员的div
                 var ui = document.getElementsByClassName("form-content1")[0];
                 ui.style.display="block";
-                var aDiv=getElementByAttr('a','data-id','/enterprise/add');
+
+                //改变选项卡标题
+                var menuActiveTab = window.parent.document.getElementsByClassName('active menuTab')[0];
+                menuActiveTab.innerHTML = '添加管理员<i class="fa fa-times-circle"></i>';
             }
 	    }
 
@@ -164,6 +153,7 @@
             focusCleanup: true
         });
 
+        //将企业id和其他表单里的信息一起传入后台
         var urlParam = decodeURI(window.location.href.split("?")[1]);
         var enterpriseId = urlParam.split("enterpriseId=")[1];
 
@@ -203,6 +193,8 @@
                 return false;
             }
         }
+
+        //上传图片操作，包括对上传的文件进行图片格式控制以及回显
         function submitHandlerlogo() {
             var _name, _fileName, personsFile;
             personsFile = document.getElementById("image");

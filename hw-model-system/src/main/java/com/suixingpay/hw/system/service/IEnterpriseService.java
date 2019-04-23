@@ -31,14 +31,6 @@ public interface IEnterpriseService
     public Enterprise selectEnterpriseByName(String name);
 
     /**
-     * 通过信息查询用户
-     *
-     * @param enterprise 企业名
-     * @return 企业对象信息
-     */
-    public List<Enterprise> selectEnterpriseByMessage(Enterprise enterprise);
-
-    /**
      * 通过企业管理员编号查询企业
      *
      * @param admin 企业管理员编号

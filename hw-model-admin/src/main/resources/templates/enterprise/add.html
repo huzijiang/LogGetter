@@ -3,7 +3,6 @@
 <meta charset="utf-8" content="multipart/form-data">
 <head th:include="include :: header"></head>
 <body>
-<div class="div"></div>
     <div class="form-content">
         <form id="form-enterprise-add" class="form-horizontal"  enctype="multipart/form-data">
             <h4 class="form-header h4">基本信息</h4>
@@ -39,6 +38,7 @@
                     <div class="form-group">
                         <div class="col-sm-8">
                             企业logo:<input name="logo" type="file" accept="image/*"  onchange="submitHandlerlogo()"  multiple="multiple" id="image">
+                            <!--图片回显-->
                             <img id="showImg" style="width: 80px;height: 80px">
                         </div>
                     </div>
@@ -58,6 +58,7 @@
 	<script>
         var prefix = ctx + "enterprise";
         $("#form-enterprise-add").validate({
+            //对input输入框相对应的字段属性进行控制
             onkeyup: false,
             rules:{
                 name:{
@@ -92,7 +93,7 @@
                 return false;
             }
         }
-
+        //上传图片操作，包括对上传的文件进行图片格式控制以及回显
         function submitHandlerlogo() {
             var _name, _fileName, personsFile;
             personsFile = document.getElementById("image");
@@ -117,7 +118,6 @@
                     }
                 })
         }
-
     </script>
 </body>
 </html>
