@@ -214,14 +214,6 @@ public class EnterpriseManageController extends BaseController
         return toAjax(insert);
 
     }
-    /**
-     * 跳转成功页面
-     */
-    @GetMapping("/successful")
-    public String successful()
-    {
-        return prefix + "/successful";
-    }
 
     /**
      * 跳转修改企业页面

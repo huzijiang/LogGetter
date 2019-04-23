@@ -85,7 +85,7 @@
                     contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
                     success: function (result) {
                         if (result.code == web_status.SUCCESS) {
-                            window.location.href = prefix + "/successful" + "?enterpriseId=" + result.enterpriseId;
+                            window.location.href = prefix + "/addUser" + "?enterpriseId=" + result.enterpriseId;
                         }
                     }
                 });

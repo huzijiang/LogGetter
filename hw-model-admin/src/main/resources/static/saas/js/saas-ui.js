@@ -446,7 +446,7 @@
             },
             // 关闭窗体
             close: function () {
-            	var index = parent.layer.getFrameIndex(window.name);
+                var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             },
             // 关闭全部窗体

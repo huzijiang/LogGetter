@@ -575,7 +575,17 @@ label {
     border-image: none;
     border-width: 1px 0px;
 }
-
+.form-content1 {
+	display: none;
+	background-color: #ffffff;
+	color: inherit;
+	padding: 10px 15px 15px 15px;
+	border-color: #e7eaec;
+	-webkit-border-image: none;
+	-o-border-image: none;
+	border-image: none;
+	border-width: 1px 0px;
+}
 /** 表格跳转样式 **/
 .pageGo input {
     height: 32px;
