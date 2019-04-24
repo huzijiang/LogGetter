@@ -6,23 +6,14 @@
     <!--实体映射-->
     <resultMap id="enterpriseTargetTemplate"
                type="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
-        <!---->
         <id property="enterpriseTargetTemplateId" column="enterprise_target_template_Id"/>
-        <!---->
         <result property="enterpriseReportTemplateId" column="enterprise_report_template_id"/>
-        <!---->
         <result property="targetModelTemplateId" column="target_model_template_id"/>
-        <!---->
         <result property="enterpriseId" column="enterprise_id"/>
-        <!---->
         <result property="showWay" column="show_way"/>
-        <!---->
         <result property="name" column="name"/>
-        <!---->
         <result property="templateContent" column="template_content"/>
-        <!---->
         <result property="belongQueue" column="belong_queue"/>
-        <!---->
         <result property="sn" column="sn"/>
         <result property="groupName" column="group_name"/>
     </resultMap>
@@ -41,22 +32,22 @@
     <!-- 通用查询条件-->
     <sql id="dynamicWhere">
         <where>
-            <if test=" @Ognl@isNotEmpty(enterpriseTargetTemplateId)">AND enterprise_target_template_Id =
+          1=1
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">AND enterprise_target_template_Id =
                 #{enterpriseTargetTemplateId}
             </if>
-            <if test=" @Ognl@isNotEmpty(enterpriseReportTemplateId)">AND enterprise_report_template_id =
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">AND enterprise_report_template_id =
                 #{enterpriseReportTemplateId}
             </if>
-            <if test=" @Ognl@isNotEmpty(targetModelTemplateId)">AND target_model_template_id =
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id =
                 #{targetModelTemplateId}
             </if>
-            <if test=" @Ognl@isNotEmpty(enterpriseId)">AND enterprise_id = #{enterpriseId}</if>
-            <if test=" @Ognl@isNotEmpty(showWay)">AND show_way = #{showWay}</if>
-            <if test=" @Ognl@isNotEmpty(name)">AND name = #{name}</if>
-            <if test=" @Ognl@isNotEmpty(templateContent)">AND template_content = #{templateContent}</if>
-            <if test=" @Ognl@isNotEmpty(belongQueue)">AND belong_queue = #{belongQueue}</if>
-            <if test=" @Ognl@isNotEmpty(sn)">AND sn = #{sn}</if>
-            <if test=" @Ognl@isNotEmpty(groupName)">AND group_name = #{groupName}</if>
+            <if test="enterpriseId != null and enterpriseId != ''">AND enterprise_id = #{enterpriseId}</if>
+            <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
+            <if test="sn != null and sn != ''">AND sn = #{sn}</if>
+            <if test="groupName != null and groupName != ''">AND group_name = #{groupName}</if>
         </where>
     </sql>
 

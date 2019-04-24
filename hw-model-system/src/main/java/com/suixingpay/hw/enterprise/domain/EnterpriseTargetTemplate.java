@@ -15,7 +15,7 @@ public class EnterpriseTargetTemplate {
 
     private static final long serialVersionUID = 1L;
 
-    private String enterpriseTargetTemplateId;
+    private Integer enterpriseTargetTemplateId;
 
     private Integer enterpriseReportTemplateId;
 

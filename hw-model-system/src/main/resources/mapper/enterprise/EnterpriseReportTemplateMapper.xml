@@ -139,7 +139,7 @@
 			<if test="@Ognl@isNotEmpty(state) "> #{state}, </if>
 			<if test="@Ognl@isNotEmpty(audiences) "> #{audiences}, </if>
 			<if test="@Ognl@isNotEmpty(type) "> #{type}, </if>
-			<if test="@Ognl@isNotEmpty(belongorg) "> #{belongorg}, </if>
+			<if test="@Ognl@isNotEmpty(belongorg) "> #{belongOrg}, </if>
 			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> #{belongOrgLevel}, </if>
 			<if test="@Ognl@isNotEmpty(makeCycle) "> #{makeCycle}, </if>
 		 </trim>
