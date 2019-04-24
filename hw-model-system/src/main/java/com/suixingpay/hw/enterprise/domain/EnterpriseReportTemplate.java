@@ -38,7 +38,7 @@ public class EnterpriseReportTemplate {
 
     private String type;
 
-    private Integer belongorg;
+    private Integer belongOrg;
 
     private String belongOrgLevel;
 
