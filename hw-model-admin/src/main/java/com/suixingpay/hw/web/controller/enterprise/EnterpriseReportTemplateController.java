@@ -76,9 +76,9 @@ public class EnterpriseReportTemplateController  extends BaseController {
     /**
      * 修改报告模板
      */
-    @RequestMapping("/edit/{reportTemplateId}")
-    public String edit(@PathVariable("reportTemplateId") Integer reportTemplateId, ModelMap mmap) {
-        mmap.put("reportTemplate", reportTemplateService.findOneById(reportTemplateId));
+    @RequestMapping("/edit/{enterpriseReportTemplateId}")
+    public String edit(@PathVariable("enterpriseReportTemplateId") Integer enterpriseReportTemplateId, ModelMap mmap) {
+        mmap.put("enterpriseReportTemplate", reportTemplateService.findOneById(enterpriseReportTemplateId));
         return "enterprise/report/enterpriseReportTemplateEdit";
     }
 

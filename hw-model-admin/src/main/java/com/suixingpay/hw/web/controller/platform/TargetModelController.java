@@ -81,9 +81,9 @@ public class TargetModelController extends BaseController {
     /**
      * 修改指标模板
      */
-    @RequestMapping("/edit/{reportTemplateId}")
-    public String edit(@PathVariable("reportTemplateId") Integer reportTemplateId, ModelMap mmap) {
-        mmap.put("reportTemplate", targetModelService.findOneById(reportTemplateId));
+    @RequestMapping("/edit/{targetModelId}")
+    public String edit(@PathVariable("targetModelId") Integer targetModelId, ModelMap mmap) {
+        mmap.put("targetModel", targetModelService.findOneById(targetModelId));
         return "platform/targetModelEdit";
     }
 
@@ -104,6 +104,7 @@ public class TargetModelController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        targetModelService.deleteRelationIds(ids);
         return toAjax(targetModelService.deleteBatchIds(ids));
     }
 }

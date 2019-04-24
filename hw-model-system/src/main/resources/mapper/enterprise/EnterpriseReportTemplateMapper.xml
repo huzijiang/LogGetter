@@ -149,20 +149,20 @@
 	<update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate">
 		 UPDATE 
 		 <include refid="table" />
- 		 <set> 
-			<if test="@Ognl@isNotEmpty(enterpriseId) "> enterprise_id = #{enterpriseId}, </if>
-			<if test="@Ognl@isNotEmpty(reportTemplateId) "> report_template_id = #{reportTemplateId}, </if>
-			<if test="@Ognl@isNotEmpty(name) "> name = #{name}, </if>
-			<if test="@Ognl@isNotEmpty(reportAlias) "> report_alias = #{reportAlias}, </if>
-			<if test="@Ognl@isNotEmpty(description) "> description = #{description}, </if>
-			<if test="@Ognl@isNotEmpty(creater) "> creater = #{creater}, </if>
-			<if test="@Ognl@isNotEmpty(createDate) "> create_date = #{createDate}, </if>
-			<if test="@Ognl@isNotEmpty(state) "> state = #{state}, </if>
-			<if test="@Ognl@isNotEmpty(audiences) "> audiences = #{audiences}, </if>
-			<if test="@Ognl@isNotEmpty(type) "> type = #{type}, </if>
-			<if test="@Ognl@isNotEmpty(belongorg) "> belongOrg = #{belongorg}, </if>
-			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> belong_org_level = #{belongOrgLevel}, </if>
-			<if test="@Ognl@isNotEmpty(makeCycle) "> make_cycle = #{makeCycle}, </if>
+ 		 <set>
+			 <if test="enterpriseId != null and enterpriseId != ''">  enterprise_id = #{enterpriseId}, </if>
+			 <if test="reportTemplateId != null and reportTemplateId != ''">  report_template_id = #{reportTemplateId}, </if>
+			 <if test="name != null and name != ''">  name = #{name} ,</if>
+			 <if test="reportAlias != null and reportAlias != ''">  report_alias = #{reportAlias}, </if>
+			 <if test="description != null and description != ''">  description = #{description}, </if>
+			 <if test="creater != null and creater != ''">  creater = #{creater} ,</if>
+			 <if test="createDate != null and createDate != ''">  create_date = #{createDate}, </if>
+			 <if test="state != null and state != ''">  state = #{state}, </if>
+			 <if test="audiences != null and audiences != ''">  audiences = #{audiences} ,</if>
+			 <if test="type != null and type != ''">  type = #{type} ,</if>
+			 <if test="belongOrg != null and belongOrg != ''">  belongOrg = #{belongOrg} ,</if>
+			 <if test="belongOrgLevel != null and belongOrgLevel != ''">  belong_org_level = #{belongOrgLevel}, </if>
+			 <if test="makeCycle != null and makeCycle != ''">  make_cycle = #{makeCycle}, </if>
  		 </set>
 		 WHERE enterprise_report_template_id = #{enterpriseReportTemplateId}
 	</update>

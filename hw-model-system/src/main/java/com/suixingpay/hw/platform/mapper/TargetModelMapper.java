@@ -48,12 +48,28 @@ public interface TargetModelMapper {
     int deleteById(Integer targetModelId);
 
     /**
+     * 删除：根据指标模板编号删除关系表中数据
+     *
+     * @param targetModelId 指标模板编号
+     * @return 变更数
+     */
+    int deleteRelationById(Integer targetModelId);
+
+    /**
      * 删除：根据指标模板编号删除
      *
      * @param ids 指标模板编号
      * @return 变更数
      */
     int deleteBatchIds(@Param("ids") Integer[] ids);
+
+    /**
+     * 删除：根据指标模板编号删除关系表
+     *
+     * @param ids 指标模板编号
+     * @return 变更数
+     */
+    int deleteRelationIds(@Param("ids") Integer[] ids);
 
     /**
      * 添加报告模板与指标模板映射关系

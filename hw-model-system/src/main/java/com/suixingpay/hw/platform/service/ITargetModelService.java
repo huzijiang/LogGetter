@@ -46,12 +46,28 @@ public interface ITargetModelService {
     int deleteById(Integer targetModelId);
 
     /**
+     * 删除：根据指标模板编号删除关系表中数据
+     *
+     * @param targetModelId 指标模板编号
+     * @return 变更数
+     */
+    int deleteRelationById(Integer targetModelId);
+
+    /**
      * 删除：根据指标模板编号删除
      *
      * @param ids 指标模板编号
      * @return 变更数
      */
     int deleteBatchIds(String ids);
+
+    /**
+     * 删除：根据指标模板编号删除关系表中数据
+     *
+     * @param ids 指标模板编号
+     * @return 变更数
+     */
+    int deleteRelationIds(String ids);
 
     /**
      * 添加报告模板与指标模板映射关系

@@ -86,10 +86,25 @@
         WHERE target_model_id = #{targetModelId}
     </delete>
 
+    <delete id="deleteRelationById" parameterType="java.lang.Integer">
+         DELETE FROM t_report_target_relation_model
+         WHERE target_model_id = #{targetModelId}
+    </delete>
+
     <!--批量删除：根据主键ID删除-->
     <delete id="deleteBatchIds">
         DELETE FROM
         <include refid="table" />
+        WHERE target_model_id in
+        <foreach collection="ids" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!--批量删除：根据主键ID删除关系表-->
+    <delete id="deleteRelationIds">
+        DELETE FROM
+        t_report_target_relation_model
         WHERE target_model_id in
         <foreach collection="ids" item="i" open="(" separator="," close=")">
             #{i}
