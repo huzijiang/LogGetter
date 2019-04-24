@@ -1,9 +1,10 @@
-package com.suixingpay.hw.system.service.impl;
+package com.suixingpay.hw.enterprise.service.impl;
 
-import com.suixingpay.hw.common.annotation.DataScope;
-import com.suixingpay.hw.system.domain.*;
-import com.suixingpay.hw.system.mapper.*;
-import com.suixingpay.hw.system.service.IEnterpriseService;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseUser;
+import com.suixingpay.hw.enterprise.mapper.EnterpriseMapper;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
+import com.suixingpay.hw.system.service.impl.SysUserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

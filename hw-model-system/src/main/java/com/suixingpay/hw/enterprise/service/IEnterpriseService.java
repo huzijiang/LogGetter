@@ -1,8 +1,7 @@
-package com.suixingpay.hw.system.service;
+package com.suixingpay.hw.enterprise.service;
 
-import com.suixingpay.hw.system.domain.Enterprise;
-import com.suixingpay.hw.system.domain.EnterpriseUser;
-import com.suixingpay.hw.system.domain.SysUser;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseUser;
 
 import java.util.List;
 

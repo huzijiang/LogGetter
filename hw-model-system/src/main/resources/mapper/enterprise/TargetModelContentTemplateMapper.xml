@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.TargetModelContentTemplateMapper">
+
+    <!--实体映射-->
+    <resultMap id="targetModelContentTemplate"
+               type="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+        <!---->
+        <id property="targetModelTemplateId" column="target_model_template_id"/>
+        <!---->
+        <result property="targetModelId" column="target_model_id"/>
+        <!---->
+        <result property="name" column="name"/>
+        <!---->
+        <result property="showWay" column="show_way"/>
+        <!---->
+        <result property="templateContent" column="template_content"/>
+        <!---->
+        <result property="belongQueue" column="belong_queue"/>
+        <!---->
+        <result property="sn" column="sn"/>
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_target_model_content_template
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		target_model_template_id,target_model_id,name,show_way,template_content,belong_queue,sn
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            <if test=" @Ognl@isNotEmpty(targetModelTemplateId)">AND target_model_template_id =
+                #{targetModelTemplateId}
+            </if>
+            <if test=" @Ognl@isNotEmpty(targetModelId)">AND target_model_id = #{targetModelId}</if>
+            <if test=" @Ognl@isNotEmpty(name)">AND name = #{name}</if>
+            <if test=" @Ognl@isNotEmpty(showWay)">AND show_way = #{showWay}</if>
+            <if test=" @Ognl@isNotEmpty(templateContent)">AND template_content = #{templateContent}</if>
+            <if test=" @Ognl@isNotEmpty(belongQueue)">AND belong_queue = #{belongQueue}</if>
+            <if test=" @Ognl@isNotEmpty(sn)">AND sn = #{sn}</if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="targetModelContentTemplate">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="targetModelContentTemplate" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        WHERE target_model_template_id = #{targetModelTemplateId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="targetModelContentTemplate">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="targetModelContentTemplate" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE target_model_template_id = #{targetModelTemplateId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE target_model_template_id in
+        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+        INSERT INTO
+        <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id,</if>
+            <if test="@Ognl@isNotEmpty(targetModelId) ">target_model_id,</if>
+            <if test="@Ognl@isNotEmpty(name) ">name,</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">show_way,</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">template_content,</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue,</if>
+            <if test="@Ognl@isNotEmpty(sn) ">sn,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">#{targetModelTemplateId},</if>
+            <if test="@Ognl@isNotEmpty(targetModelId) ">#{targetModelId},</if>
+            <if test="@Ognl@isNotEmpty(name) ">#{name},</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">#{showWay},</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">#{templateContent},</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">#{belongQueue},</if>
+            <if test="@Ognl@isNotEmpty(sn) ">#{sn},</if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="@Ognl@isNotEmpty(targetModelId) ">target_model_id = #{targetModelId},</if>
+            <if test="@Ognl@isNotEmpty(name) ">name = #{name},</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">show_way = #{showWay},</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">template_content = #{templateContent},</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue = #{belongQueue},</if>
+            <if test="@Ognl@isNotEmpty(sn) ">sn = #{sn},</if>
+        </set>
+        WHERE target_model_template_id = #{targetModelTemplateId}
+    </update>
+
+    <select id="getModelId" resultType="com.suixingpay.hw.platform.domain.TargetModel">
+        select
+        model.collation_code as collationCode ,
+        model.target_model_id as targetModelId
+        from
+        <include refid="table"/>
+        as template
+        left join t_target_model as model
+        on model.target_model_id = template.target_model_id
+        <where>
+            template.target_model_template_id = #{targetModelTemplateId}
+            and model.state = '0'
+        </where>
+    </select>
+
+</mapper>

@@ -1,7 +1,7 @@
-package com.suixingpay.hw.system.mapper;
+package com.suixingpay.hw.enterprise.mapper;
 
-import com.suixingpay.hw.system.domain.Enterprise;
-import com.suixingpay.hw.system.domain.EnterpriseUser;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseUser;
 
 import java.util.List;
 

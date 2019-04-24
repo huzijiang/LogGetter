@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.platform.mapper.TargetModelMapper">
+
+    <!--实体映射-->
+    <resultMap id="targetModel" type="com.suixingpay.hw.platform.domain.TargetModel">
+        <id property="targetModelId" column="target_model_id" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="creater" column="creater" />
+        <result property="createDate" column="create_date" />
+        <result property="state" column="state" />
+        <result property="level" column="level" />
+        <result property="makeCycle" column="make_cycle" />
+        <result property="childModelId" column="child_model_id" />
+        <result property="collationCode" column="collation_code" />
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_target_model
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		target_model_id,name,description,creater,create_date,state,level,
+		make_cycle,child_model_id,collation_code
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            1=1
+            <if test="targetModelId != null and targetModelId != ''"> AND target_model_id = #{targetModelId} </if>
+            <if test="name != null and name != ''"> AND name = #{name} </if>
+            <if test="description != null and description != ''"> AND description = #{description} </if>
+            <if test="creater != null and creater != ''"> AND creater = #{creater} </if>
+            <if test="createDate != null"> AND create_date = #{createDate} </if>
+            <if test="state != null and state != ''"> AND state = #{state} </if>
+            <if test="level != null and level != ''"> AND level = #{level} </if>
+            <if test="makeCycle != null and makeCycle != ''"> AND make_cycle = #{makeCycle} </if>
+            <if test="childModelId != null and childModelId != ''"> AND child_model_id = #{childModelId} </if>
+            <if test="collationCode != null and collationCode != ''"> AND collation_code = #{collationCode} </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="targetModel">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="targetModel" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        WHERE target_model_id = #{targetModelId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="targetModel">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="targetModel" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_model_id = #{targetModelId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_model_id in
+        <foreach collection="ids" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.platform.domain.TargetModel">
+        INSERT INTO
+        <include refid="table" />
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="targetModelId != null and targetModelId != ''"> target_model_id, </if>
+            <if test="name != null and name != ''"> name, </if>
+            <if test="description != null and description != ''"> description, </if>
+            <if test="creater != null and creater != ''"> creater, </if>
+            <if test="createDate != null"> create_date, </if>
+            <if test="state != null and state != ''"> state, </if>
+            <if test="level != null and level != ''"> level, </if>
+            <if test="makeCycle != null and makeCycle != ''"> make_cycle, </if>
+            <if test="childModelId != null and childModelId != ''"> child_model_id, </if>
+            <if test="collationCode != null and collationCode != ''"> collation_code, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="targetModelId != null and targetModelId != ''"> #{targetModelId}, </if>
+            <if test="name != null and name != ''">#{name}, </if>
+            <if test="description != null and description != ''"> #{description}, </if>
+            <if test="creater != null and creater != ''"> #{creater}, </if>
+            <if test="createDate != null"> #{createDate}, </if>
+            <if test="state != null and state != ''"> #{state}, </if>
+            <if test="level != null and level != ''"> #{level}, </if>
+            <if test="makeCycle != null and makeCycle != ''"> #{makeCycle}, </if>
+            <if test="childModelId != null and childModelId != ''"> #{childModelId}, </if>
+            <if test="collationCode != null and collationCode != ''"> #{collationCode}, </if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.platform.domain.TargetModel">
+        UPDATE
+        <include refid="table" />
+        <set>
+            <if test="name != null and name != ''"> name = #{name}, </if>
+            <if test="description != null and description != ''"> description = #{description}, </if>
+            <if test="creater != null and creater != ''"> creater = #{creater}, </if>
+            <if test="createDate != null"> create_date = #{createDate}, </if>
+            <if test="state != null and state != ''"> state = #{state}, </if>
+            <if test="level != null and level != ''"> level = #{level}, </if>
+            <if test="makeCycle != null and makeCycle != ''"> make_cycle = #{makeCycle}, </if>
+            <if test="childModelId != null and childModelId != ''"> child_model_id = #{childModelId}, </if>
+            <if test="collationCode != null and collationCode != ''"> collation_code = #{collationCode}, </if>
+        </set>
+        WHERE target_model_id = #{targetModelId}
+    </update>
+
+    <insert id="addReportTargetRelation">
+        insert into t_report_target_relation_model
+        (report_template_id, target_model_id)
+        values (#{reportTemplateId}, #{targetModelId})
+    </insert>
+
+</mapper>

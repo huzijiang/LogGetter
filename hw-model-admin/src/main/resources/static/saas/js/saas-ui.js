@@ -743,6 +743,9 @@
             addTab: function (id) {
                 $.modal.openTab("添加" + $.table._option.modalName, $.operate.addUrl(id));
             },
+			toAddTargetPage: function(id,makeCycle) {
+				$.modal.openTab("添加指标模板", ctx + "targetModel/add/" + id + "/" + makeCycle);
+			},
             // 添加信息 全屏
             addFull: function(id) {
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);
@@ -750,7 +753,6 @@
             },
             // 添加访问地址
             addUrl: function(id) {
-        		console.log(id);
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);
                 return url;
             },

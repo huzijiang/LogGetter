@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseTargetTemplateMapper">
+
+    <!--实体映射-->
+    <resultMap id="enterpriseTargetTemplate"
+               type="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
+        <!---->
+        <id property="enterpriseTargetTemplateId" column="enterprise_target_template_Id"/>
+        <!---->
+        <result property="enterpriseReportTemplateId" column="enterprise_report_template_id"/>
+        <!---->
+        <result property="targetModelTemplateId" column="target_model_template_id"/>
+        <!---->
+        <result property="enterpriseId" column="enterprise_id"/>
+        <!---->
+        <result property="showWay" column="show_way"/>
+        <!---->
+        <result property="name" column="name"/>
+        <!---->
+        <result property="templateContent" column="template_content"/>
+        <!---->
+        <result property="belongQueue" column="belong_queue"/>
+        <!---->
+        <result property="sn" column="sn"/>
+        <result property="groupName" column="group_name"/>
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_enterprise_target_template
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		enterprise_target_template_Id,enterprise_report_template_id,target_model_template_id,enterprise_id,show_way,name,template_content,
+		belong_queue,sn,group_name
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            <if test=" @Ognl@isNotEmpty(enterpriseTargetTemplateId)">AND enterprise_target_template_Id =
+                #{enterpriseTargetTemplateId}
+            </if>
+            <if test=" @Ognl@isNotEmpty(enterpriseReportTemplateId)">AND enterprise_report_template_id =
+                #{enterpriseReportTemplateId}
+            </if>
+            <if test=" @Ognl@isNotEmpty(targetModelTemplateId)">AND target_model_template_id =
+                #{targetModelTemplateId}
+            </if>
+            <if test=" @Ognl@isNotEmpty(enterpriseId)">AND enterprise_id = #{enterpriseId}</if>
+            <if test=" @Ognl@isNotEmpty(showWay)">AND show_way = #{showWay}</if>
+            <if test=" @Ognl@isNotEmpty(name)">AND name = #{name}</if>
+            <if test=" @Ognl@isNotEmpty(templateContent)">AND template_content = #{templateContent}</if>
+            <if test=" @Ognl@isNotEmpty(belongQueue)">AND belong_queue = #{belongQueue}</if>
+            <if test=" @Ognl@isNotEmpty(sn)">AND sn = #{sn}</if>
+            <if test=" @Ognl@isNotEmpty(groupName)">AND group_name = #{groupName}</if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="enterpriseTargetTemplate">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="enterpriseTargetTemplate" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="enterpriseTargetTemplate">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="enterpriseTargetTemplate" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_target_template_Id in
+        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
+        INSERT INTO
+        <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@Ognl@isNotEmpty(enterpriseTargetTemplateId) ">enterprise_target_template_Id,</if>
+            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">enterprise_report_template_id,</if>
+            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id,</if>
+            <if test="@Ognl@isNotEmpty(enterpriseId) ">enterprise_id,</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">show_way,</if>
+            <if test="@Ognl@isNotEmpty(name) ">name,</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">template_content,</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue,</if>
+            <if test="@Ognl@isNotEmpty(sn) ">sn,</if>
+            <if test="@Ognl@isNotEmpty(groupName) ">group_name,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@Ognl@isNotEmpty(enterpriseTargetTemplateId) ">#{enterpriseTargetTemplateId},</if>
+            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">#{enterpriseReportTemplateId},</if>
+            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">#{targetModelTemplateId},</if>
+            <if test="@Ognl@isNotEmpty(enterpriseId) ">#{enterpriseId},</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">#{showWay},</if>
+            <if test="@Ognl@isNotEmpty(name) ">#{name},</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">#{templateContent},</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">#{belongQueue},</if>
+            <if test="@Ognl@isNotEmpty(sn) ">#{sn},</if>
+            <if test="@Ognl@isNotEmpty(groupName) ">#{groupName},</if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">enterprise_report_template_id =
+                #{enterpriseReportTemplateId},
+            </if>
+            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id = #{targetModelTemplateId},
+            </if>
+            <if test="@Ognl@isNotEmpty(enterpriseId) ">enterprise_id = #{enterpriseId},</if>
+            <if test="@Ognl@isNotEmpty(showWay) ">show_way = #{showWay},</if>
+            <if test="@Ognl@isNotEmpty(name) ">name = #{name},</if>
+            <if test="@Ognl@isNotEmpty(templateContent) ">template_content = #{templateContent},</if>
+            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue = #{belongQueue},</if>
+            <if test="@Ognl@isNotEmpty(sn) ">sn = #{sn},</if>
+            <if test="@Ognl@isNotEmpty(groupName) ">group_name = #{groupName},</if>
+        </set>
+        WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
+    </update>
+
+</mapper>

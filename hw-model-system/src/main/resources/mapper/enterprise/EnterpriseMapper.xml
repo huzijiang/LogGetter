@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.suixingpay.hw.system.mapper.EnterpriseMapper">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseMapper">
 
     <resultMap type="Enterprise" id="EnterpriseResult">
         <id     property="enterpriseId"       column="enterprise_id"      />
@@ -15,7 +15,7 @@
         <result property="logo"       column="logo"       />
     </resultMap>
 
-    <select id="selectEnterpriseList" parameterType="com.suixingpay.hw.system.domain.Enterprise" resultMap="EnterpriseResult">
+    <select id="selectEnterpriseList" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise" resultMap="EnterpriseResult">
        SELECT enterprise_id,NAME,address,uscd,create_date,creater,admin,logo FROM t_enterprise where 1 = 1
         <if test="enterpriseId != null and enterpriseId != 0">
             AND enterprise_id like concat('%', #{enterpriseId}, '%')
@@ -58,7 +58,7 @@
  		delete from t_enterprise where enterprise_id = #{enterprise_id}
  	</delete>
 
-    <!--<select id="selectEnterpriseUserByEnterpriseId" parameterType="int" resultMap="com.suixingpay.hw.system.domain.EnterpriseUser">-->
+    <!--<select id="selectEnterpriseUserByEnterpriseId" parameterType="int" resultMap="com.suixingpay.hw.enterprise.domain.EnterpriseUser">-->
 		<!--SELECT user_id,enterprise_id,account,password,name,phone,email,state,job_number,wx_open_id,wx_chatHead,qicq,create_date FROM t_enterprise_user-->
         <!--where enterprise_id = #{enterprise_id}-->
 	<!--</select>-->
@@ -74,7 +74,7 @@
         </foreach>
     </delete>
 
-    <update id="updateEnterpriseInfo" parameterType="com.suixingpay.hw.system.domain.Enterprise">
+    <update id="updateEnterpriseInfo" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise">
         update t_enterprise
         <set>
             <if test="enterpriseId != null and enterpriseId != 0">enterprise_id = #{enterpriseId},</if>
@@ -89,7 +89,7 @@
         where enterprise_id = #{enterpriseId}
     </update>
 
-    <insert id="insertEnterprise" parameterType="com.suixingpay.hw.system.domain.Enterprise">
+    <insert id="insertEnterprise" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise">
         insert into t_enterprise(
         <if test="name != null and name != ''">enterprise_id,</if>
         <if test="name != null and name != ''">name,</if>
@@ -112,7 +112,7 @@
     </insert>
 
 
-    <insert id="insertEnterpriseUser" parameterType="com.suixingpay.hw.system.domain.EnterpriseUser">
+    <insert id="insertEnterpriseUser" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseUser">
         insert into t_enterprise_user(
         user_id,
         <if test="enterpriseId != null and enterpriseId != 0">enterprise_id,</if>
