@@ -60,7 +60,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="findOneById" resultMap="enterpriseTargetTemplate" parameterType="java.lang.String">
+    <select id="findOneById" resultMap="enterpriseTargetTemplate" parameterType="java.lang.Integer">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -85,7 +85,7 @@
     </select>
 
     <!--删除：根据主键ID删除-->
-    <delete id="deleteById" parameterType="java.lang.String">
+    <delete id="deleteById" parameterType="java.lang.Integer">
         DELETE FROM
         <include refid="table"/>
         WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
@@ -96,7 +96,7 @@
         DELETE FROM
         <include refid="table"/>
         WHERE enterprise_target_template_Id in
-        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+        <foreach collection="ids" item="i" open="(" separator="," close=")">
             #{i}
         </foreach>
     </delete>
@@ -136,18 +136,21 @@
         UPDATE
         <include refid="table"/>
         <set>
-            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">enterprise_report_template_id =
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''"> enterprise_target_template_Id =
+                #{enterpriseTargetTemplateId},
+            </if>
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> enterprise_report_template_id =
                 #{enterpriseReportTemplateId},
             </if>
-            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id = #{targetModelTemplateId},
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''"> target_model_template_id =
+                #{targetModelTemplateId},
             </if>
-            <if test="@Ognl@isNotEmpty(enterpriseId) ">enterprise_id = #{enterpriseId},</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">show_way = #{showWay},</if>
-            <if test="@Ognl@isNotEmpty(name) ">name = #{name},</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">template_content = #{templateContent},</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue = #{belongQueue},</if>
-            <if test="@Ognl@isNotEmpty(sn) ">sn = #{sn},</if>
-            <if test="@Ognl@isNotEmpty(groupName) ">group_name = #{groupName},</if>
+            <if test="enterpriseId != null and enterpriseId != ''"> enterprise_id = #{enterpriseId},</if>
+            <if test="showWay != null and showWay != ''"> show_way = #{showWay},</if>
+            <if test="name != null and name != ''"> name = #{name},</if>
+            <if test="belongQueue != null and belongQueue != ''"> belong_queue = #{belongQueue},</if>
+            <if test="sn != null and sn != ''"> sn = #{sn},</if>
+            <if test="groupName != null and groupName != ''"> group_name = #{groupName},</if>
         </set>
         WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
     </update>

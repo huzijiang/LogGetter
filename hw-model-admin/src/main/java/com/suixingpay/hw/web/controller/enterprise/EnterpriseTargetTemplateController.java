@@ -71,9 +71,9 @@ public class EnterpriseTargetTemplateController extends BaseController {
     /**
      * 进入修改企业指标模板页面
      */
-    @RequestMapping("/edit/{targetTemplateId}")
-    public String edit(@PathVariable("targetTemplateId") Integer targetTemplateId, ModelMap mmap) {
-        mmap.put("targetTemplate", targetTemplateService.findOneById(targetTemplateId));
+    @RequestMapping("/edit/{enterpriseTargetTemplateId}")
+    public String edit(@PathVariable("enterpriseTargetTemplateId") Integer enterpriseTargetTemplateId, ModelMap mmap) {
+        mmap.put("targetTemplate", targetTemplateService.findOneById(enterpriseTargetTemplateId));
         return "enterprise/report/enterpriseTargetTemplateEdit";
     }
 
@@ -93,8 +93,8 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequiresPermissions("enterprise:targetTemplate:remove")
     @RequestMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(Integer ids) {
-        targetTemplateService.deleteById(ids);
+    public AjaxResult remove(String ids) {
+        targetTemplateService.deleteBatchIds(ids);
         return AjaxResult.success();
     }
 }

@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">模板名称：</label>
+                    <label class="col-sm-4 control-label">企业指标模板名称：</label>
                     <div class="col-sm-8">
                         <input name="name" autocomplete="off" placeholder="请输入报告模板名称" class="form-control" type="text" maxlength="30" th:field="*{name}" required>
                     </div>
@@ -18,9 +18,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">描述：</label>
+                    <label class="col-sm-4 control-label">展现方式：</label>
                     <div class="col-sm-8">
-                        <input name="description" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{description}" required>
+                        <input name="showWay" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{showWay}" required>
                     </div>
                 </div>
             </div>
@@ -28,20 +28,18 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">核对码：</label>
+                    <label class="col-sm-4 control-label">归属的列或行：</label>
                     <div class="col-sm-8">
-                        <input name="collationCode" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{collationCode}" required>
+                        <input name="belongQueue" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{belongQueue}" required>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">状态：</label>
+                    <label class="col-sm-4 control-label">在行和列的排序序号：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{state}"></option>
-                            </select>
+                            <input name="sn" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{sn}" required>
                         </div>
                     </div>
                 </div>
@@ -50,24 +48,10 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">抽象水平：</label>
+                    <label class="col-sm-4 control-label">groupName：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="level" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{level}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">生成周期：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{makeCycle}"></option>
-                            </select>
+                            <input name="groupName" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="30" th:field="*{groupName}" >
                         </div>
                     </div>
                 </div>
@@ -87,7 +71,8 @@
     function submitHandler() {
         if ($.validate.form()) {
             var data = $("#form-targetModel-edit").serializeArray();
-            $.operate.saveTab(ctx + "targetModel/editSave", data);
+            debugger
+            $.operate.saveTab(ctx + "enterprise/targetTemplate/editSave", data);
         }
     }
 </script>

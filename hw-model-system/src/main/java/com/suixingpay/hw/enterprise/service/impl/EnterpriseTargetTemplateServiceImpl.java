@@ -1,5 +1,6 @@
 package com.suixingpay.hw.enterprise.service.impl;
 
+import com.suixingpay.hw.common.core.text.Convert;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
 import com.suixingpay.hw.enterprise.mapper.EnterpriseTargetTemplateMapper;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
@@ -31,7 +32,7 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
 
     @Override
     public int updateById(EnterpriseTargetTemplate template) {
-        return targetTemplateMapper.add(template);
+        return targetTemplateMapper.updateById(template);
     }
 
     @Override
@@ -42,5 +43,11 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
     @Override
     public int deleteById(Integer targetTemplateId) {
         return targetTemplateMapper.deleteById(targetTemplateId);
+    }
+
+    @Override
+    public int deleteBatchIds(String ids) {
+        Integer[] targetModelIds = Convert.toIntArray(ids);
+        return targetTemplateMapper.deleteBatchIds(targetModelIds);
     }
 }

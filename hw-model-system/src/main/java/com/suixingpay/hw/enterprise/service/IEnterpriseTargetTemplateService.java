@@ -45,4 +45,12 @@ public interface IEnterpriseTargetTemplateService {
      * @return 变更数
      */
     int deleteById(Integer targetTemplateId);
+
+    /**
+     * 删除：根据企业指标模板编号删除
+     *
+     * @param ids 企业指标模板编号
+     * @return 变更数
+     */
+    int deleteBatchIds(String ids);
 }

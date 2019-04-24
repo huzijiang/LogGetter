@@ -1,6 +1,7 @@
 package com.suixingpay.hw.enterprise.mapper;
 
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -45,4 +46,12 @@ public interface EnterpriseTargetTemplateMapper {
      * @return 变更数
      */
     int deleteById(Integer targetTemplateId);
+
+    /**
+     * 删除：根据企业指标模板编号删除
+     *
+     * @param ids 企业指标模板编号
+     * @return 变更数
+     */
+    int deleteBatchIds(@Param("ids") Integer[] ids);
 }
