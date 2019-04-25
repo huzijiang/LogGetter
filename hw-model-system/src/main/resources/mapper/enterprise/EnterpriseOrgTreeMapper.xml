@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseOrgTreeMapper">
+
+    <!--实体映射-->
+    <resultMap id="enterpriseOrgTree" type="com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree">
+        <id property="orgId" column="org_id" />
+        <result property="platformEnterpriseId" column="platform_enterprise_id" />
+        <result property="orgLevel" column="org_level" />
+        <result property="superiorOrg" column="superior_org" />
+        <result property="name" column="name" />
+        <result property="createDate" column="create_date" />
+        <result property="isDepartment" column="is_department" />
+        <result property="state" column="state" />
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_enterprise_org_tree
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		org_id,platform_enterprise_id,org_level,superior_org,name,create_date,is_department,
+		state
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            <if test="orgId != null and orgId != ''"> AND org_id = #{orgId} </if>
+            <if test="platformEnterpriseId != null and platformEnterpriseId != ''"> AND platform_enterprise_id = #{platformEnterpriseId} </if>
+            <if test="orgLevel != null and orgLevel != ''"> AND org_level = #{orgLevel} </if>
+            <if test="superiorOrg != null and superiorOrg != ''"> AND superior_org = #{superiorOrg} </if>
+            <if test="name != null and name != ''"> AND name = #{name} </if>
+            <if test="createDate != null"> AND create_date = #{createDate} </if>
+            <if test="isDepartment != null and isDepartment != ''"> AND is_department = #{isDepartment} </if>
+            <if test="state != null and state != ''"> AND state = #{state} </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="enterpriseOrgTree">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="enterpriseOrgTree" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        WHERE org_id = #{orgId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="enterpriseOrgTree">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="enterpriseOrgTree" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table" />
+        WHERE org_id = #{orgId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table" />
+        WHERE org_id in
+        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree">
+        INSERT INTO
+        <include refid="table" />
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(orgId) "> org_id, </if>
+            <if test="@Ognl@isNotEmpty(platformEnterpriseId) "> platform_enterprise_id, </if>
+            <if test="@Ognl@isNotEmpty(orgLevel) "> org_level, </if>
+            <if test="@Ognl@isNotEmpty(superiorOrg) "> superior_org, </if>
+            <if test="@Ognl@isNotEmpty(name) "> name, </if>
+            <if test="@Ognl@isNotEmpty(createDate) "> create_date, </if>
+            <if test="@Ognl@isNotEmpty(isDepartment) "> is_department, </if>
+            <if test="@Ognl@isNotEmpty(state) "> state, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(orgId) "> #{orgId}, </if>
+            <if test="@Ognl@isNotEmpty(platformEnterpriseId) "> #{platformEnterpriseId}, </if>
+            <if test="@Ognl@isNotEmpty(orgLevel) "> #{orgLevel}, </if>
+            <if test="@Ognl@isNotEmpty(superiorOrg) "> #{superiorOrg}, </if>
+            <if test="@Ognl@isNotEmpty(name) "> #{name}, </if>
+            <if test="@Ognl@isNotEmpty(createDate) "> #{createDate}, </if>
+            <if test="@Ognl@isNotEmpty(isDepartment) "> #{isDepartment}, </if>
+            <if test="@Ognl@isNotEmpty(state) "> #{state}, </if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree">
+        UPDATE
+        <include refid="table" />
+        <set>
+            <if test="@Ognl@isNotEmpty(platformEnterpriseId) "> platform_enterprise_id = #{platformEnterpriseId}, </if>
+            <if test="@Ognl@isNotEmpty(orgLevel) "> org_level = #{orgLevel}, </if>
+            <if test="@Ognl@isNotEmpty(superiorOrg) "> superior_org = #{superiorOrg}, </if>
+            <if test="@Ognl@isNotEmpty(name) "> name = #{name}, </if>
+            <if test="@Ognl@isNotEmpty(createDate) "> create_date = #{createDate}, </if>
+            <if test="@Ognl@isNotEmpty(isDepartment) "> is_department = #{isDepartment}, </if>
+            <if test="@Ognl@isNotEmpty(state) "> state = #{state}, </if>
+        </set>
+        WHERE org_id = #{orgId}
+    </update>
+
+</mapper>

@@ -1,4 +1,4 @@
-package com.suixingpay.hw.enterprise.domain;
+package com.suixingpay.hw.platform.domain;
 
 import lombok.Data;
 

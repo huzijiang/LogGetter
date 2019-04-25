@@ -73,6 +73,20 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">子模板：</label>
+                <div class="col-sm-2">
+                    <a class="btn btn-success" onclick="$.operate.selectTemplate('指标模板','enterprise/reportTemplate/selectTargetTemplate')">
+                        <i class="fa fa-plus"></i> 请选择
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <input name="childModelId" th:value="${id}" class="form-control templateId" type="hidden">
+                    <input th:value="${name}" class="form-control templateName" readonly>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <div class="row">
@@ -91,6 +105,11 @@
             var data = $("#form-targetModel-add").serializeArray();
             $.operate.saveTab(ctx + "targetModel/save", data);
         }
+    }
+
+    function changeDisplay(id, name) {
+        $('.templateId').attr("value",id);
+        $('.templateName').attr("value",name);
     }
 </script>
 </body>

@@ -5,7 +5,7 @@
 
     <!--实体映射-->
     <resultMap id="targetModelContentTemplate"
-               type="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+               type="com.suixingpay.hw.platform.domain.TargetModelContentTemplate">
         <!---->
         <id property="targetModelTemplateId" column="target_model_template_id"/>
         <!---->
@@ -98,7 +98,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+    <insert id="add" parameterType="com.suixingpay.hw.platform.domain.TargetModelContentTemplate">
         INSERT INTO
         <include refid="table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -122,7 +122,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.TargetModelContentTemplate">
+    <update id="updateById" parameterType="com.suixingpay.hw.platform.domain.TargetModelContentTemplate">
         UPDATE
         <include refid="table"/>
         <set>

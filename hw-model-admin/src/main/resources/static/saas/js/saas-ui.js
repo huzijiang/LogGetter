@@ -735,6 +735,55 @@
 				return url;
 			},
 
+			//弹窗：选择xx模板
+			selectTemplate: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+
+			//选择报告模板
+			selectReportTemplate: function(id) {
+				$.modal.open("选择报告模板", ctx + "enterprise/reportTemplate/selectReportTemplate");
+			},
+			selectSuccessCallBack: function(type, url){
+				var row = $.table.selectFirstColumns();
+				if ($.common.isEmpty(row)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'id=' + row +'&type=' + type,
+					success: function (result) {
+						parent.window.changeDisplay(row, result.modelMap.name);
+						$.modal.close();
+					}
+				})
+			},
+			//回显所选择报告模板
+			select: function() {
+				var row = $.table.selectFirstColumns();
+				if ($.common.isEmpty(row)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + "enterprise/reportTemplate/add",
+					type: 'GET',
+					success: function (result) {
+						$.ajax({
+							url: ctx + "enterprise/reportTemplate/get",
+							type: 'POST',
+							data: "id=" + row,
+							success: function (data) {
+								parent.window.change(row, data.mmap.reportTemplateName);
+								$.modal.close();
+							}
+						});
+					}
+				})
+			},
+
             // 添加信息
             add: function(id) {
                 $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id));

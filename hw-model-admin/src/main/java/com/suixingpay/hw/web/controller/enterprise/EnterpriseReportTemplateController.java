@@ -3,10 +3,16 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
+import com.suixingpay.hw.enterprise.service.IEnterpriseOrgTreeService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
+import com.suixingpay.hw.platform.domain.ReportTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
+import com.suixingpay.hw.platform.service.ITargetModelService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
@@ -30,6 +37,18 @@ public class EnterpriseReportTemplateController  extends BaseController {
 
     @Autowired
     private IEnterpriseReportTemplateService reportTemplateService;
+
+    @Autowired
+    private IReportTemplateService templateService;
+
+    @Autowired
+    private IEnterpriseService enterpriseService;
+
+    @Autowired
+    private IEnterpriseOrgTreeService enterpriseOrgTreeService;
+
+    @Autowired
+    private ITargetModelService targetModelService;
 
     /**
      * 进入报告模板列表页面
@@ -56,7 +75,9 @@ public class EnterpriseReportTemplateController  extends BaseController {
      * 进入报告模板添加页面
      */
     @RequestMapping("/add")
-    public String add() {
+    public String add(ModelMap mmap) {
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        mmap.put("enterpriseList", enterpriseList);
         return "enterprise/report/enterpriseReportTemplateAdd";
     }
 
@@ -67,7 +88,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseReportTemplate template) {
-        template.setReportTemplateId((Integer) IdUtil.getManyId("t_enterprise_report_template",1).get(0));
+        template.setEnterpriseReportTemplateId((Integer) IdUtil.getManyId("t_enterprise_report_template",1).get(0));
         template.setCreateDate(new Date());
         template.setCreater(ShiroUtils.getUserId().intValue());
         return toAjax(reportTemplateService.add(template));
@@ -105,4 +126,49 @@ public class EnterpriseReportTemplateController  extends BaseController {
 //        targetModelMapper.deleteBatchIds(reportTemplateIdList.toArray(new Integer[]{reportTemplateIdList.size()}));
         return AjaxResult.success();
     }
+
+    @RequestMapping("/getOrg")
+    @ResponseBody
+    public AjaxResult getOrg(@RequestParam("enterpriseId")  Integer enterpriseId) {
+        EnterpriseOrgTree enterpriseOrgTree = new EnterpriseOrgTree();
+        enterpriseOrgTree.setPlatformEnterpriseId(enterpriseId);
+        return AjaxResult.success().put("orgList", enterpriseOrgTreeService.find(enterpriseOrgTree));
+    }
+
+    /**
+     * 进入选择报告模板添加页面
+     */
+    @RequestMapping("/selectReportTemplate")
+    public String selectReportTemplate() {
+        return "mini/reportTemplateMini";
+    }
+
+    /**
+     * 进入选择指标模板添加页面
+     */
+    @RequestMapping("/selectTargetTemplate")
+    public String selectTargetTemplate() {
+        return "mini/targetModelMini";
+    }
+
+    @RequestMapping("/getTemplate")
+    @ResponseBody
+    public AjaxResult getTemplate(@RequestParam("id") Integer id,@RequestParam("type") String type, ModelMap modelMap){
+        String name = "";
+        switch (type){
+            case "00" :
+                name = templateService.findOneById(id).getName();
+                break;
+            case "10" :
+                name  = targetModelService.findOneById(id).getName();
+                break;
+            default:break;
+        }
+
+        modelMap.put("name", name);
+        modelMap.put("id", id);
+
+        return AjaxResult.success().put("modelMap", modelMap);
+    }
+
 }
