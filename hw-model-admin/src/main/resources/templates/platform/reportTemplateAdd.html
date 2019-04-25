@@ -9,17 +9,17 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">模板名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板名称：</label>
                     <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="请输入报告模板名称" class="form-control" type="text" maxlength="30" required>
+                        <input name="name" autocomplete="off" placeholder="请输入报告模板名称" class="form-control" type="text" maxlength="20" required>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>描述：</label>
+                    <label class="col-sm-4 control-label">描述：</label>
                     <div class="col-sm-8">
-                        <input name="description" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="11" required>
+                        <input name="description" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="40">
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">状态：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
@@ -39,7 +39,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">受众：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>受众：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="audiences" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
@@ -53,7 +53,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">归属：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
@@ -65,7 +65,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">是否首页展示：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否首页展示：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
@@ -79,7 +79,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">生成周期：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
@@ -103,9 +103,11 @@
 <script>
 
     function submitHandler() {
-        var data = $("#form-reportTemplate-add").serializeArray();
-        console.log("data: ", data);
-       $.operate.saveTab(ctx + "reportTemplate/save", data);
+        if ($.validate.form()) {
+                var data = $("#form-reportTemplate-add").serializeArray();
+                $.operate.saveTab(ctx + "reportTemplate/save", data);
+
+        }
     }
 </script>
 </body>
