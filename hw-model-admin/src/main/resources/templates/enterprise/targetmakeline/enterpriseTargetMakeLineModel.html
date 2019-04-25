@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+
+<body class="gray-bg">
+	<div class="container-div ui-layout-center">
+		<!--模糊查询模块-->
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="enterpriseTargetMakeLineModel-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								企业指标模型标记线id：<input type="text" name="enterpriseTargetMakeLineModelId"/>
+							</li>
+							<li>
+								企业报告id：<input type="text" name="enterpriseReportId"/>
+							</li>
+							<li>
+								企业指标模版id：<input type="text" name="enterpriseTargetTemplateId"/>
+							</li>
+							<li>
+								指标模型标记线id：<input type="text" name="targetMakeLineModelId"/>
+							</li>
+							<li>
+								指标模型模版id：<input type="text" name="targetModelTemplateId"/>
+							</li>
+							<li>
+								企业id：<input type="text" name="enterpriseId"/>
+							</li>
+							<li>
+								指标模型id：<input type="text" name="targetModelId"/>
+							</li>
+							<li>
+								标记线名称：<input type="text" name="lineName"/>
+							</li>
+							<li>
+								描述：<input type="text" name="description"/>
+							</li>
+							<li>
+								标记值：<input type="text" name="markValue"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+	        	<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetMakeLine:save">
+	                <i class="fa fa-plus"></i> 新增
+	            </a>
+	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetMakeLine:edit">
+		            <i class="fa fa-edit"></i> 修改
+		        </a>
+	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetMakeLine:remove">
+	                <i class="fa fa-remove"></i> 删除
+	            </a>
+	        </div>
+	        <!--查询结果显示table-->
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	
+	<div th:include="include :: footer"></div>
+	<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('enterprise:targetMakeLine:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('enterprise:targetMakeLine:remove')}]];
+		var prefix = ctx + "enterprise/targetMakeLine";
+
+        //对查询结果显示的table进行控制
+		$(function() {
+		    var panehHidden = false;
+		    if ($(this).width() < 769) {
+		        panehHidden = true;
+		    }
+		    $('body').layout({ initClosed: panehHidden, west__size: 185 });
+            queryCustomerList();
+		});
+
+		function queryCustomerList() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+		        modalName: "企业指标模型标记线模型",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'enterpriseTargetMakeLineModelId',
+		            title: '企业指标模型标记线id'
+		        },
+		        {
+		            field: 'enterpriseReportId',
+		            title: '企业报告id',
+		        },
+		        {
+		            field: 'enterpriseTargetTemplateId',
+		            title: '企业指标模版id'
+		        },
+		        {
+		            field: 'targetMakeLineModelId',
+		            title: '指标模型标记线id'
+		        },
+		        {
+                    field: 'targetModelTemplateId',
+		        	title: '指标模型模版id',
+		        },
+				{
+					field: 'enterpriseId',
+					title: '企业id',
+				},
+				{
+					field: 'targetModelId',
+					title: '指标模型id',
+				},
+				{
+					field: 'lineName',
+					title: '标记线名称',
+				},
+				{
+					field: 'description',
+					title: '描述',
+				},
+				{
+					field: 'markValue',
+					title: '标记值',
+				},
+				{
+					field: 'lastChangeDate',
+					title: '最后改变日期',
+				},
+				{
+					field: 'lastChanger',
+					title: '最后改变人',
+				},
+
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.enterpriseTargetMakeLineModelId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.enterpriseTargetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    //对页面所有进行初始化
+		    $.table.init(options);
+		}
+	</script>
+</body>
+</html>

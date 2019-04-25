@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8" content="multipart/form-data">
+<head th:include="include :: header"></head>
+<body>
+    <div class="form-content">
+        <form class="form-horizontal" id="form-enterpriseTargetMakeLineModel-edit"  th:object="${enterpriseTargetMakeLineModel}" >
+            <input name="enterpriseTargetMakeLineModelId"  type="hidden"  th:field="*{enterpriseTargetMakeLineModelId}" />
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业报告id：</label>
+                        <div class="col-sm-8">
+                            <input name="enterpriseReportId" autocomplete="off" placeholder="请输入企业报告id" class="form-control" type="text" maxlength="40" th:field="*{enterpriseReportId}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业指标模版id：</label>
+                        <div class="col-sm-8">
+                            <input name="enterpriseTargetTemplateId" autocomplete="off" placeholder="请输入指标模型模板id" class="form-control" type="text" maxlength="80" th:field="*{enterpriseTargetTemplateId}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标模型标记线id：</label>
+                        <div class="col-sm-8">
+                            <input name="targetMakeLineModelId" autocomplete="off" placeholder="请输入标记线名称" class="form-control" type="text" maxlength="40" th:field="*{targetMakeLineModelId}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标模型模版id：</label>
+                        <div class="col-sm-8">
+                            <input name="targetModelTemplateId" autocomplete="off" placeholder="请输入描述" class="form-control" type="text" maxlength="80" th:field="*{targetModelTemplateId}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">企业id：</label>
+                        <div class="col-sm-8">
+                            <input name="enterpriseId"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" th:field="*{enterpriseId}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">指标模型id：</label>
+                        <div class="col-sm-8">
+                            <input name="targetModelId"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" th:field="*{targetModelId}" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">标记线名称：</label>
+                        <div class="col-sm-8">
+                            <input name="lineName"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)"  th:field="*{lineName}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">描述：</label>
+                        <div class="col-sm-8">
+                            <input name="description"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" th:field="*{description}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">标记值：</label>
+                        <div class="col-sm-8">
+                            <input name="markValue"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)"  th:field="*{markValue}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<div th:include="include::footer"></div>
+	<script th:src="@{/ajax/libs/select/select2.js}"></script>
+	<script>
+        function submitHandler() {
+            if ($.validate.form()) {
+                var data = $("#form-enterpriseTargetMakeLineModel-edit").serializeArray();
+                $.operate.saveTab(ctx + "enterprise/targetMakeLine/editSave", data);
+            }
+        }
+    </script>
+</body>
+</html>

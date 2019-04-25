@@ -18,6 +18,8 @@ public class EnterpriseTargetMakeLineModel {
 
 	private Integer enterpriseReportId;
 
+	private Integer enterpriseTargetTemplateId;
+
 	private String targetMakeLineModelId;
 
 	private Integer targetModelTemplateId;

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.platform.mapper.TargetMakeLineModelMapper">
+
+    <!--实体映射-->
+    <resultMap id="targetMakeLineModel" type="com.suixingpay.hw.platform.domain.TargetMakeLineModel">
+        <id property="targetMakeLineModelId" column="target_make_line_model_Id" />
+        <result property="targetModelId" column="target_model_id" />
+        <result property="targetModelTemplateId" column="target_model_template_id" />
+        <result property="lineName" column="line_name" />
+        <result property="description" column="description" />
+        <result property="defaultvalue" column="defaultValue" />
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_target_make_line_model
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		target_make_line_model_Id,target_model_id,target_model_template_id,line_name,description,defaultValue
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            1=1
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''"> AND target_make_line_model_Id  like concat('%', #{targetMakeLineModelId}, '%') </if>
+            <if test="targetModelId != null"> AND target_model_id like concat('%', #{targetModelId}, '%') </if>
+            <if test="targetModelTemplateId != null "> AND target_model_template_id  like concat('%', #{targetModelTemplateId}, '%')</if>
+            <if test="lineName != null and lineName != ''"> AND line_name like concat('%', #{lineName}, '%')</if>
+            <if test="description != null and description != ''"> AND description like concat('%', #{description}, '%') </if>
+            <if test="defaultvalue != null"> AND defaultValue like concat('%', #{defaultvalue}, '%')</if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="targetMakeLineModel">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="targetMakeLineModel" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        WHERE target_make_line_model_Id = #{targetMakeLineModelId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="targetMakeLineModel">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="targetMakeLineModel" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_make_line_model_Id = #{targetMakeLineModelId}
+    </delete>
+
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_make_line_model_Id  in
+        <foreach collection="ids" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.platform.domain.TargetMakeLineModel">
+        INSERT INTO
+        <include refid="table" />
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''"> target_make_line_model_Id, </if>
+            <if test="targetModelId != null"> target_model_id, </if>
+            <if test="targetModelTemplateId != null"> target_model_template_id, </if>
+            <if test="lineName != null and lineName != ''"> line_name, </if>
+            <if test="description != null and description != ''"> description, </if>
+            <if test="defaultvalue != null "> defaultValue, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''">#{targetMakeLineModelId}, </if>
+            <if test="targetModelId != null"> #{targetModelId}, </if>
+            <if test="targetModelTemplateId != null"> #{targetModelTemplateId}, </if>
+            <if test="lineName != null and lineName != ''"> #{lineName}, </if>
+            <if test="description != null and description != ''"> #{description}, </if>
+            <if test="defaultvalue != null"> #{defaultvalue}, </if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.platform.domain.TargetMakeLineModel">
+        UPDATE
+        <include refid="table" />
+        <set>
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''">  target_make_line_model_Id = #{targetMakeLineModelId} ,</if>
+            <if test="targetModelId != null">  target_model_id = #{targetModelId} ,</if>
+            <if test="targetModelTemplateId != null ">  target_model_template_id = #{targetModelTemplateId} ,</if>
+            <if test="lineName != null and lineName != ''">  line_name = #{lineName}, </if>
+            <if test="description != null and description != ''">  description = #{description}, </if>
+            <if test="defaultvalue != null">  defaultValue = #{defaultvalue}, </if>
+        </set>
+        WHERE target_make_line_model_Id = #{targetMakeLineModelId}
+    </update>
+
+</mapper>
