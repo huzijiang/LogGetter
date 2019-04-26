@@ -11,7 +11,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业报告id：</label>
                         <div class="col-sm-8">
-                            <input name="enterpriseReportId" autocomplete="off" placeholder="请输入企业报告id" class="form-control" type="text" maxlength="40" required>
+                            <input name="enterpriseReportId" autocomplete="off" placeholder="请输入企业报告id" class="form-control" type="text" maxlength="11" required>
                         </div>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业指标模版id：</label>
                         <div class="col-sm-8">
-                            <input name="enterpriseTargetTemplateId" autocomplete="off" placeholder="请输入指标模型模板id" class="form-control" type="text" maxlength="80" >
+                            <input name="enterpriseTargetTemplateId" autocomplete="off" placeholder="请输入指标模型模板id" class="form-control" type="text" maxlength="11" required>
                         </div>
                     </div>
                 </div>
@@ -27,17 +27,17 @@
             <div class="row">
             	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标模型标记线id：</label>
+                        <label class="col-sm-4 control-label">指标模型标记线id：</label>
                         <div class="col-sm-8">
-                            <input name="targetMakeLineModelId" autocomplete="off" placeholder="请输入标记线名称" class="form-control" type="text" maxlength="40" required>
+                            <input name="targetMakeLineModelId" autocomplete="off" placeholder="请输入标记线名称" class="form-control" type="text" maxlength="10" >
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标模型模版id：</label>
+                        <label class="col-sm-4 control-label">指标模型模版id：</label>
                         <div class="col-sm-8">
-                            <input name="targetModelTemplateId" autocomplete="off" placeholder="请输入描述" class="form-control" type="text" maxlength="80" >
+                            <input name="targetModelTemplateId" autocomplete="off" placeholder="请输入指标模型模版id" class="form-control" type="text" maxlength="11" >
                         </div>
                     </div>
                 </div>
@@ -45,17 +45,17 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">企业id：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>企业id：</label>
                         <div class="col-sm-8">
-                            <input name="enterpriseId"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" >
+                            <input name="enterpriseId"  autocomplete="off" placeholder="请输入企业id" class="form-control" type="text" maxlength="11" required >
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">指标模型id：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标模型id：</label>
                         <div class="col-sm-8">
-                            <input name="targetModelId"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" >
+                            <input name="targetModelId"  autocomplete="off" placeholder="请输入指标模型id" class="form-control" type="text" maxlength="11" required >
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">标记线名称：</label>
                         <div class="col-sm-8">
-                            <input name="lineName"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" >
+                            <input name="lineName"  autocomplete="off" placeholder="请输入标记线名称" class="form-control" type="text" maxlength="10" >
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">描述：</label>
                         <div class="col-sm-8">
-                            <input name="description"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" >
+                            <input name="description"  autocomplete="off" placeholder="请输入描述" class="form-control" type="text" maxlength="10"  >
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">标记值：</label>
                         <div class="col-sm-8">
-                            <input name="markValue"  autocomplete="off" placeholder="请输入默认值" class="form-control" type="number" oninput="if(value.length>4)value=value.slice(10,4)" >
+                            <input name="markValue"  autocomplete="off" placeholder="请输入标记值" class="form-control" type="text" maxlength="10"  >
                         </div>
                     </div>
                 </div>

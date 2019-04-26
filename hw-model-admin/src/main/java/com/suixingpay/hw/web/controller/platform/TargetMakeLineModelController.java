@@ -95,6 +95,7 @@ public class TargetMakeLineModelController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        //todo 删除企业标记线表里相关联的数据
         return toAjax(targetMakeLineModelService.deleteBatchIds(ids));
     }
 }

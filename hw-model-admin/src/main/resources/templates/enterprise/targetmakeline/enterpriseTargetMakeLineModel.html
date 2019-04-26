@@ -60,9 +60,9 @@
 	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetMakeLine:edit">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetMakeLine:remove">
-	                <i class="fa fa-remove"></i> 删除
-	            </a>
+	            <!--<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetMakeLine:remove">-->
+	                <!--<i class="fa fa-remove"></i> 删除-->
+	            <!--</a>-->
 	        </div>
 	        <!--查询结果显示table-->
 	        <div class="col-sm-12 select-table table-striped">
@@ -153,7 +153,7 @@
 		            formatter: function(value, row, index) {
 		                var actions = [];
 		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.enterpriseTargetMakeLineModelId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.enterpriseTargetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.enterpriseTargetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                return actions.join('');
 		            }
 		        }]
