@@ -6,7 +6,7 @@ spring:
         druid:
             # 主库数据源
             master:
-                url: jdbc:mysql://10.10.3.81:32630/fang_cloud?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+                url: jdbc:mysql://172.16.143.31:32326/fang_cloud?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&allowMultiQueries=true
                 username: fangcloud
                 password: 123456$sxf$
             # 从库数据源
@@ -17,11 +17,11 @@ spring:
                 username: 
                 password: 
             # 初始连接数
-            initialSize: 5
+            initialSize: 10
             # 最小连接池数量
             minIdle: 10
             # 最大连接池数量
-            maxActive: 20
+            maxActive: 200
             # 配置获取连接等待超时的时间
             maxWait: 60000
             # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
