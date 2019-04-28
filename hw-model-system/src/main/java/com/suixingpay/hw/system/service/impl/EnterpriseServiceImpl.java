@@ -1,6 +1,7 @@
 package com.suixingpay.hw.system.service.impl;
 
-import com.suixingpay.hw.common.annotation.DataScope;
+import com.suixingpay.hw.common.utils.PasswordEncoder;
+import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.system.domain.*;
 import com.suixingpay.hw.system.mapper.*;
 import com.suixingpay.hw.system.service.IEnterpriseService;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
@@ -23,6 +25,9 @@ public class EnterpriseServiceImpl implements IEnterpriseService
 
     @Autowired
     private EnterpriseMapper enterpriseMapper;
+
+    /** 默认密码 */
+    private static final String DEFAULT_PASSWORD = "123456";
 
     @Override
     public List<Enterprise> selectEnterpriseList(Enterprise enterprise) {
@@ -71,13 +76,9 @@ public class EnterpriseServiceImpl implements IEnterpriseService
 
     @Override
     public int insertEnterpriseUser(EnterpriseUser enterpriseUser) {
+        enterpriseUser.setPassword(encoderPassword(enterpriseUser.getPassword()));
         return enterpriseMapper.insertEnterpriseUser(enterpriseUser);
     }
-
-//    @Override
-//    public int updateEnterprise(Enterprise enterprise) {
-//        return EnterpriseMapper.updateEnterprise(enterprise);
-//    }
 
     @Override
     public int updateEnterpriseInfo(Enterprise enterprise) {
@@ -92,6 +93,17 @@ public class EnterpriseServiceImpl implements IEnterpriseService
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * 密码处理方法
+     *
+     * @param passWord 明文密码
+     * @return 密文密码
+     */
+    private String encoderPassword(String passWord) {
+        PasswordEncoder encoder = new PasswordEncoder(PasswordEncoder.DEFAULT_SALT, "SHA");
+        return encoder.encode(encoder.encode(StringUtils.isEmpty(passWord) ? DEFAULT_PASSWORD : passWord));
     }
 }
 

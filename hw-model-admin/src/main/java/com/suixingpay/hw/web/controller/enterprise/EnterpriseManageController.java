@@ -199,6 +199,7 @@ public class EnterpriseManageController extends BaseController
         enterpriseUser.setPhone(phone);
         enterpriseUser.setQicq(qicq);
         enterpriseUser.setWxOpenId(wxOpenId);
+        enterpriseUser.setState("00");
         enterpriseService.insertEnterpriseUser(enterpriseUser);
         Enterprise enterprise = new Enterprise();
         Integer userId = enterpriseUser.getUserId();

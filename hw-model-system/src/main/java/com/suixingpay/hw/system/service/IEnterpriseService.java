@@ -90,14 +90,6 @@ public interface IEnterpriseService
      */
     public int insertEnterpriseUser(EnterpriseUser enterpriseUser);
 
-//    /**
-//     * 修改保存企业信息
-//     *
-//     * @param enterprise 企业信息
-//     * @return 结果
-//     */
-//    public int updateEnterprise(Enterprise enterprise);
-
     /**
      * 修改用户详细信息
      *

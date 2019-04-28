@@ -121,7 +121,7 @@
         <if test="name != null and name != ''">name,</if>
         <if test="phone != null and phone != ''">phone,</if>
         <if test="email != null and email != ''">email,</if>
-        state,
+        <if test="state != null and state != ''">state,</if>
         <if test="jobNumber != null and jobNumber != ''">job_number,</if>
         <if test="wxOpenId != null and wxOpenId != ''">wx_open_id,</if>
         <if test="wxChatHead != null and wxChatHead != ''">wx_chatHead,</if>
@@ -135,7 +135,7 @@
         <if test="name != null and name != ''">#{name},</if>
         <if test="phone != null and phone != ''">#{phone},</if>
         <if test="email != null and email != ''">#{email},</if>
-        00,
+        <if test="state != null and state != ''">#{state},</if>
         <if test="jobNumber != null and jobNumber != ''">#{jobNumber},</if>
         <if test="wxOpenId != null and wxOpenId != ''">#{wxOpenId},</if>
         <if test="wxChatHead != null and wxChatHead != ''">#{wxChatHead},</if>
