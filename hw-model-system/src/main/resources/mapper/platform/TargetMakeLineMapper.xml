@@ -11,7 +11,7 @@
         <result property="targetModelTemplateId" column="target_model_template_id" />
         <result property="lineName" column="line_name" />
         <result property="description" column="description" />
-        <result property="defaultvalue" column="defaultValue" />
+        <result property="defaultValue" column="defaultValue" />
     </resultMap>
 
     <!--表名-->
@@ -33,7 +33,7 @@
             <if test="targetModelTemplateId != null "> AND target_model_template_id  like concat('%', #{targetModelTemplateId}, '%')</if>
             <if test="lineName != null and lineName != ''"> AND line_name like concat('%', #{lineName}, '%')</if>
             <if test="description != null and description != ''"> AND description like concat('%', #{description}, '%') </if>
-            <if test="defaultvalue != null"> AND defaultValue like concat('%', #{defaultvalue}, '%')</if>
+            <if test="defaultValue != null"> AND defaultValue like concat('%', #{defaultValue}, '%')</if>
         </where>
     </sql>
 
@@ -59,13 +59,6 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM
-        <include refid="table" />
-        <include refid="dynamicWhere"/>
-    </select>
-
-    <!-- 查询总数（根据实体查询） -->
-    <select id="count" resultMap="targetMakeLineModel" resultType="java.lang.Long">
-        SELECT COUNT(*) FROM
         <include refid="table" />
         <include refid="dynamicWhere"/>
     </select>
@@ -98,7 +91,7 @@
             <if test="targetModelTemplateId != null"> target_model_template_id, </if>
             <if test="lineName != null and lineName != ''"> line_name, </if>
             <if test="description != null and description != ''"> description, </if>
-            <if test="defaultvalue != null "> defaultValue, </if>
+            <if test="defaultValue != null "> defaultValue, </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''">#{targetMakeLineModelId}, </if>
@@ -106,7 +99,7 @@
             <if test="targetModelTemplateId != null"> #{targetModelTemplateId}, </if>
             <if test="lineName != null and lineName != ''"> #{lineName}, </if>
             <if test="description != null and description != ''"> #{description}, </if>
-            <if test="defaultvalue != null"> #{defaultvalue}, </if>
+            <if test="defaultValue != null"> #{defaultValue}, </if>
         </trim>
     </insert>
 
@@ -120,7 +113,7 @@
             <if test="targetModelTemplateId != null ">  target_model_template_id = #{targetModelTemplateId} ,</if>
             <if test="lineName != null and lineName != ''">  line_name = #{lineName}, </if>
             <if test="description != null and description != ''">  description = #{description}, </if>
-            <if test="defaultvalue != null">  defaultValue = #{defaultvalue}, </if>
+            <if test="defaultValue != null">  defaultValue = #{defaultValue}, </if>
         </set>
         WHERE target_make_line_model_Id = #{targetMakeLineModelId}
     </update>

@@ -22,7 +22,7 @@
                             描述：<input type="text" name="description"/>
                         </li>
                         <li>
-                            子模板编号：<input type="text" name="childModelId"/>
+                            子指标模型编号：<input type="text" name="childModelId"/>
                         </li>
                         <li>
                             核对码：<input type="text" name="collationCode"/>
@@ -61,9 +61,9 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <!--<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="targetModel:add">-->
-                <!--<i class="fa fa-plus"></i> 新增-->
-            <!--</a>-->
+            <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="targetModel:add">
+                <i class="fa fa-plus"></i> 新增
+            </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="targetModel:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
@@ -106,14 +106,15 @@
             removeUrl: ctx + "targetModel/remove",
             sortName: "createDate",
             sortOrder: "desc",
-            modalName: "指标模板",
+            modalName: "平台指标模型",
             columns: [
                 {
                     checkbox: true
                 },
                 {
                     field: 'targetModelId',
-                    title: '编号'
+                    title: '编号',
+                    visible: false
                 },
                 {
                     field: 'name',
@@ -125,7 +126,8 @@
                 },
                 {
                     field: 'childModelId',
-                    title: '子模板编号'
+                    title: '子指标模型编号',
+                    visible: false
                 },
                 {
                     field: 'collationCode',
@@ -147,7 +149,8 @@
                 },
                 {
                     field: 'createDate',
-                    title: '生成日期'
+                    title: '生成日期',
+                    visible: false
                 },
                 {
                     field: 'makeCycle',
@@ -159,7 +162,8 @@
                 },
                 {
                     field: 'creater',
-                    title: '创建人'
+                    title: '创建人',
+                    visible: false
                 },
                 {
                     title: '操作',

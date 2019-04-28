@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @description: 报告模板
+ * @description: 平台报告模型
  * @author: xu_pf@suixingpay.com
  * @create: 2019-04-23 15:28
  **/

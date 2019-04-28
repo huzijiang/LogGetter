@@ -24,6 +24,6 @@ public class TargetMakeLineModel {
 
 	private String description;
 
-	private BigDecimal defaultvalue;
+	private BigDecimal defaultValue;
 
 }

@@ -734,29 +734,268 @@
 				}
 				return url;
 			},
+			//
+			// selectSuccessCallBack: function(url){
+			// 	var rows = $.table.selectFirstColumns();
+			// 	if ($.common.isEmpty(rows)) {
+			// 		$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+			// 		return;
+			// 	}
+			// 	$.ajax({
+			// 		url: ctx + url,
+			// 		type: 'POST',
+			// 		data: 'id=' + rows,
+			// 		success: function (result) {
+			// 			parent.window.changeDisplay(rows, result.modelMap.name);
+			// 			$.modal.close();
+			// 		}
+			// 	})
+			// },
 
-			//弹窗：选择xx模板
-			selectTemplate: function(type, url) {
+			//判断元素是否在数组中
+			contain: function(arr, obj) {
+        		$.each(arr, function (index, item) {
+					return item == obj;
+				});
+			},
+
+			//获取当前分页所有的targetModelIds
+			getCurrentTargetModelIds: function() {
+				var rows = $('#' + $.table._option.id).bootstrapTable('getData');
+				var currentTargetModelIds = [];
+				$.each(rows, function (index, row) {
+					currentTargetModelIds.push(row.targetModelId);
+				});
+				return currentTargetModelIds;
+			},
+
+
+			/**
+			 *checkbox回显已经选过的数据
+			 *
+			 * @param dbExistTargetModelIds 待回显的数据
+			 */
+			checkboxDisplay: function(dbExistTargetModelIds) {
+				console.log("dbExistTargetModelIds = ", dbExistTargetModelIds);
+        		if (dbExistTargetModelIds.length == 0) {
+        			return;
+				}
+        		//获取当前分页出现的所有 targetModelId
+				var currentTargetModelIds = $.operate.getCurrentTargetModelIds();
+				//回显当前分页的 targetModelId
+				for (var i = 0; i < dbExistTargetModelIds.length; i++) {
+					for (var j = 0; j < currentTargetModelIds.length; j++) {
+						if (dbExistTargetModelIds[i] == currentTargetModelIds[j]) {
+							$('#' + $.table._option.id).bootstrapTable('check', j);
+						}
+					}
+				}
+
+			},
+
+
+
+			chechboxDisplay: function() {
+        		//debugger;
+				//var rows = $.table.selectColumns('targetModelId');
+				var rows = $('#' + $.table._option.id).bootstrapTable('getData');
+				console.log(rows);
+				var data = [];
+				$.each(rows, function (index, row) {
+					data.push(row.targetModelId);
+				});
+				for (var i = 0; i < data.length; i++) {
+					console.log(i + ' = ', data[i]);
+					if (eval(data[i]) == eval(100024)) {
+						$('#' + $.table._option.id).bootstrapTable('check', i);
+					}
+				}
+				// $.each(data, function (index, d) {
+				// 	if (d == 100024){
+				// 		$('#' + $.table._option.id).bootstrapTable('check', d)
+				// 	}
+				// })
+				console.log(data);
+			},
+
+
+
+			//弹窗：选择企业指标模板
+			selectEnterpriseTargetTemp: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectEnterpriseTargetTempSuccess: function() {
+
+			},
+
+
+			//弹窗：选择平台指标模型展示内容模板
+			selectTMCT: function(type, url) {
 				$.modal.open("选择" + type, ctx + url);
 			},
 
-			//选择报告模板
-			selectReportTemplate: function(id) {
-				$.modal.open("选择报告模板", ctx + "enterprise/reportTemplate/selectReportTemplate");
-			},
-			selectSuccessCallBack: function(type, url){
-				var row = $.table.selectFirstColumns();
-				if ($.common.isEmpty(row)) {
+			selectTMCTSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
 					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
 					return;
 				}
 				$.ajax({
 					url: ctx + url,
 					type: 'POST',
-					data: 'id=' + row +'&type=' + type,
+					data: 'targetModelTemplateId=' + rows,
 					success: function (result) {
-						parent.window.changeDisplay(row, result.modelMap.name);
-						$.modal.close();
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(rows, result.modelMap.name, result.modelMap.targetModelId);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
+			},
+
+
+
+
+			//弹窗：选择平台报告模型
+			selectReportModel: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectReportModelSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'reportModelId=' + rows,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(rows, result.modelMap.name);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
+			},
+
+
+			//弹窗：选择平台指标模型
+			selectTargetModel: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectTargetModelSuccess: function(url, reportModelId, dbExisttargetModelIds) {
+				var rows = $.table.selectFirstColumns();
+
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				if (reportModelId == 0 && rows.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+				if (reportModelId == 0) {
+					// 单个平台指标模型
+					$.ajax({
+						url: ctx + url,
+						type: 'POST',
+						data: 'targetModelId=' + rows,
+						success: function (result) {
+							if (result.code == web_status.SUCCESS) {
+								parent.window.changeDisplay(rows, result.modelMap.name);
+								$.modal.close();
+							} else {
+								$.modal.alertError(result.msg);
+							}
+						}
+					})
+				} else {
+					//多个平台指标模型
+					var data = { "targetModelIds": rows.join(), "reportModelId": reportModelId};
+					$.ajax({
+						url: ctx + url,
+						type: 'POST',
+						data: data,
+						success: function (result) {
+							if (result.code == web_status.SUCCESS) {
+								$.modal.close();
+							} else {
+								$.modal.alertError(result.msg);
+							}
+						}
+					})
+				}
+			},
+
+			//弹窗：选择xx模板
+			selectTemplate: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			//成功选择xx模板
+			selectTemplateSuccess: function(url, templateId) {
+        		//debugger;
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				if (templateId == 0 && rows.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+				if (templateId == 0) {
+					$.operate.selectSingleTemplate(rows, url);
+				} else {
+					var data = { "ids": rows.join(), "templateId": templateId};
+					$.operate.selectManyTemplate(data, url);
+				}
+			},
+			//校验
+			checkedTemplate: function(data, val) {
+				if ($.common.isEmpty(data)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				if (val == 0 && data.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+			},
+			//选择多个模板
+			selectManyTemplate: function(data, url) {
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: data,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+
+					}
+				})
+			},
+			//选择单个模板
+			selectSingleTemplate: function(data, url){
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'id=' + data,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(data, result.modelMap.name);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+
 					}
 				})
 			},

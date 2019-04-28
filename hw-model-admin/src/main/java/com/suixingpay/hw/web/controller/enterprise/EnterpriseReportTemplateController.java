@@ -99,7 +99,9 @@ public class EnterpriseReportTemplateController  extends BaseController {
      */
     @RequestMapping("/edit/{enterpriseReportTemplateId}")
     public String edit(@PathVariable("enterpriseReportTemplateId") Integer enterpriseReportTemplateId, ModelMap mmap) {
-        mmap.put("enterpriseReportTemplate", reportTemplateService.findOneById(enterpriseReportTemplateId));
+        EnterpriseReportTemplate enterpriseReportTemplate = reportTemplateService.findOneById(enterpriseReportTemplateId);
+        mmap.put("enterpriseReportTemplate", enterpriseReportTemplate);
+        mmap.put("name", templateService.findOneById(enterpriseReportTemplate.getReportTemplateId()).getName());
         return "enterprise/report/enterpriseReportTemplateEdit";
     }
 
@@ -134,41 +136,4 @@ public class EnterpriseReportTemplateController  extends BaseController {
         enterpriseOrgTree.setPlatformEnterpriseId(enterpriseId);
         return AjaxResult.success().put("orgList", enterpriseOrgTreeService.find(enterpriseOrgTree));
     }
-
-    /**
-     * 进入选择报告模板添加页面
-     */
-    @RequestMapping("/selectReportTemplate")
-    public String selectReportTemplate() {
-        return "mini/reportTemplateMini";
-    }
-
-    /**
-     * 进入选择指标模板添加页面
-     */
-    @RequestMapping("/selectTargetTemplate")
-    public String selectTargetTemplate() {
-        return "mini/targetModelMini";
-    }
-
-    @RequestMapping("/getTemplate")
-    @ResponseBody
-    public AjaxResult getTemplate(@RequestParam("id") Integer id,@RequestParam("type") String type, ModelMap modelMap){
-        String name = "";
-        switch (type){
-            case "00" :
-                name = templateService.findOneById(id).getName();
-                break;
-            case "10" :
-                name  = targetModelService.findOneById(id).getName();
-                break;
-            default:break;
-        }
-
-        modelMap.put("name", name);
-        modelMap.put("id", id);
-
-        return AjaxResult.success().put("modelMap", modelMap);
-    }
-
 }

@@ -6,25 +6,40 @@
 <div class="form-content">
     <form class="form-horizontal" id="form-reportTemplate-edit" th:object="${enterpriseReportTemplate}">
         <input name="enterpriseReportTemplateId"  type="hidden"  th:field="*{enterpriseReportTemplateId}" />
-        <h4 class="form-header h4">企业指标模板基本信息</h4>
+        <h4 class="form-header h4">企业报告模板基本信息</h4>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">企业报告模板名称：</label>
+                    <label class="col-sm-4 control-label">名称：</label>
                     <div class="col-sm-8">
                         <input name="name" autocomplete="off" placeholder="请输入企业报告模板名称" class="form-control" type="text" maxlength="40" th:field="*{name}" required>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">企业报告模板别名：</label>
+                    <label class="col-sm-4 control-label">别名：</label>
                     <div class="col-sm-8">
                         <input name="name" autocomplete="off" placeholder="请输入企业报告模板别名" class="form-control" type="text" maxlength="40" th:field="*{reportAlias}" required>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">平台报告模型：</label>
+                    <div class="col-sm-6">
+                        <input name="reportTemplateId" th:value="${id}" class="form-control templateId" type="hidden" th:field="*{reportTemplateId}">
+                        <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-success" onclick="$.operate.selectReportModel('平台报告模型','toAddReportModelPage')">
+                            <i class="fa fa-plus"></i> 请选择
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">状态：</label>
@@ -32,6 +47,20 @@
                         <div class="input-group" style="width: 100%">
                             <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{state}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">生成周期：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{makeCycle}"></option>
                             </select>
                         </div>
                     </div>
@@ -53,6 +82,18 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label">归属企业：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="enterpriseId" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{belongOrg}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label">归属部门：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
@@ -63,6 +104,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">归属组织级别：</label>
@@ -75,9 +118,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">是否首页展示：</label>
@@ -90,20 +130,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">生成周期：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{makeCycle}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">描述：</label>
@@ -129,6 +157,10 @@
             var data = $("#form-reportTemplate-edit").serializeArray();
             $.operate.saveTab(ctx + "enterprise/reportTemplate/editSave", data);
         }
+    }
+    function changeDisplay(id, name) {
+        $('.templateId').attr("value",id);
+        $('.templateName').attr("value",name);
     }
 </script>
 </body>

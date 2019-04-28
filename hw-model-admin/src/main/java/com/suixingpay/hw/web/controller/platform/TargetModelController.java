@@ -54,10 +54,8 @@ public class TargetModelController extends BaseController {
     /**
      * 进入指标模板添加页面
      */
-    @RequestMapping("/add/{id}/{makeCycle}")
-    public String add(@PathVariable("id") Integer reportTemplateId, @PathVariable("makeCycle") String makeCycle, ModelMap mmap) {
-        mmap.put("reportTemplateId", reportTemplateId);
-        mmap.put("makeCycle", makeCycle);
+    @RequestMapping("/add")
+    public String add() {
         return "platform/targetModelAdd";
     }
 
@@ -73,17 +71,19 @@ public class TargetModelController extends BaseController {
         targetModel.setCreater(ShiroUtils.getUserId().intValue());
         targetModelService.add(targetModel);
 
-        targetModelService.addReportTargetRelation(targetModel.getReportTemplateId(), targetModel.getTargetModelId());
+        //targetModelService.addReportTargetRelation(targetModel.getReportTemplateId(), targetModel.getTargetModelId());
 
         return AjaxResult.success();
     }
 
     /**
-     * 修改指标模板
+     * 修改指标模板 TODO 若为空 处理
      */
     @RequestMapping("/edit/{targetModelId}")
     public String edit(@PathVariable("targetModelId") Integer targetModelId, ModelMap mmap) {
-        mmap.put("targetModel", targetModelService.findOneById(targetModelId));
+        TargetModel targetModel = targetModelService.findOneById(targetModelId);
+        mmap.put("targetModel", targetModel);
+        mmap.put("name", targetModelService.findOneById(targetModel.getTargetModelId()).getName());
         return "platform/targetModelEdit";
     }
 

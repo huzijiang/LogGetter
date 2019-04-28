@@ -2,11 +2,8 @@ package com.suixingpay.hw.platform.domain;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
- * @description:
+ * @description: 平台指标模型内容模板
  * @author: xu_pf@suixingpay.com
  * @create: 2019-04-23 23:56
  **/
@@ -28,21 +25,4 @@ public class TargetModelContentTemplate {
     private String belongQueue;
 
     private Integer sn;
-
-    /** 请求参数 */
-    private Map<String, Object> params;
-
-    public Map<String, Object> getParams()
-    {
-        if (params == null)
-        {
-            params = new HashMap<>();
-        }
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params)
-    {
-        this.params = params;
-    }
 }

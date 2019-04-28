@@ -19,13 +19,13 @@
                             企业编号：<input type="text" name="enterpriseId"/>
                         </li>
                         <li>
-                            报告模板编号：<input type="text" name="reportTemplateId"/>
+                            平台报告模型编号：<input type="text" name="reportTemplateId"/>
                         </li>
                         <li>
-                            企业报告模板名称：<input type="text" name="name"/>
+                            名称：<input type="text" name="name"/>
                         </li>
                         <li>
-                            企业报告模板别名：<input type="text" name="reportAlias"/>
+                            别名：<input type="text" name="reportAlias"/>
                         </li>
                         <li>
                             描述：<input type="text" name="description"/>
@@ -124,23 +124,26 @@
             columns: [
                 {
                     field: 'enterpriseReportTemplateId',
-                    title: '企业报告模板编号'
+                    title: '企业报告模板编号',
+                    visible: false
                 },
                 {
                     field: 'enterpriseId',
-                    title: '企业编号'
+                    title: '企业编号',
+                    visible: false
                 },
                 {
                     field: 'reportTemplateId',
-                    title: '报告模板编号'
+                    title: '平台报告模型编号',
+                    visible: false
                 },
                 {
                     field: 'name',
-                    title: '企业报告模板名称'
+                    title: '名称'
                 },
                 {
                     field: 'reportAlias',
-                    title: '企业报告模板别名'
+                    title: '别名'
                 },
                 {
                     field: 'description',
@@ -184,7 +187,8 @@
                 },
                 {
                     field: 'createDate',
-                    title: '生成日期'
+                    title: '生成日期',
+                    visible: false
                 },
                 {
                     field: 'makeCycle',
@@ -196,7 +200,8 @@
                 },
                 {
                     field: 'creater',
-                    title: '创建人'
+                    title: '创建人',
+                    visible: false
                 },
                 {
                     title: '操作',
@@ -205,7 +210,7 @@
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.enterpriseReportTemplateId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.enterpriseReportTemplateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-                        actions.push('<a class="btn btn-primary btn-xs ' + addTargetFlag + '" href="#" onclick="$.operate.toAddTargetPage(\'' + row.enterpriseReportTemplateId + '\', \'' + row.makeCycle + '\')"><i class="fa fa-plus"></i>添加指标</a> ');
+                        // actions.push('<a class="btn btn-primary btn-xs ' + addTargetFlag + '" href="#" onclick="$.operate.selectEnterpriseTargetTemp(\'企业指标模型\',\'toAddEnterpriseTargetTempPage/' + row.enterpriseReportTemplateId + '\')"><i class="fa fa-plus"></i>添加指标</a> ');
                         return actions.join('');
                     }
                 }]

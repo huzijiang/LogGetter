@@ -8,29 +8,28 @@
 
 <body class="gray-bg">
 	<div class="container-div ui-layout-center">
-		<!--模糊查询模块-->
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="enterprise-form">
 					<div class="select-list">
 						<ul>
 							<li>
-								指标模型标记线id：<input type="text" name="targetMakeLineModelId"/>
+								平台指标标记线模型编号：<input type="text" name="targetMakeLineModelId"/>
 							</li>
 							<li>
-								指标模型id：<input type="text" name="targetModelId"/>
+								平台指标模型编号：<input type="text" name="targetModelId"/>
 							</li>
 							<li>
-								指标模型模板id：<input type="text" name="targetModelTemplateId"/>
+								平台指标模型展示内容模型编号：<input type="text" name="targetModelTemplateId"/>
 							</li>
 							<li>
-								标记线名称：<input type="text" name="lineName"/>
+								名称：<input type="text" name="lineName"/>
 							</li>
 							<li>
 								描述：<input type="text" name="description"/>
 							</li>
 							<li>
-								默认值：<input type="text" name="defaultvalue"/>
+								默认值：<input type="text" name="defaultValue"/>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -82,47 +81,50 @@
 		        createUrl: prefix + "/add",
 		        updateUrl: prefix + "/edit/{id}",
 		        removeUrl: prefix + "/remove",
-		        modalName: "指标模型标记线",
+				sortName: "targetMakeLineModelId",
+				sortOrder: "desc",
+				modalName: "平台指标标记线模型",
 		        columns: [{
 		            checkbox: true
 		        },
 		        {
 		            field: 'targetMakeLineModelId',
-		            title: '指标模型标记线id'
+		            title: '平台指标标记线模型编号',
+					visible: false
 		        },
 		        {
 		            field: 'targetModelId',
-		            title: '指标模型id',
+		            title: '平台指标模型编号',
+					visible: false
 		        },
 		        {
 		            field: 'targetModelTemplateId',
-		            title: '指标模型模板id'
+		            title: '平台指标模型展示内容模型编号',
+					visible: false
 		        },
 		        {
 		            field: 'lineName',
-		            title: '标记线名称'
+		            title: '名称'
 		        },
 		        {
                     field: 'description',
-		        	title: '描述',
+		        	title: '描述'
 		        },
 				{
-					field: 'defaultvalue',
-					title: '默认值',
+					field: 'defaultValue',
+					title: '默认值'
 				},
-
 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		                var actions = [];
 		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.targetMakeLineModelId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-		                //actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.targetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs disabled' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.targetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
 		                return actions.join('');
 		            }
 		        }]
 		    };
-		    //对页面所有进行初始化
 		    $.table.init(options);
 		}
 	</script>

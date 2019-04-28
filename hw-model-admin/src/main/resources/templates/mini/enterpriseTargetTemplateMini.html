@@ -13,19 +13,7 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            企业指标模板编号：<input type="text" name="enterpriseTargetTemplateId"/>
-                        </li>
-                        <li>
-                            企业报告模板编号：<input type="text" name="enterpriseReportTemplateId"/>
-                        </li>
-                        <li>
-                            平台指标模型展示内容模型编号：<input type="text" name="targetModelTemplateId"/>
-                        </li>
-                        <li>
-                            名称：<input type="text" name="name"/>
-                        </li>
-                        <li>
-                            公司编号：<input type="text" name="enterpriseId"/>
+                            企业指标模板名称：<input type="text" name="name"/>
                         </li>
                         <li>
                             展现方式：<input type="text" name="showWay"/>
@@ -48,18 +36,6 @@
             </form>
         </div>
 
-        <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetTemplate:save">
-                <i class="fa fa-plus"></i> 新增
-            </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetTemplate:edit">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetTemplate:remove">
-                <i class="fa fa-remove"></i> 删除
-            </a>
-        </div>
-
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
         </div>
@@ -69,9 +45,6 @@
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
 
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('enterprise:targetTemplate:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('enterprise:targetTemplate:remove')}]];
-
     $(function() {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -84,15 +57,13 @@
     function queryReportList() {
         var options = {
             url: ctx + "enterprise/targetTemplate/list",
-            createUrl: ctx + "enterprise/targetTemplate/add",
-            updateUrl: ctx + "enterprise/targetTemplate/edit/{id}",
-            removeUrl: ctx + "enterprise/targetTemplate/remove",
             sortName: "enterpriseTargetTemplateId",
             sortOrder: "desc",
             modalName: "企业指标模板",
             columns: [
                 {
-                    checkbox: true
+                    field: 'selectItem',
+                    radio: true
                 },
                 {
                     field: 'enterpriseTargetTemplateId',
@@ -106,7 +77,7 @@
                 },
                 {
                     field: 'targetModelTemplateId',
-                    title: '平台指标模型展示内容模型编号',
+                    title: '指标模板编号',
                     visible: false
                 },
                 {
@@ -138,19 +109,13 @@
                     field: 'templateContent',
                     title: '文本内容',
                     visible: false
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.enterpriseTargetTemplateId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.enterpriseTargetTemplateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
-                        return actions.join('');
-                    }
                 }]
         };
         $.table.init(options);
+    }
+    function submitHandler() {
+        var url = [[${enterpriseReportModelId}]] == 0 ? 'getSingleModelDisplay' : 'addSaveTargetModel';
+        $.operate.selectEnterpriseTargetTempSuccess(url, [[${enterpriseReportModelId}]]);
     }
 </script>
 </body>

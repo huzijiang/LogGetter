@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.suixingpay.hw.enterprise.mapper.TargetModelContentTemplateMapper">
+<mapper namespace="com.suixingpay.hw.platform.mapper.TargetModelContentTemplateMapper">
 
     <!--实体映射-->
     <resultMap id="targetModelContentTemplate"
@@ -35,15 +35,15 @@
     <!-- 通用查询条件-->
     <sql id="dynamicWhere">
         <where>
-            <if test=" @Ognl@isNotEmpty(targetModelTemplateId)">AND target_model_template_id =
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id =
                 #{targetModelTemplateId}
             </if>
-            <if test=" @Ognl@isNotEmpty(targetModelId)">AND target_model_id = #{targetModelId}</if>
-            <if test=" @Ognl@isNotEmpty(name)">AND name = #{name}</if>
-            <if test=" @Ognl@isNotEmpty(showWay)">AND show_way = #{showWay}</if>
-            <if test=" @Ognl@isNotEmpty(templateContent)">AND template_content = #{templateContent}</if>
-            <if test=" @Ognl@isNotEmpty(belongQueue)">AND belong_queue = #{belongQueue}</if>
-            <if test=" @Ognl@isNotEmpty(sn)">AND sn = #{sn}</if>
+            <if test="targetModelId != null and targetModelId != ''">AND target_model_id = #{targetModelId}</if>
+            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
+            <if test="templateContent != null and templateContent != ''">AND template_content = #{templateContent}</if>
+            <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
+            <if test="sn != null and sn != ''">AND sn = #{sn}</if>
         </where>
     </sql>
 
@@ -73,13 +73,6 @@
         <include refid="dynamicWhere"/>
     </select>
 
-    <!-- 查询总数（根据实体查询） -->
-    <select id="count" resultMap="targetModelContentTemplate" resultType="java.lang.Long">
-        SELECT COUNT(*) FROM
-        <include refid="table"/>
-        <include refid="dynamicWhere"/>
-    </select>
-
     <!--删除：根据主键ID删除-->
     <delete id="deleteById" parameterType="java.lang.Integer">
         DELETE FROM
@@ -102,22 +95,22 @@
         INSERT INTO
         <include refid="table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id,</if>
-            <if test="@Ognl@isNotEmpty(targetModelId) ">target_model_id,</if>
-            <if test="@Ognl@isNotEmpty(name) ">name,</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">show_way,</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">template_content,</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue,</if>
-            <if test="@Ognl@isNotEmpty(sn) ">sn,</if>
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">target_model_template_id,</if>
+            <if test="targetModelId != null and targetModelId != ''">target_model_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="showWay != null and showWay != ''">show_way,</if>
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">template_content,</if>
+            <if test="belongQueue != null and belongQueue != ''">belong_queue,</if>
+            <if test="sn != null and sn != ''">sn,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">#{targetModelTemplateId},</if>
-            <if test="@Ognl@isNotEmpty(targetModelId) ">#{targetModelId},</if>
-            <if test="@Ognl@isNotEmpty(name) ">#{name},</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">#{showWay},</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">#{templateContent},</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">#{belongQueue},</if>
-            <if test="@Ognl@isNotEmpty(sn) ">#{sn},</if>
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">#{targetModelTemplateId},</if>
+            <if test="targetModelId != null and targetModelId != ''">#{targetModelId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="showWay != null and showWay != ''">#{showWay},</if>
+            <if test="templateContent != null and templateContent != ''">#{templateContent},</if>
+            <if test="belongQueue != null and belongQueue != ''">#{belongQueue},</if>
+            <if test="sn != null and sn != ''">#{sn},</if>
         </trim>
     </insert>
 
@@ -126,29 +119,15 @@
         UPDATE
         <include refid="table"/>
         <set>
-            <if test="@Ognl@isNotEmpty(targetModelId) ">target_model_id = #{targetModelId},</if>
-            <if test="@Ognl@isNotEmpty(name) ">name = #{name},</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">show_way = #{showWay},</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">template_content = #{templateContent},</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue = #{belongQueue},</if>
-            <if test="@Ognl@isNotEmpty(sn) ">sn = #{sn},</if>
+            <if test="targetModelId != null and targetModelId != ''">target_model_id = #{targetModelId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="showWay != null and showWay != ''">show_way = #{showWay},</if>
+            <if test="templateContent != null and templateContent != ''">template_content = #{templateContent},</if>
+            <if test="belongQueue != null and belongQueue != ''">belong_queue = #{belongQueue},</if>
+            <if test="sn != null and sn != ''">sn = #{sn},</if>
         </set>
         WHERE target_model_template_id = #{targetModelTemplateId}
     </update>
 
-    <select id="getModelId" resultType="com.suixingpay.hw.platform.domain.TargetModel">
-        select
-        model.collation_code as collationCode ,
-        model.target_model_id as targetModelId
-        from
-        <include refid="table"/>
-        as template
-        left join t_target_model as model
-        on model.target_model_id = template.target_model_id
-        <where>
-            template.target_model_template_id = #{targetModelTemplateId}
-            and model.state = '0'
-        </where>
-    </select>
 
 </mapper>

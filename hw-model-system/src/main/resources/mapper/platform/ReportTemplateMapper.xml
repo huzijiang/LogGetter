@@ -151,10 +151,19 @@
         <result property="targetModelId" column="target_model_id" />
     </resultMap>
 
-    <select id="selectTargetModelByReportTemplateId" parameterType="java.lang.Integer" resultMap="targetModelIds">
+    <select id="selectTargetModelByReportTemplateId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select target_model_id
         from t_report_target_relation_model
         where report_template_id = #{reportTemplateId}
     </select>
+
+    <insert id="insertReportTargetRelation">
+        insert into t_report_target_relation_model
+          (report_template_id, target_model_id)
+        values
+            <foreach collection="ids" item="id" separator=",">
+                (#{reportTemplateId},#{id})
+            </foreach>
+    </insert>
 
 </mapper>

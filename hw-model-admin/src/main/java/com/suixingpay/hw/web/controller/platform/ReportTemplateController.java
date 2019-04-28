@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @description: 报告模板 Controller
+ * @description: 平台报告模型 Controller
  * @author: xu_pf@suixingpay.com
  * @create: 2019-04-23 15:21
  **/
@@ -35,7 +35,7 @@ public class ReportTemplateController extends BaseController {
     private TargetModelMapper targetModelMapper;
 
     /**
-     * 进入报告模板列表页面
+     * 进入平台报告模型列表页面
      */
     @RequiresPermissions("reportTemplate:view")
     @RequestMapping("/view")
@@ -44,7 +44,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 获取报告模板列表
+     * 获取平台报告模型列表
      */
     @RequiresPermissions("reportTemplate:list")
     @RequestMapping("/list")
@@ -56,7 +56,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 进入报告模板添加页面
+     * 进入平台报告模型添加页面
      */
     @RequestMapping("/add")
     public String add() {
@@ -64,7 +64,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 新增报告模板
+     * 新增平台报告模型
      */
     @RequiresPermissions("reportTemplate:save")
     @RequestMapping("/save")
@@ -77,7 +77,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 修改报告模板
+     * 修改平台报告模型
      */
     @RequestMapping("/edit/{reportTemplateId}")
     public String edit(@PathVariable("reportTemplateId") Integer reportTemplateId, ModelMap mmap) {
@@ -86,7 +86,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 修改保存报告模板
+     * 修改保存平台报告模型
      */
     @RequiresPermissions("reportTemplate:edit")
     @RequestMapping("/editSave")
@@ -96,7 +96,7 @@ public class ReportTemplateController extends BaseController {
     }
 
     /**
-     * 删除报告模板
+     * 删除平台报告模型
      */
     @RequiresPermissions("reportTemplate:remove")
     @RequestMapping("/remove")

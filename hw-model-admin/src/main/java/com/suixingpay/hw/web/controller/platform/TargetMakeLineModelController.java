@@ -4,7 +4,9 @@ import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.platform.domain.TargetMakeLineModel;
+import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
 import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
+import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class TargetMakeLineModelController extends BaseController {
 
     @Autowired
     private ITargetMakeLineModelService targetMakeLineModelService;
+
+    @Autowired
+    private ITargetModelContentTemplateService tmctService;
 
     /**
      * 进入指标模板列表页面
@@ -74,7 +79,11 @@ public class TargetMakeLineModelController extends BaseController {
      */
     @RequestMapping("/edit/{targetMakeLineModelId}")
     public String edit(@PathVariable("targetMakeLineModelId") Integer targetMakeLineModelId, ModelMap mmap) {
-        mmap.put("targetMakeLineModel", targetMakeLineModelService.findOneById(targetMakeLineModelId));
+        TargetMakeLineModel targetMakeLineModel = targetMakeLineModelService.findOneById(targetMakeLineModelId);
+        TargetModelContentTemplate tmct = tmctService.findOneById(targetMakeLineModel.getTargetModelTemplateId());
+        mmap.put("targetMakeLineModel", targetMakeLineModel);
+        mmap.put("name",tmct.getName());
+        mmap.put("targetModelId", tmct.getTargetModelId());
         return "platform/targetMakeLineModelEdit";
     }
 

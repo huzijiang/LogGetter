@@ -1,5 +1,6 @@
 package com.suixingpay.hw.platform.service.impl;
 
+import com.suixingpay.hw.common.core.text.Convert;
 import com.suixingpay.hw.platform.domain.ReportTemplate;
 import com.suixingpay.hw.platform.mapper.ReportTemplateMapper;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @description: 报告模板 Service
+ * @description: 平台报告模型 Service
  * @author: xu_pf@suixingpay.com
  * @create: 2019-04-23 15:34
  **/
@@ -47,5 +48,10 @@ public class ReportTemplateServiceImpl implements IReportTemplateService {
     @Override
     public List<Integer> selectTargetModelByReportTemplateId(Integer reportTemplateId) {
         return reportTemplateMapper.selectTargetModelByReportTemplateId(reportTemplateId);
+    }
+
+    @Override
+    public int insertReportTargetRelation(String ids, Integer reportTemplateId) {
+        return reportTemplateMapper.insertReportTargetRelation(Convert.toIntArray(ids), reportTemplateId);
     }
 }
