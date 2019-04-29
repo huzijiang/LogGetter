@@ -49,7 +49,5 @@ uploadArchives {
             pom.groupId = 'com.hw_saas.model.common'
             pom.artifactId = 'hw-model-common'
         }
-    }
-    
-     
+    }  
 }
