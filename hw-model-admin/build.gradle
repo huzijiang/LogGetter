@@ -15,3 +15,10 @@ dependencies {
 }
 
 description = '管理系统admin'
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}

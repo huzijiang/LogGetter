@@ -12,3 +12,11 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '定时器'
+
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}

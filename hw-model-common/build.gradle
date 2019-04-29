@@ -20,3 +20,10 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '功能公共包'
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}

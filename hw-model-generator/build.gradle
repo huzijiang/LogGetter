@@ -10,3 +10,10 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '代码生成'
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
