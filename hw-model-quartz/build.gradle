@@ -1,11 +1,11 @@
 dependencies {
-    ///compile project(':hw-model-common')
+    compile project(':hw-model-common')
     compile group: 'org.apache.shiro', name: 'shiro-core', version:'1.4.0'
     compile(group: 'org.quartz-scheduler', name: 'quartz', version:'2.3.0') {
         exclude(module: 'c3p0')
     }
     
-    compile group: 'com.hw_saas.model.common', name: 'hw-model-common', version: '1.0.1-SNAPSHOT'
+    //compile group: 'com.hw_saas.model.common', name: 'hw-model-common', version: '1.0.1-SNAPSHOT'
     
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compile 'org.projectlombok:lombok:1.18.2'

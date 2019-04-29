@@ -1,9 +1,9 @@
 dependencies {
-    ////compile project(':hw-model-common')
+    compile project(':hw-model-common')
     compile(group: 'mysql', name: 'mysql-connector-java', version:'8.0.13') {
         exclude(module: 'protobuf-java')
     }
-    compile group: 'com.hw_saas.model.common', name: 'hw-model-common', version: '1.0.1-SNAPSHOT'
+    //compile group: 'com.hw_saas.model.common', name: 'hw-model-common', version: '1.0.1-SNAPSHOT'
     
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compile 'org.projectlombok:lombok:1.18.2'
