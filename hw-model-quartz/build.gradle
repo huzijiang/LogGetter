@@ -4,5 +4,11 @@ dependencies {
     compile(group: 'org.quartz-scheduler', name: 'quartz', version:'2.3.0') {
         exclude(module: 'c3p0')
     }
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '定时器'

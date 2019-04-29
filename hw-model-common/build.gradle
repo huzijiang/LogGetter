@@ -12,5 +12,11 @@ dependencies {
     compile group: 'javax.servlet', name: 'javax.servlet-api', version:'4.0.1'
 
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.56'
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '功能公共包'

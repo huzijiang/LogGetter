@@ -2,5 +2,11 @@ dependencies {
     compile project(':hw-model-common')
     compile group: 'org.apache.shiro', name: 'shiro-core', version:'1.4.0'
     compile group: 'org.apache.velocity', name: 'velocity', version:'1.7'
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 description = '代码生成'

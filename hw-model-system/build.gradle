@@ -3,6 +3,12 @@ dependencies {
     compile(group: 'mysql', name: 'mysql-connector-java', version:'8.0.13') {
         exclude(module: 'protobuf-java')
     }
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 
 description = '管理系统代码'

@@ -6,6 +6,12 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version:'2.1.1.RELEASE'
     compile group: 'io.springfox', name: 'springfox-swagger2', version:'2.7.0'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version:'2.7.0'
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.2'
+    compile 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'org.projectlombok:lombok:1.18.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
 
 description = '管理系统admin'
