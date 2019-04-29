@@ -21,18 +21,6 @@ dependencies {
 }
 description = '功能公共包'
 
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
-    
-    into('lib') {
-        from configurations.runtime
-    }
-}
-
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 

@@ -13,9 +13,4 @@ dependencies {
 }
 description = '代码生成'
 
-bootJar {
-    enabled = true
-}
-jar {
-    enabled = false
-}
+
