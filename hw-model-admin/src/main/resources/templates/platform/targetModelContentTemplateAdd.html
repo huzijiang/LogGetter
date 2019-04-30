@@ -23,7 +23,7 @@
                         <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-success" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0')">
+                        <a class="btn btn-success btn-sm" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0/999')">
                             <i class="fa fa-plus"></i> 请选择
                         </a>
                     </div>
@@ -54,8 +54,8 @@
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展现形式：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="showWay" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
-                                <option value="">请选择</option>
+                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -86,7 +86,6 @@
     function submitHandler() {
         if ($.validate.form()) {
             var data = $("#form-targetModel-add").serializeArray();
-            console.log("data= ",data);
             $.operate.saveTab(ctx + "targetModelContentTemplate/save", data);
         }
     }

@@ -762,6 +762,7 @@
 			//获取当前分页所有的targetModelIds
 			getCurrentTargetModelIds: function() {
 				var rows = $('#' + $.table._option.id).bootstrapTable('getData');
+				console.log("rows = ", rows);
 				var currentTargetModelIds = [];
 				$.each(rows, function (index, row) {
 					currentTargetModelIds.push(row.targetModelId);
@@ -816,6 +817,32 @@
 				// 	}
 				// })
 				console.log(data);
+			},
+
+
+			//弹窗：选择企业报告模板
+			selectEnterpriseReportTemp: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectEnterpriseReportTempSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'entReportTempId=' + rows,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplayForEntReportTemp(rows, result.modelMap.name, result.modelMap.id);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
 			},
 
 

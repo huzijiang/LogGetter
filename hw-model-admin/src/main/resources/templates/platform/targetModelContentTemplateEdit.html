@@ -19,12 +19,12 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">平台指标模型：</label>
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <input name="targetModelId" th:value="${id}" class="form-control templateId" type="hidden" th:field="*{targetModelId}">
                         <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-success" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0')">
+                        <a class="btn btn-success btn-sm" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0/999')">
                             <i class="fa fa-plus"></i> 请选择
                         </a>
                     </div>

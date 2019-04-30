@@ -123,7 +123,7 @@
 			<if test="@Ognl@isNotEmpty(state) "> state, </if>
 			<if test="@Ognl@isNotEmpty(audiences) "> audiences, </if>
 			<if test="@Ognl@isNotEmpty(type) "> type, </if>
-			<if test="@Ognl@isNotEmpty(belongorg) "> belongOrg, </if>
+			<if test="@Ognl@isNotEmpty(belongOrg) "> belongOrg, </if>
 			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> belong_org_level, </if>
 			<if test="@Ognl@isNotEmpty(makeCycle) "> make_cycle, </if>
 		 </trim>
@@ -139,7 +139,7 @@
 			<if test="@Ognl@isNotEmpty(state) "> #{state}, </if>
 			<if test="@Ognl@isNotEmpty(audiences) "> #{audiences}, </if>
 			<if test="@Ognl@isNotEmpty(type) "> #{type}, </if>
-			<if test="@Ognl@isNotEmpty(belongorg) "> #{belongOrg}, </if>
+			<if test="@Ognl@isNotEmpty(belongOrg) "> #{belongOrg}, </if>
 			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> #{belongOrgLevel}, </if>
 			<if test="@Ognl@isNotEmpty(makeCycle) "> #{makeCycle}, </if>
 		 </trim>

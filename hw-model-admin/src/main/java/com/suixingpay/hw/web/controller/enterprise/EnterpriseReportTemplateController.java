@@ -36,10 +36,10 @@ import java.util.List;
 public class EnterpriseReportTemplateController  extends BaseController {
 
     @Autowired
-    private IEnterpriseReportTemplateService reportTemplateService;
+    private IEnterpriseReportTemplateService entReportTemplateService;
 
     @Autowired
-    private IReportTemplateService templateService;
+    private IReportTemplateService reportTemplateService;
 
     @Autowired
     private IEnterpriseService enterpriseService;
@@ -67,7 +67,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseReportTemplate template) {
         startPage();
-        List<EnterpriseReportTemplate> reportTemplateList = reportTemplateService.find(template);
+        List<EnterpriseReportTemplate> reportTemplateList = entReportTemplateService.find(template);
         return getDataTable(reportTemplateList);
     }
 
@@ -88,10 +88,12 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseReportTemplate template) {
+        ReportTemplate reportTemplate = reportTemplateService.findOneById(template.getReportTemplateId());
+        template.setMakeCycle(reportTemplate.getMakeCycle());
         template.setEnterpriseReportTemplateId((Integer) IdUtil.getManyId("t_enterprise_report_template",1).get(0));
         template.setCreateDate(new Date());
         template.setCreater(ShiroUtils.getUserId().intValue());
-        return toAjax(reportTemplateService.add(template));
+        return toAjax(entReportTemplateService.add(template));
     }
 
     /**
@@ -99,9 +101,19 @@ public class EnterpriseReportTemplateController  extends BaseController {
      */
     @RequestMapping("/edit/{enterpriseReportTemplateId}")
     public String edit(@PathVariable("enterpriseReportTemplateId") Integer enterpriseReportTemplateId, ModelMap mmap) {
-        EnterpriseReportTemplate enterpriseReportTemplate = reportTemplateService.findOneById(enterpriseReportTemplateId);
+        EnterpriseReportTemplate enterpriseReportTemplate = entReportTemplateService.findOneById(enterpriseReportTemplateId);
+        ReportTemplate reportTemplate = reportTemplateService.findOneById(enterpriseReportTemplate.getReportTemplateId());
         mmap.put("enterpriseReportTemplate", enterpriseReportTemplate);
-        mmap.put("name", templateService.findOneById(enterpriseReportTemplate.getReportTemplateId()).getName());
+        mmap.put("name", reportTemplate.getName());
+//        mmap.put("id", reportTemplate);
+
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        mmap.put("enterpriseList", enterpriseList);
+
+        EnterpriseOrgTree enterpriseOrgTree = new EnterpriseOrgTree();
+        enterpriseOrgTree.setPlatformEnterpriseId(enterpriseReportTemplate.getEnterpriseId());
+        mmap.put("orgList", enterpriseOrgTreeService.find(enterpriseOrgTree));
+
         return "enterprise/report/enterpriseReportTemplateEdit";
     }
 
@@ -112,7 +124,9 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/editSave")
     @ResponseBody
     public AjaxResult editSave(EnterpriseReportTemplate template) {
-        return toAjax(reportTemplateService.updateById(template));
+        ReportTemplate reportTemplate = reportTemplateService.findOneById(template.getReportTemplateId());
+        template.setMakeCycle(reportTemplate.getMakeCycle());
+        return toAjax(entReportTemplateService.updateById(template));
     }
 
     /**
@@ -122,7 +136,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(Integer ids) {
-        reportTemplateService.deleteById(ids);
+        entReportTemplateService.deleteById(ids);
         //删除对应的指标模板
 //        List<Integer> reportTemplateIdList = reportTemplateService.selectTargetModelByReportTemplateId(ids);
 //        targetModelMapper.deleteBatchIds(reportTemplateIdList.toArray(new Integer[]{reportTemplateIdList.size()}));

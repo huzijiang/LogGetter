@@ -32,6 +32,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{state}"></option>
                             </select>
                         </div>
@@ -44,6 +45,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="audiences" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{audiences}"></option>
                             </select>
                         </div>
@@ -58,6 +60,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{belongOrgLevel}"></option>
                             </select>
                         </div>
@@ -70,6 +73,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{type}"></option>
                             </select>
                         </div>
@@ -84,6 +88,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{makeCycle}"></option>
                             </select>
                         </div>

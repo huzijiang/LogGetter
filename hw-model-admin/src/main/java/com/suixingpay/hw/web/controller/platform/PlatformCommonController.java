@@ -1,6 +1,7 @@
 package com.suixingpay.hw.web.controller.platform;
 
 import com.suixingpay.hw.common.core.domain.AjaxResult;
+import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
 import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
@@ -32,8 +33,12 @@ public class PlatformCommonController {
     @Autowired
     private ITargetModelContentTemplateService tmctService;
 
+    @Autowired
+    private IEnterpriseReportTemplateService entReportTempService;
+
     /**
      * 进入选择平台指标模型页面
+     * 注：makeCycle == 999 表示没有此周期，传入前台表示查询全部指标
      *
      * @param reportModelId 平台报告模型编号
      * @param modelMap
@@ -42,7 +47,7 @@ public class PlatformCommonController {
     @RequestMapping("/toAddTargetModelPage/{reportModelId}/{makeCycle}")
     public String addTargetTemplate(@PathVariable("reportModelId") Integer reportModelId, @PathVariable("makeCycle") Integer makeCycle, ModelMap modelMap) {
         modelMap.put("reportModelId", reportModelId);
-        modelMap.put("makeCycle", makeCycle);
+        modelMap.put("makeCycle", makeCycle == 999 ? null:makeCycle);
         //返回已经选好的平台指标模型编号
         modelMap.put("targetModelList", reportTemplateService.selectTargetModelByReportTemplateId(reportModelId));
         return "mini/targetModelMini";
@@ -79,6 +84,16 @@ public class PlatformCommonController {
     @RequestMapping("/toAddTMCTPage")
     public String toAddTMCTPage() {
         return "mini/targetModelContentTemplateMini";
+    }
+
+    /**
+     * 进入选择企业报告模板页面
+     *
+     * @return
+     */
+    @RequestMapping("/toAddEnterpriseReportTempPage")
+    public String toAddEnterpriseReportTempPage() {
+        return "mini/enterpriseReportTemplateMini";
     }
 
     /**
@@ -158,23 +173,19 @@ public class PlatformCommonController {
         return AjaxResult.success().put("modelMap", modelMap);
     }
 
-
-
-    @RequestMapping("/getSingleTemplate")
+    /**
+     * 将选择的单个企业报告模板，回显到父窗口
+     *
+     * @param entReportTempId
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping("/getSingleEntReportTempDisplay")
     @ResponseBody
-    public AjaxResult getSingleTargetModel(@RequestParam("id") Integer id, ModelMap modelMap){
-        modelMap.put("name", targetModelService.findOneById(id).getName());
-        modelMap.put("id", id);
+    public AjaxResult getSingleEntReportTempDisplay(@RequestParam("entReportTempId") Integer entReportTempId, ModelMap modelMap){
+        modelMap.put("name", entReportTempService.findOneById(entReportTempId).getName());
+        modelMap.put("id", entReportTempId);
         return AjaxResult.success().put("modelMap", modelMap);
     }
-
-    @RequestMapping("/getSingleReportTemplate")
-    @ResponseBody
-    public AjaxResult getSingleReportTemplate(@RequestParam("id") Integer id, ModelMap modelMap){
-        modelMap.put("name", reportTemplateService.findOneById(id).getName());
-        modelMap.put("id", id);
-        return AjaxResult.success().put("modelMap", modelMap);
-    }
-
 
 }

@@ -35,13 +35,14 @@
                         </li>
                         <li hidden>
                             生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                            <option value="">全部</option>
                             <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:selected="${fangCloudDict.value} == ${makeCycle}"></option>
                         </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm searchBtn" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            <!--<a class="btn btn-warning btn-rounded btn-sm displayBtn" onload="checkboxDisplay()"><i class="fa fa-refresh"></i>&nbsp;回显</a>-->
+                            <a class="btn btn-warning btn-rounded btn-sm displayBtn" onclick="checkboxDisplay()"><i class="fa fa-refresh"></i>&nbsp;回显</a>
                         </li>
                     </ul>
                 </div>
@@ -69,10 +70,6 @@
         queryReportList();
         document.getElementsByClassName("searchBtn")[0].onclick();
         //checkboxDisplay();
-    });
-
-    $(document).ready(function () {
-        checkboxDisplay();
     });
 
     function queryReportList() {
@@ -133,12 +130,11 @@
     }
 
     function checkboxDisplay() {
-        $('#' + $.table._option.id).bootstrapTable('refresh');
         console.log("checkboxDisplay......enter");
         var rows = $('#' + $.table._option.id).bootstrapTable('getData');
         console.log("rows = ", rows);
         var dataArr = [[${targetModelList}]];
-        //$.operate.checkboxDisplay(dataArr);
+        $.operate.checkboxDisplay(dataArr);
     }
 </script>
 </body>

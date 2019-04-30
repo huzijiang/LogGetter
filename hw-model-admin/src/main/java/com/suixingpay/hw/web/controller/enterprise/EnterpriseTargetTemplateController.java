@@ -3,8 +3,12 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
+import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
+import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
+import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
+import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,13 @@ import java.util.List;
 public class EnterpriseTargetTemplateController extends BaseController {
 
     @Autowired
-    private IEnterpriseTargetTemplateService targetTemplateService;
+    private IEnterpriseTargetTemplateService entTargetTempService;
+
+    @Autowired
+    private IEnterpriseReportTemplateService entReportTempService;
+
+    @Autowired
+    private ITargetModelContentTemplateService tmctService;
 
     /**
      * 进入企业指标模板列表页面
@@ -45,7 +55,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseTargetTemplate template) {
         startPage();
-        List<EnterpriseTargetTemplate> targetTemplateList = targetTemplateService.find(template);
+        List<EnterpriseTargetTemplate> targetTemplateList = entTargetTempService.find(template);
         return getDataTable(targetTemplateList);
     }
 
@@ -64,8 +74,10 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseTargetTemplate template) {
+        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(template.getEnterpriseReportTemplateId());
+        template.setEnterpriseId(entReportTemp.getEnterpriseId());
         template.setEnterpriseTargetTemplateId((Integer) IdUtil.getManyId("t_enterprise_target_template",1).get(0));
-        return toAjax(targetTemplateService.add(template));
+        return toAjax(entTargetTempService.add(template));
     }
 
     /**
@@ -73,7 +85,13 @@ public class EnterpriseTargetTemplateController extends BaseController {
      */
     @RequestMapping("/edit/{enterpriseTargetTemplateId}")
     public String edit(@PathVariable("enterpriseTargetTemplateId") Integer enterpriseTargetTemplateId, ModelMap mmap) {
-        mmap.put("targetTemplate", targetTemplateService.findOneById(enterpriseTargetTemplateId));
+        EnterpriseTargetTemplate entTargetTemp = entTargetTempService.findOneById(enterpriseTargetTemplateId);
+        EnterpriseReportTemplate entReportTemp = entReportTempService
+                .findOneById(entTargetTemp.getEnterpriseReportTemplateId());
+        TargetModelContentTemplate tmct = tmctService.findOneById(entTargetTemp.getTargetModelTemplateId());
+        mmap.put("entReportName", entReportTemp.getName());
+        mmap.put("tmctName", tmct.getName());
+        mmap.put("targetTemplate", entTargetTempService.findOneById(enterpriseTargetTemplateId));
         return "enterprise/report/enterpriseTargetTemplateEdit";
     }
 
@@ -84,7 +102,9 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/editSave")
     @ResponseBody
     public AjaxResult editSave(EnterpriseTargetTemplate template) {
-        return toAjax(targetTemplateService.updateById(template));
+        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(template.getEnterpriseReportTemplateId());
+        template.setEnterpriseId(entReportTemp.getEnterpriseId());
+        return toAjax(entTargetTempService.updateById(template));
     }
 
     /**
@@ -94,7 +114,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        targetTemplateService.deleteBatchIds(ids);
+        entTargetTempService.deleteBatchIds(ids);
         return AjaxResult.success();
     }
 }

@@ -13,13 +13,10 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            企业报告模板名称：<input type="text" name="name"/>
+                            名称：<input type="text" name="name"/>
                         </li>
                         <li>
                             企业报告模板别名：<input type="text" name="reportAlias"/>
-                        </li>
-                        <li>
-                            描述：<input type="text" name="description"/>
                         </li>
                         <li>
                             状态：<select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
@@ -90,7 +87,7 @@
     function queryReportList() {
         var options = {
             url: ctx + "enterprise/reportTemplate/list",
-            sortName: "enterpriseReportTemplateId",
+            sortName: "createDate",
             sortOrder: "desc",
             modalName: "企业报告模板",
             columns: [
@@ -174,7 +171,7 @@
     }
 
     function submitHandler() {
-        $.operate.selectSuccessCallBack('02','enterprise/reportTemplate/getTemplate');
+        $.operate.selectEnterpriseReportTempSuccess('getSingleEntReportTempDisplay');
     }
 </script>
 </body>

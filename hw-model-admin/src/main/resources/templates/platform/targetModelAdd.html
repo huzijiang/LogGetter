@@ -33,7 +33,7 @@
                         <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
                     </div>
                     <div class="col-sm-2">
-                        <a class="btn btn-success" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0')">
+                        <a class="btn btn-success" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0/999')">
                             <i class="fa fa-plus"></i> 请选择
                         </a>
                     </div>
@@ -55,6 +55,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -67,6 +68,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="level" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -81,6 +83,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
