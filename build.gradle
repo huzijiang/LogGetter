@@ -41,20 +41,16 @@ subprojects {
 
   //这里一定得要。在多模块下，不然编译失败，因为不会把信赖模块给打包。
   jar {
-    enabled = true
-   }
-   
-   jar {
-        enabled = true
-    }
+	    enabled = true
+  }
+  bootJar {
+	    enabled = false
+  }
+  artifacts {
+	    archives jar
+  }
 
-    bootJar {
-        enabled = false
-    }
 
-    artifacts {
-        archives jar
-    }
   dependencies {
     // 是配置文件有提示
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
