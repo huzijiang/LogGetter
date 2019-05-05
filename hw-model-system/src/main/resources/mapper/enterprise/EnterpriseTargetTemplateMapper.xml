@@ -4,8 +4,7 @@
 <mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseTargetTemplateMapper">
 
     <!--实体映射-->
-    <resultMap id="enterpriseTargetTemplate"
-               type="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
+    <resultMap id="enterpriseTargetTemplate" type="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
         <id property="enterpriseTargetTemplateId" column="enterprise_target_template_Id"/>
         <result property="enterpriseReportTemplateId" column="enterprise_report_template_id"/>
         <result property="targetModelTemplateId" column="target_model_template_id"/>
@@ -33,21 +32,21 @@
     <sql id="dynamicWhere">
         <where>
           1=1
-            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">AND enterprise_target_template_Id =
-                #{enterpriseTargetTemplateId}
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">AND enterprise_target_template_Id
+                like concat('%', #{enterpriseTargetTemplateId}, '%')
             </if>
-            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">AND enterprise_report_template_id =
-                #{enterpriseReportTemplateId}
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">AND enterprise_report_template_id
+                like concat('%', #{enterpriseReportTemplateId}, '%')
             </if>
-            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id =
-                #{targetModelTemplateId}
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id
+                like concat('%', #{targetModelTemplateId}, '%')
             </if>
-            <if test="enterpriseId != null and enterpriseId != ''">AND enterprise_id = #{enterpriseId}</if>
+            <if test="enterpriseId != null and enterpriseId != ''">AND enterprise_id like concat('%', #{enterpriseId}, '%')</if>
             <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
-            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="name != null and name != ''">AND name like concat('%', #{name}, '%')</if>
             <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
-            <if test="sn != null and sn != ''">AND sn = #{sn}</if>
-            <if test="groupName != null and groupName != ''">AND group_name = #{groupName}</if>
+            <if test="sn != null and sn != ''">AND sn like concat('%', #{sn}, '%')</if>
+            <if test="groupName != null and groupName != ''">AND group_name like concat('%', #{groupName}, '%')</if>
         </where>
     </sql>
 
@@ -106,28 +105,28 @@
         INSERT INTO
         <include refid="table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="@Ognl@isNotEmpty(enterpriseTargetTemplateId) ">enterprise_target_template_Id,</if>
-            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">enterprise_report_template_id,</if>
-            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">target_model_template_id,</if>
-            <if test="@Ognl@isNotEmpty(enterpriseId) ">enterprise_id,</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">show_way,</if>
-            <if test="@Ognl@isNotEmpty(name) ">name,</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">template_content,</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">belong_queue,</if>
-            <if test="@Ognl@isNotEmpty(sn) ">sn,</if>
-            <if test="@Ognl@isNotEmpty(groupName) ">group_name,</if>
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">enterprise_target_template_Id,</if>
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">enterprise_report_template_id,</if>
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">target_model_template_id,</if>
+            <if test="enterpriseId != null and enterpriseId != ''">enterprise_id,</if>
+            <if test="showWay != null and showWay != ''">show_way,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="templateContent != null and templateContent != ''">template_content,</if>
+            <if test="belongQueue != null and belongQueue != ''">belong_queue,</if>
+            <if test="sn != null and sn != ''">sn,</if>
+            <if test="groupName != null and groupName != ''">group_name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="@Ognl@isNotEmpty(enterpriseTargetTemplateId) ">#{enterpriseTargetTemplateId},</if>
-            <if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) ">#{enterpriseReportTemplateId},</if>
-            <if test="@Ognl@isNotEmpty(targetModelTemplateId) ">#{targetModelTemplateId},</if>
-            <if test="@Ognl@isNotEmpty(enterpriseId) ">#{enterpriseId},</if>
-            <if test="@Ognl@isNotEmpty(showWay) ">#{showWay},</if>
-            <if test="@Ognl@isNotEmpty(name) ">#{name},</if>
-            <if test="@Ognl@isNotEmpty(templateContent) ">#{templateContent},</if>
-            <if test="@Ognl@isNotEmpty(belongQueue) ">#{belongQueue},</if>
-            <if test="@Ognl@isNotEmpty(sn) ">#{sn},</if>
-            <if test="@Ognl@isNotEmpty(groupName) ">#{groupName},</if>
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">#{enterpriseTargetTemplateId},</if>
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">#{enterpriseReportTemplateId},</if>
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">#{targetModelTemplateId},</if>
+            <if test="enterpriseId != null and enterpriseId != ''">#{enterpriseId},</if>
+            <if test="showWay != null and showWay != ''">#{showWay},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="templateContent != null and templateContent != ''">#{templateContent},</if>
+            <if test="belongQueue != null and belongQueue != ''">#{belongQueue},</if>
+            <if test="sn != null and sn != ''">#{sn},</if>
+            <if test="groupName != null and groupName != ''">#{groupName},</if>
         </trim>
     </insert>
 

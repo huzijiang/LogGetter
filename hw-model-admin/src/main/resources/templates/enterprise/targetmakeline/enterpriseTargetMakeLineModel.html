@@ -54,15 +54,18 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-	        	<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetMakeLine:save">
-	                <i class="fa fa-plus"></i> 新增
+	        	<a class="btn btn-success" onclick="$.operate.exportETMLModelPage()">
+	                <i class="fa fa-plus"></i> 导入
+	            </a>
+				<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetMakeLine:save">
+	                <i class="fa fa-plus"></i> 自定义
 	            </a>
 	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetMakeLine:edit">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-	            <!--<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetMakeLine:remove">-->
-	                <!--<i class="fa fa-remove"></i> 删除-->
-	            <!--</a>-->
+	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="enterprise:targetMakeLine:remove">
+	                <i class="fa fa-remove"></i> 删除
+	            </a>
 	        </div>
 	        <!--查询结果显示table-->
 	        <div class="col-sm-12 select-table table-striped">

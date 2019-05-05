@@ -48,7 +48,7 @@ public class PlatformCommonController {
     public String addTargetTemplate(@PathVariable("reportModelId") Integer reportModelId, @PathVariable("makeCycle") Integer makeCycle, ModelMap modelMap) {
         modelMap.put("reportModelId", reportModelId);
         modelMap.put("makeCycle", makeCycle == 999 ? null:makeCycle);
-        //返回已经选好的平台指标模型编号
+        //返回在库中已经存在的平台指标模型编号
         modelMap.put("targetModelList", reportTemplateService.selectTargetModelByReportTemplateId(reportModelId));
         return "mini/targetModelMini";
     }
@@ -186,6 +186,14 @@ public class PlatformCommonController {
         modelMap.put("name", entReportTempService.findOneById(entReportTempId).getName());
         modelMap.put("id", entReportTempId);
         return AjaxResult.success().put("modelMap", modelMap);
+    }
+
+    /**
+     * 进入：导入企业指标标记线模板页面
+     */
+    @RequestMapping("toExportETtMLModelPage")
+    public String toExportETtMLModelPage() {
+        return "mini/exportETMlModelPage";
     }
 
 }

@@ -6,19 +6,12 @@
     <!--实体映射-->
     <resultMap id="targetModelContentTemplate"
                type="com.suixingpay.hw.platform.domain.TargetModelContentTemplate">
-        <!---->
         <id property="targetModelTemplateId" column="target_model_template_id"/>
-        <!---->
         <result property="targetModelId" column="target_model_id"/>
-        <!---->
         <result property="name" column="name"/>
-        <!---->
         <result property="showWay" column="show_way"/>
-        <!---->
         <result property="templateContent" column="template_content"/>
-        <!---->
         <result property="belongQueue" column="belong_queue"/>
-        <!---->
         <result property="sn" column="sn"/>
     </resultMap>
 
@@ -35,13 +28,12 @@
     <!-- 通用查询条件-->
     <sql id="dynamicWhere">
         <where>
-            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id =
-                #{targetModelTemplateId}
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id
+                like concat('%', #{targetModelTemplateId}, '%')
             </if>
-            <if test="targetModelId != null and targetModelId != ''">AND target_model_id = #{targetModelId}</if>
-            <if test="name != null and name != ''">AND name = #{name}</if>
+            <if test="targetModelId != null and targetModelId != ''">AND target_model_id like concat('%', #{targetModelId}, '%')</if>
+            <if test="name != null and name != ''">AND name like concat('%', #{name}, '%')</if>
             <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
-            <if test="templateContent != null and templateContent != ''">AND template_content = #{templateContent}</if>
             <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
             <if test="sn != null and sn != ''">AND sn = #{sn}</if>
         </where>
@@ -49,7 +41,7 @@
 
     <!-- 查询所有数据 -->
     <select id="findAll" resultMap="targetModelContentTemplate">
-        SELECT
+      SELECT
         <include refid="Base_Column_List"/>
         FROM
         <include refid="table"/>

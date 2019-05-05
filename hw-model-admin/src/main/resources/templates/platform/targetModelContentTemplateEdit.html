@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
                     <div class="col-sm-8">
                         <input name="name" autocomplete="off" placeholder="请输入平台指标模型内容模型名称" class="form-control" type="text" maxlength="20" th:field="*{name}" required>
                     </div>
@@ -18,9 +18,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">平台指标模型：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标模型：</label>
                     <div class="col-sm-5">
-                        <input name="targetModelId" th:value="${id}" class="form-control templateId" type="hidden" th:field="*{targetModelId}">
+                        <input name="targetModelId" th:value="${id}" class="form-control templateId" type="hidden" th:field="*{targetModelId}" required>
                         <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
                     </div>
                     <div class="col-sm-2">
@@ -34,28 +34,10 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">归属行或列：</label>
-                    <div class="col-sm-8">
-                        <input name="belongQueue" autocomplete="off" placeholder="请输入归属行或列" class="form-control" type="text" maxlength="20" th:field="*{belongQueue}" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">展示顺序：</label>
-                    <div class="col-sm-8">
-                        <input name="sn" autocomplete="off" placeholder="请输入展示顺序" class="form-control" type="text" maxlength="20" th:field="*{sn}" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">展现形式：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展现形式：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
+                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}" required>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{showWay}"></option>
                             </select>
                         </div>
@@ -64,13 +46,30 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">内容：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>内容：</label>
                     <div class="col-sm-8">
-                        <input name="templateContent" autocomplete="off" placeholder="请输入平台指标模型内容模型内容" class="form-control" type="text" maxlength="20" th:field="*{templateContent}" required>
+                        <input name="templateContent" autocomplete="off" placeholder="请输入平台指标模型内容模型内容" class="form-control" type="text" maxlength="200" th:field="*{templateContent}" required>
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">归属行或列：</label>
+                    <div class="col-sm-8">
+                        <input name="belongQueue" autocomplete="off" placeholder="请输入归属行或列" class="form-control" type="text" maxlength="10" th:field="*{belongQueue}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">展示顺序：</label>
+                    <div class="col-sm-8">
+                        <input name="sn" autocomplete="off" placeholder="请输入展示顺序" class="form-control" type="text" maxlength="10" th:field="*{sn}">
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

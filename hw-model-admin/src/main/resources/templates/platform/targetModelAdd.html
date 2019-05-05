@@ -27,6 +27,42 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>抽象水平：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="level" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}" required>
+                                <option value="">未选择</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">核对码：</label>
+                    <div class="col-sm-8">
+                        <input name="collationCode" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="40">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelState')}" required>
+                                <option value="">未选择</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label">子指标模型：</label>
                     <div class="col-sm-6">
                         <input name="childModelId" th:value="${id}" class="form-control templateId" type="hidden">
@@ -39,50 +75,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>核对码：</label>
-                    <div class="col-sm-8">
-                        <input name="collationCode" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="40" required>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>抽象水平：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="level" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">生成周期：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}" required>
                                 <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>

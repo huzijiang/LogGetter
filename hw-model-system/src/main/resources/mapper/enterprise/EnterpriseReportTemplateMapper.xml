@@ -36,10 +36,10 @@
 	<sql id="dynamicWhere">
 		<where>
 			1=1
-			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> AND enterprise_report_template_id = #{enterpriseReportTemplateId} </if>
-			<if test="enterpriseId != null and enterpriseId != ''"> AND enterprise_id = #{enterpriseId} </if>
-			<if test="reportTemplateId != null and reportTemplateId != ''"> AND report_template_id = #{reportTemplateId} </if>
-			<if test="reportAlias != null and reportAlias != ''"> AND report_alias = #{reportAlias} </if>
+			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> AND enterprise_report_template_id like concat('%', #{enterpriseReportTemplateId}, '%')</if>
+			<if test="enterpriseId != null and enterpriseId != ''"> AND enterprise_id like concat('%', #{enterpriseId}, '%') </if>
+			<if test="reportTemplateId != null and reportTemplateId != ''"> AND report_template_id like concat('%', #{reportTemplateId}, '%') </if>
+			<if test="reportAlias != null and reportAlias != ''"> AND report_alias like concat('%', #{reportAlias}, '%') </if>
 			<if test="belongOrg != null and belongOrg != ''"> AND belongOrg = #{belongOrg} </if>
 			<if test="name != null and name != ''"> AND name like concat('%', #{name}, '%') </if>
 			<if test="description != null and description != ''"> AND description like concat('%', #{description}, '%') </if>
@@ -112,36 +112,36 @@
 		 INSERT INTO 
 		 <include refid="table" />
 		 <trim prefix="(" suffix=")" suffixOverrides="," >
-			<if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) "> enterprise_report_template_id, </if>
-			<if test="@Ognl@isNotEmpty(enterpriseId) "> enterprise_id, </if>
-			<if test="@Ognl@isNotEmpty(reportTemplateId) "> report_template_id, </if>
-			<if test="@Ognl@isNotEmpty(name) "> name, </if>
-			<if test="@Ognl@isNotEmpty(reportAlias) "> report_alias, </if>
-			<if test="@Ognl@isNotEmpty(description) "> description, </if>
-			<if test="@Ognl@isNotEmpty(creater) "> creater, </if>
-			<if test="@Ognl@isNotEmpty(createDate) "> create_date, </if>
-			<if test="@Ognl@isNotEmpty(state) "> state, </if>
-			<if test="@Ognl@isNotEmpty(audiences) "> audiences, </if>
-			<if test="@Ognl@isNotEmpty(type) "> type, </if>
-			<if test="@Ognl@isNotEmpty(belongOrg) "> belongOrg, </if>
-			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> belong_org_level, </if>
-			<if test="@Ognl@isNotEmpty(makeCycle) "> make_cycle, </if>
+			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> enterprise_report_template_id, </if>
+			<if test="enterpriseId != null and enterpriseId != ''"> enterprise_id, </if>
+			<if test="reportTemplateId != null and reportTemplateId != ''"> report_template_id, </if>
+			<if test="name != null and name != ''"> name, </if>
+			<if test="reportAlias != null and reportAlias != ''"> report_alias, </if>
+			<if test="description != null and description != ''"> description, </if>
+			<if test="creater != null and creater != ''"> creater, </if>
+			<if test="createDate != null and createDate != ''"> create_date, </if>
+			<if test="state != null and state != ''"> state, </if>
+			<if test="audiences != null and audiences != ''"> audiences, </if>
+			<if test="type != null and type != ''"> type, </if>
+			<if test="belongOrg != null and belongOrg != ''"> belongOrg, </if>
+			<if test="belongOrgLevel != null and belongOrgLevel != ''"> belong_org_level, </if>
+			<if test="makeCycle != null and makeCycle != ''"> make_cycle, </if>
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
-			<if test="@Ognl@isNotEmpty(enterpriseReportTemplateId) "> #{enterpriseReportTemplateId}, </if>
-			<if test="@Ognl@isNotEmpty(enterpriseId) "> #{enterpriseId}, </if>
-			<if test="@Ognl@isNotEmpty(reportTemplateId) "> #{reportTemplateId}, </if>
-			<if test="@Ognl@isNotEmpty(name) "> #{name}, </if>
-			<if test="@Ognl@isNotEmpty(reportAlias) "> #{reportAlias}, </if>
-			<if test="@Ognl@isNotEmpty(description) "> #{description}, </if>
-			<if test="@Ognl@isNotEmpty(creater) "> #{creater}, </if>
-			<if test="@Ognl@isNotEmpty(createDate) "> #{createDate}, </if>
-			<if test="@Ognl@isNotEmpty(state) "> #{state}, </if>
-			<if test="@Ognl@isNotEmpty(audiences) "> #{audiences}, </if>
-			<if test="@Ognl@isNotEmpty(type) "> #{type}, </if>
-			<if test="@Ognl@isNotEmpty(belongOrg) "> #{belongOrg}, </if>
-			<if test="@Ognl@isNotEmpty(belongOrgLevel) "> #{belongOrgLevel}, </if>
-			<if test="@Ognl@isNotEmpty(makeCycle) "> #{makeCycle}, </if>
+			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> #{enterpriseReportTemplateId}, </if>
+			<if test="enterpriseId != null and enterpriseId != ''"> #{enterpriseId}, </if>
+			<if test="reportTemplateId != null and reportTemplateId != ''"> #{reportTemplateId}, </if>
+			<if test="name != null and name != ''"> #{name}, </if>
+			<if test="reportAlias != null and reportAlias != ''"> #{reportAlias}, </if>
+			<if test="description != null and description != ''"> #{description}, </if>
+			 <if test="creater != null and creater != ''"> #{creater}, </if>
+			 <if test="createDate != null and createDate != ''"> #{createDate}, </if>
+			<if test="state != null and state != ''"> #{state}, </if>
+			<if test="audiences != null and audiences != ''"> #{audiences}, </if>
+			<if test="type != null and type != ''"> #{type}, </if>
+			 <if test="belongOrg != null and belongOrg != ''"> #{belongOrg}, </if>
+			<if test="belongOrgLevel != null and belongOrgLevel != ''"> #{belongOrgLevel}, </if>
+			<if test="makeCycle != null and makeCycle != ''"> #{makeCycle}, </if>
 		 </trim>
 	</insert>
 

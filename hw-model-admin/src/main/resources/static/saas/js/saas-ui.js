@@ -734,23 +734,11 @@
 				}
 				return url;
 			},
-			//
-			// selectSuccessCallBack: function(url){
-			// 	var rows = $.table.selectFirstColumns();
-			// 	if ($.common.isEmpty(rows)) {
-			// 		$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
-			// 		return;
-			// 	}
-			// 	$.ajax({
-			// 		url: ctx + url,
-			// 		type: 'POST',
-			// 		data: 'id=' + rows,
-			// 		success: function (result) {
-			// 			parent.window.changeDisplay(rows, result.modelMap.name);
-			// 			$.modal.close();
-			// 		}
-			// 	})
-			// },
+
+			//导入企业指标标记线模板
+			exportETMLModelPage: function() {
+				$.modal.open("导入企业指标标记线模板", ctx + "toExportETtMLModelPage");
+			},
 
 			//判断元素是否在数组中
 			contain: function(arr, obj) {
@@ -794,32 +782,6 @@
 
 			},
 
-
-
-			chechboxDisplay: function() {
-        		//debugger;
-				//var rows = $.table.selectColumns('targetModelId');
-				var rows = $('#' + $.table._option.id).bootstrapTable('getData');
-				console.log(rows);
-				var data = [];
-				$.each(rows, function (index, row) {
-					data.push(row.targetModelId);
-				});
-				for (var i = 0; i < data.length; i++) {
-					console.log(i + ' = ', data[i]);
-					if (eval(data[i]) == eval(100024)) {
-						$('#' + $.table._option.id).bootstrapTable('check', i);
-					}
-				}
-				// $.each(data, function (index, d) {
-				// 	if (d == 100024){
-				// 		$('#' + $.table._option.id).bootstrapTable('check', d)
-				// 	}
-				// })
-				console.log(data);
-			},
-
-
 			//弹窗：选择企业报告模板
 			selectEnterpriseReportTemp: function(type, url) {
 				$.modal.open("选择" + type, ctx + url);
@@ -843,16 +805,6 @@
 						}
 					}
 				})
-			},
-
-
-
-			//弹窗：选择企业指标模板
-			selectEnterpriseTargetTemp: function(type, url) {
-				$.modal.open("选择" + type, ctx + url);
-			},
-			selectEnterpriseTargetTempSuccess: function() {
-
 			},
 
 
@@ -881,8 +833,6 @@
 					}
 				})
 			},
-
-
 
 
 			//弹窗：选择平台报告模型
@@ -922,6 +872,7 @@
 					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
 					return;
 				}
+				//传入 reportModelId == 0 代表只能选择一个
 				if (reportModelId == 0 && rows.length > 1){
 					$.modal.alertWarning("只能选择一个平台指标模型");
 					return;
@@ -950,6 +901,7 @@
 						data: data,
 						success: function (result) {
 							if (result.code == web_status.SUCCESS) {
+								$.modal.alertSuccess("添加成功");
 								$.modal.close();
 							} else {
 								$.modal.alertError(result.msg);

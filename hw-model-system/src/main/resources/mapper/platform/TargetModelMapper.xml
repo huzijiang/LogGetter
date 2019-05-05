@@ -33,16 +33,14 @@
     <sql id="dynamicWhere">
         <where>
             1=1
-            <if test="targetModelId != null and targetModelId != ''"> AND target_model_id = #{targetModelId} </if>
-            <if test="name != null and name != ''"> AND name = #{name} </if>
-            <if test="description != null and description != ''"> AND description = #{description} </if>
-            <if test="creater != null and creater != ''"> AND creater = #{creater} </if>
-            <if test="createDate != null"> AND create_date = #{createDate} </if>
+            <if test="targetModelId != null and targetModelId != ''"> AND target_model_id like concat('%', #{targetModelId}, '%') </if>
+            <if test="name != null and name != ''"> AND name like concat('%', #{name}, '%') </if>
+            <if test="description != null and description != ''"> AND description like concat('%', #{description}, '%') </if>
             <if test="state != null and state != ''"> AND state = #{state} </if>
             <if test="level != null and level != ''"> AND level = #{level} </if>
             <if test="makeCycle != null and makeCycle != ''"> AND make_cycle = #{makeCycle} </if>
-            <if test="childModelId != null and childModelId != ''"> AND child_model_id = #{childModelId} </if>
-            <if test="collationCode != null and collationCode != ''"> AND collation_code = #{collationCode} </if>
+            <if test="childModelId != null and childModelId != ''"> AND child_model_id like concat('%', #{childModelId}, '%') </if>
+            <if test="collationCode != null and collationCode != ''"> AND collation_code like concat('%', #{collationCode}, '%') </if>
         </where>
     </sql>
 

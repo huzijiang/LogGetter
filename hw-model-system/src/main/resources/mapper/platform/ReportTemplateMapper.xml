@@ -25,8 +25,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		report_template_id,name,description,creater,create_date,state,audiences,
-		belong_org_level,type,make_cycle
+		report_template_id,name,description,creater,create_date,state,audiences,belong_org_level,type,make_cycle
 	</sql>
 
     <!-- 通用查询条件-->

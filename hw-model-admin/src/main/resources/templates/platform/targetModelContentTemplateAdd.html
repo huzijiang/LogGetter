@@ -17,10 +17,10 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">平台指标模型：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标模型：</label>
                     <div class="col-sm-6">
                         <input name="targetModelId" th:value="${id}" class="form-control templateId" type="hidden">
-                        <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
+                        <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly required>
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-success btn-sm" onclick="$.operate.selectTargetModel('平台指标模型','toAddTargetModelPage/0/999')">
@@ -33,28 +33,10 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属行或列：</label>
-                    <div class="col-sm-8">
-                        <input name="belongQueue" autocomplete="off" placeholder="请输入归属行或列" class="form-control" type="text" maxlength="20" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展示顺序：</label>
-                    <div class="col-sm-8">
-                        <input name="sn" autocomplete="off" placeholder="请输入展示顺序" class="form-control" type="text" maxlength="20" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展现形式：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
+                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}" required>
                                 <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
@@ -66,7 +48,25 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>内容：</label>
                     <div class="col-sm-8">
-                        <input name="templateContent" autocomplete="off" placeholder="请输入平台指标模型内容模型内容" class="form-control" type="text" maxlength="20" required>
+                        <input name="templateContent" autocomplete="off" placeholder="请输入平台指标模型内容模型内容" class="form-control" type="text" maxlength="200" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">归属行或列：</label>
+                    <div class="col-sm-8">
+                        <input name="belongQueue" autocomplete="off" placeholder="请输入归属行或列" class="form-control" type="text" maxlength="10">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">展示顺序：</label>
+                    <div class="col-sm-8">
+                        <input name="sn" autocomplete="off" placeholder="请输入展示顺序" class="form-control" type="text" maxlength="10">
                     </div>
                 </div>
             </div>
