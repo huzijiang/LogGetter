@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseTargetMakeLineModelMapper">
+
+    <!--实体映射-->
+    <resultMap id="enterpriseTargetMakeLineModel"
+               type="com.suixingpay.hw.enterprise.domain.EnterpriseTargetMakeLineModel">
+        <id property="enterpriseTargetMakeLineModelId" column="enterprise_target_make_line_model_id"/>
+        <result property="enterpriseReportId" column="enterprise_report_Id"/>
+        <result property="enterpriseTargetTemplateId" column="enterprise_target_template_Id"/>
+        <result property="targetMakeLineModelId" column="target_make_line_model_Id"/>
+        <result property="targetModelTemplateId" column="target_model_template_id"/>
+        <result property="enterpriseId" column="enterprise_id"/>
+        <result property="targetModelId" column="target_model_id"/>
+        <result property="lineName" column="line_name"/>
+        <result property="description" column="description"/>
+        <result property="markValue" column="mark_value"/>
+        <result property="lastChangeDate" column="last_change_date"/>
+        <result property="lastChanger" column="last_changer"/>
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_enterprise_target_make_line_model
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		enterprise_target_make_line_model_id,enterprise_report_Id,enterprise_target_template_Id,target_make_line_model_Id,target_model_template_id,enterprise_id,target_model_id,
+		line_name,description,mark_value,last_change_date,last_changer
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+          1=1
+            <if test="enterpriseTargetMakeLineModelId != null">AND enterprise_target_make_line_model_id like concat('%', #{enterpriseTargetMakeLineModelId}, '%')</if>
+            <if test="enterpriseReportId != null">AND enterprise_report_Id like concat('%',  #{enterpriseReportId}, '%')</if>
+            <if test="enterpriseTargetTemplateId != null">AND enterprise_target_template_Id like concat('%',  #{enterpriseTargetTemplateId}, '%')</if>
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''">AND target_make_line_model_Id like concat('%',#{targetMakeLineModelId} , '%') </if>
+            <if test="targetModelTemplateId != null">AND target_model_template_id like concat('%',#{targetModelTemplateId}, '%') </if>
+            <if test="enterpriseId != null">AND enterprise_id like concat('%', #{enterpriseId}, '%') </if>
+            <if test="targetModelId != null ">AND target_model_id like concat('%',#{targetModelId}, '%') </if>
+            <if test="lineName != null and lineName != ''">AND line_name like concat('%',  #{lineName}, '%')</if>
+            <if test="description != null and description != ''">AND description like concat('%', #{description}, '%') </if>
+            <if test="markValue != null and markValue != ''">AND mark_value like concat('%',  #{markValue}, '%')</if>
+            <if test="lastChangeDate != null">AND last_change_date like concat('%', #{lastChangeDate}, '%') </if>
+            <if test="lastChanger != null ">AND last_changer like concat('%', #{lastChanger}, '%') </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="enterpriseTargetMakeLineModel">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="enterpriseTargetMakeLineModel" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        WHERE enterprise_target_make_line_model_id = #{enterpriseTargetMakeLineModelId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="enterpriseTargetMakeLineModel">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <select id="selectByEntTargetTempId" resultMap="enterpriseTargetMakeLineModel" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="table"/>
+        where target_model_template_id = #{targetModelTemplateId}
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="enterpriseTargetMakeLineModel" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_target_make_line_model_id = #{enterpriseTargetMakeLineModelId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_target_make_line_model_id  in
+        <foreach collection="ids" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseTargetMakeLineModel">
+        INSERT INTO
+        t_enterprise_target_make_line_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enterpriseTargetMakeLineModelId != null"> enterprise_target_make_line_model_id, </if>
+            <if test="enterpriseReportId != null">enterprise_report_Id,</if>
+            <if test="enterpriseTargetTemplateId != null">enterprise_target_template_Id,</if>
+            <if test="targetMakeLineModelId != null and description != ''">target_make_line_model_Id,</if>
+            <if test="targetModelTemplateId != null">target_model_template_id,</if>
+            <if test="enterpriseId != null">enterprise_id,</if>
+            <if test="targetModelId != null">target_model_id,</if>
+            <if test="lineName != null and lineName != ''">line_name,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="markValue != null and markValue != '' ">mark_value,</if>
+            <if test="lastChanger != null ">last_changer,</if>
+            <if test="lastChangeDate != null ">last_change_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enterpriseTargetMakeLineModelId != null"> #{enterpriseTargetMakeLineModelId}, </if>
+            <if test="enterpriseReportId != null">#{enterpriseReportId},</if>
+            <if test="enterpriseTargetTemplateId != null">#{enterpriseTargetTemplateId},</if>
+            <if test="targetMakeLineModelId != null and description != ''">#{targetMakeLineModelId},</if>
+            <if test="targetModelTemplateId != null">#{targetModelTemplateId},</if>
+            <if test="enterpriseId != null">#{enterpriseId},</if>
+            <if test="targetModelId != null">#{targetModelId},</if>
+            <if test="lineName != null and lineName != ''">#{lineName},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="markValue != null and markValue != '' ">#{markValue},</if>
+            <if test="lastChanger != null ">#{lastChanger},</if>
+            <if test="lastChangeDate != null ">#{lastChangeDate},</if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="enterpriseTargetMakeLineModelId != null "> enterprise_target_make_line_model_id =
+                #{enterpriseTargetMakeLineModelId},
+            </if>
+            <if test="enterpriseReportId != null "> enterprise_report_Id =
+                #{enterpriseReportId},
+            </if>
+            <if test="enterpriseTargetTemplateId != null "> enterprise_target_template_Id =
+                #{enterpriseTargetTemplateId},
+            </if>
+            <if test="targetMakeLineModelId != null and targetMakeLineModelId != ''"> target_make_line_model_Id = #{targetMakeLineModelId},</if>
+            <if test="targetModelTemplateId != null"> target_model_template_id = #{targetModelTemplateId},</if>
+            <if test="enterpriseId != null "> enterprise_id = #{enterpriseId},</if>
+            <if test="targetModelId != null"> target_model_id = #{targetModelId},</if>
+            <if test="lineName != null and lineName != ''"> line_name = #{lineName},</if>
+            <if test="description != null and description != ''"> description = #{description},</if>
+            <if test="markValue != null and markValue != ''"> mark_value = #{markValue},</if>
+            <if test="lastChangeDate != null "> last_change_date = #{lastChangeDate},</if>
+            <if test="lastChanger != null"> last_changer = #{lastChanger},</if>
+        </set>
+        WHERE enterprise_target_make_line_model_id =  #{enterpriseTargetMakeLineModelId}
+    </update>
+
+</mapper>

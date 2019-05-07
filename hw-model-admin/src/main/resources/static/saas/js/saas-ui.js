@@ -281,6 +281,53 @@
 				return actions.join('');
 			},
 
+			// 企业编号 -> 企业名称
+			exchangeEnterpriseDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, enterprise) {
+					if (enterprise.enterpriseId == ('' + value)) {
+						actions.push("<span>" + enterprise.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
+			// 企业报告编号 -> 企业报告名称
+			exchangeEntReportTempDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, entReportTemp) {
+					if (entReportTemp.enterpriseReportTemplateId == ('' + value)) {
+						actions.push("<span>" + entReportTemp.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
+			// 企业指标编号 -> 企业指标名称
+			exchangeEntTargetTempDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, entTargetTemp) {
+					if (entTargetTemp.enterpriseTargetTemplateId == ('' + value)) {
+						actions.push("<span>" + entTargetTemp.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
+			// 回显 checkbox
+			checkBoxDisplayCallback: function(dbExistTargetModelIds, row, value) {
+            	if (dbExistTargetModelIds.indexOf(row.targetModelId) != -1) {
+					return {
+						//disabled : true, //设置是否可用
+						checked : true //设置选中
+					};
+				}
+				return value;
+			},
+
             // 显示表格指定列
             showColumn: function(column) {
                 $("#" + $.table._option.id).bootstrapTable('showColumn', column);
@@ -735,6 +782,248 @@
 				return url;
 			},
 
+			//导入企业指标标记线模板
+			exportETMLModelPage: function() {
+				$.modal.open("导入企业指标标记线模板", ctx + "toExportETtMLModelPage");
+			},
+
+
+			//弹窗：选择企业报告模板
+			selectEnterpriseReportTemp: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectEnterpriseReportTempSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'entReportTempId=' + rows,
+					success: function (result) {
+						debugger;
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(result.modelMap.entReportTemp);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
+			},
+
+
+			//弹窗：选择平台指标模型展示内容模板
+			selectTMCT: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+
+			selectTMCTSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'targetModelTemplateId=' + rows,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(rows, result.modelMap.name, result.modelMap.targetModelId);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
+			},
+
+
+			//弹窗：选择平台报告模型
+			selectReportModel: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			selectReportModelSuccess: function(url) {
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'reportModelId=' + rows,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(result.modelMap.reportModel);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+					}
+				})
+			},
+
+
+			//弹窗：选择平台指标模型
+			selectTargetModel: function(type, url, enterpriseId) {
+				$.modal.open("选择" + type, ctx + url +"/" + enterpriseId);
+			},
+			selectTargetModelSuccess: function(url, reportModelId, dbExisttargetModelIds) {
+				var rows = $.table.selectFirstColumns();
+
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				//传入 reportModelId == 0 代表只能选择一个
+				if (reportModelId == 0 && rows.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+				if (reportModelId == 0) {
+					// 单个平台指标模型
+					$.ajax({
+						url: ctx + url,
+						type: 'POST',
+						data: 'targetModelId=' + rows,
+						success: function (result) {
+							if (result.code == web_status.SUCCESS) {
+								parent.window.changeDisplay(rows, result.modelMap.name);
+								$.modal.close();
+							} else {
+								$.modal.alertError(result.msg);
+							}
+						}
+					})
+				} else {
+					//多个平台指标模型
+					var data = { "targetModelIds": rows.join(), "reportModelId": reportModelId};
+					$.ajax({
+						url: ctx + url,
+						type: 'POST',
+						data: data,
+						success: function (result) {
+							if (result.code == web_status.SUCCESS) {
+								$.modal.alertSuccess("添加成功");
+								$.modal.close();
+							} else {
+								$.modal.alertError(result.msg);
+							}
+						}
+					})
+				}
+			},
+
+			//弹窗：选择xx模板
+			selectTemplate: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
+			},
+			//成功选择xx模板
+			selectTemplateSuccess: function(url, templateId) {
+        		//debugger;
+				var rows = $.table.selectFirstColumns();
+				if ($.common.isEmpty(rows)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				if (templateId == 0 && rows.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+				if (templateId == 0) {
+					$.operate.selectSingleTemplate(rows, url);
+				} else {
+					var data = { "ids": rows.join(), "templateId": templateId};
+					$.operate.selectManyTemplate(data, url);
+				}
+			},
+			//校验
+			checkedTemplate: function(data, val) {
+				if ($.common.isEmpty(data)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				if (val == 0 && data.length > 1){
+					$.modal.alertWarning("只能选择一个平台指标模型");
+					return;
+				}
+			},
+			//选择多个模板
+			selectManyTemplate: function(data, url) {
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: data,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+
+					}
+				})
+			},
+			//选择单个模板
+			selectSingleTemplate: function(data, url){
+				$.ajax({
+					url: ctx + url,
+					type: 'POST',
+					data: 'id=' + data,
+					success: function (result) {
+						if (result.code == web_status.SUCCESS) {
+							parent.window.changeDisplay(data, result.modelMap.name);
+							$.modal.close();
+						} else {
+							$.modal.alertError(result.msg);
+						}
+
+					}
+				})
+			},
+			//回显所选择报告模板
+			select: function() {
+				var row = $.table.selectFirstColumns();
+				if ($.common.isEmpty(row)) {
+					$.modal.alertWarning("请选择模板后再点击\"确定\"按钮，若不选择模板则点击\"关闭\"");
+					return;
+				}
+				$.ajax({
+					url: ctx + "enterprise/reportTemplate/add",
+					type: 'GET',
+					success: function (result) {
+						$.ajax({
+							url: ctx + "enterprise/reportTemplate/get",
+							type: 'POST',
+							data: "id=" + row,
+							success: function (data) {
+								parent.window.change(row, data.mmap.reportTemplateName);
+								$.modal.close();
+							}
+						});
+					}
+				})
+			},
+
+			//添加 企业报告模板页面
+			addEntReportTempTab: function(enterpriseId) {
+				$.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(enterpriseId));
+			},
+
+			//添加 企业指标标模板页面
+			addEntTargetTempTab: function(enterpriseId, entReportTempId) {
+				$.modal.openTab("添加指标模板", ctx + "enterprise/targetTemplate/add/" + enterpriseId + "/" + entReportTempId);
+			},
+
+			//添加 企业指标标记线模板页面
+			addEntTMLModelTempTab: function(enterpriseId, entReportTempId, entTargetTempId) {
+				$.modal.openTab("添加指标模板", ctx + "enterprise/targetMakeLine/add/" + enterpriseId + "/" + entReportTempId + "/" + entTargetTempId);
+			},
+
             // 添加信息
             add: function(id) {
                 $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id));
@@ -743,6 +1032,7 @@
             addTab: function (id) {
                 $.modal.openTab("添加" + $.table._option.modalName, $.operate.addUrl(id));
             },
+
             // 添加信息 全屏
             addFull: function(id) {
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);
@@ -750,7 +1040,6 @@
             },
             // 添加访问地址
             addUrl: function(id) {
-        		console.log(id);
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);
                 return url;
             },

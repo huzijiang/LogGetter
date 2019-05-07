@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+
+<body class="gray-bg">
+	<div class="container-div ui-layout-center">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="enterprise-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								平台指标标记线模型编号：<input type="text" name="targetMakeLineModelId"/>
+							</li>
+							<li>
+								平台指标模型编号：<input type="text" name="targetModelId"/>
+							</li>
+							<li>
+								平台指标模型展示内容模型编号：<input type="text" name="targetModelTemplateId"/>
+							</li>
+							<li>
+								名称：<input type="text" name="lineName"/>
+							</li>
+							<li>
+								描述：<input type="text" name="description"/>
+							</li>
+							<li>
+								默认值：<input type="text" name="defaultValue"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+	        	<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="targetMakeLineModel:save">
+	                <i class="fa fa-plus"></i> 新增
+	            </a>
+	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="targetMakeLineModel:edit">
+		            <i class="fa fa-edit"></i> 修改
+		        </a>
+	            <!--<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="targetMakeLineModel:remove">-->
+	                <!--<i class="fa fa-remove"></i> 删除-->
+	            <!--</a>-->
+	        </div>
+	        <!--查询结果显示table-->
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	
+	<div th:include="include :: footer"></div>
+	<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('targetMakeLineModel:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('targetMakeLineModel:remove')}]];
+		var prefix = ctx + "targetMakeLineModel";
+
+        //对查询结果显示的table进行控制
+		$(function() {
+		    var panehHidden = false;
+		    if ($(this).width() < 769) {
+		        panehHidden = true;
+		    }
+		    $('body').layout({ initClosed: panehHidden, west__size: 185 });
+            queryCustomerList();
+		});
+
+		function queryCustomerList() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+				sortName: "targetMakeLineModelId",
+				sortOrder: "desc",
+				modalName: "平台指标标记线模型",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'targetMakeLineModelId',
+		            title: '平台指标标记线模型编号',
+					visible: false
+		        },
+		        {
+		            field: 'targetModelId',
+		            title: '平台指标模型编号',
+					visible: false
+		        },
+		        {
+		            field: 'targetModelTemplateId',
+		            title: '平台指标模型展示内容模型编号',
+					visible: false
+		        },
+		        {
+		            field: 'lineName',
+		            title: '名称'
+		        },
+		        {
+                    field: 'description',
+		        	title: '描述'
+		        },
+				{
+					field: 'defaultValue',
+					title: '默认值'
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.targetMakeLineModelId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs disabled' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.targetMakeLineModelId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		}
+	</script>
+</body>
+</html>

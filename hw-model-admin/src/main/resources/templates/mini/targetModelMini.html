@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+<body class="gray-bg">
+<div class="container-div ui-layout-center">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="report-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            名称：<input type="text" name="name"/>
+                        </li>
+                        <li>
+                            描述：<input type="text" name="description"/>
+                        </li>
+                        <li>
+                            核对码：<input type="text" name="collationCode"/>
+                        </li>
+                        <li>
+                            状态：<select name="state" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
+                            <option value="">所有</option>
+                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            抽象水平：<select name="level" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
+                            <option value="">所有</option>
+                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                        </select>
+                        </li>
+                        <li hidden>
+                            生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                            <option value="">全部</option>
+                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:selected="${fangCloudDict.value} == ${makeCycle}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm searchBtn" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+
+<script th:inline="javascript">
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
+    var targetModelLevelData = [[${@fangCloudDict.getType('TargetModelLevel')}]];
+    var targetModelStateData = [[${@fangCloudDict.getType('TargetModelState')}]];
+    var dbExistTargetModelIds = [[${targetModelList}]];
+    $(function() {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({ initClosed: panehHidden, west__size: 185 });
+        queryReportList();
+        //根据 makeCycle 字段筛选结果集
+        document.getElementsByClassName("searchBtn")[0].onclick();
+    });
+
+    var overAllIds = [];                // 全局保存选中行的对象
+    $.each(dbExistTargetModelIds, function (index, dbExistTargetModelId) {
+        overAllIds.push(dbExistTargetModelId);
+    });
+
+    function examine(type,datas){            // 操作类型，选中的行
+        if(type.indexOf('uncheck')==-1){
+            $.each(datas,function(i,v){        // 如果是选中则添加选中行的 id
+                overAllIds.push(v);
+            });
+        }else{
+            $.each(datas,function(i,v){
+                overAllIds.splice(overAllIds.indexOf(v),1);     // 删除取消选中行的 id
+            });
+        }
+    }
+
+    function queryReportList() {
+        var options = {
+            url: ctx + "targetModel/list",
+            sortName: "createDate",
+            sortOrder: "desc",
+            modalName: "指标模板",
+            columns: [
+                {
+                    checkbox: true,
+                    formatter: function (value, row, index) {
+                        return $.table.checkBoxDisplayCallback(dbExistTargetModelIds, row, value);
+                    }
+                },
+                {
+                    field: 'targetModelId',
+                    title: '编号'
+                },
+                {
+                    field: 'name',
+                    title: '名称'
+                },
+                {
+                    field: 'description',
+                    title: '描述'
+                },
+                {
+                    field: 'collationCode',
+                    title: '核对码'
+                },
+                {
+                    field: 'state',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectFangCloudDictLabel(targetModelStateData, value);
+                    }
+                },
+                {
+                    field: 'level',
+                    title: '抽象水平',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(targetModelLevelData, value);
+                    }
+                },
+                {
+                    field: 'makeCycle',
+                    title: '生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
+                    }
+                }]
+        };
+        $('#bootstrap-table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
+            var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
+            examine(e.type,datas);                                 // 保存到全局 Set() 里
+        });
+
+        $.table.init(options);
+    }
+
+    console.log("overAllIds = ", overAllIds);
+
+    function submitHandler() {
+        var url = [[${reportModelId}]] == 0 ? 'getSingleModelDisplay' : 'addSaveTargetModel';
+        $.operate.selectTargetModelSuccess(url, [[${reportModelId}]], [[${targetModelList}]]);
+    }
+
+</script>
+</body>
+</html>

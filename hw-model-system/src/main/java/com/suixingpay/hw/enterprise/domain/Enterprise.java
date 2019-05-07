@@ -1,4 +1,4 @@
-package com.suixingpay.hw.system.domain;
+package com.suixingpay.hw.enterprise.domain;
 
 import com.suixingpay.hw.common.annotation.Excel;
 import com.suixingpay.hw.common.core.domain.BaseEntity;

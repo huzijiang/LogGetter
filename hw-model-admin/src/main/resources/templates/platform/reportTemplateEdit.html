@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body>
+<div class="form-content">
+    <form class="form-horizontal" id="form-reportTemplate-edit" th:object="${reportTemplate}">
+        <input name="reportTemplateId"  type="hidden"  th:field="*{reportTemplateId}" />
+        <h4 class="form-header h4">平台报告模型基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" autocomplete="off" placeholder="请输入平台报告模型名称" class="form-control" type="text" maxlength="20" th:field="*{name}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">描述：</label>
+                    <div class="col-sm-8">
+                        <input name="description" autocomplete="off" placeholder="请输入平台报告模型描述信息" class="form-control" type="text" maxlength="40" th:field="*{description}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">状态：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{state}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">受众：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="audiences" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportAudiences')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{audiences}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">归属：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{belongOrgLevel}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">是否首页展示：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{type}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">生成周期：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{makeCycle}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:src="@{/ajax/libs/select/select2.js}"></script>
+<script>
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-reportTemplate-edit").serializeArray();
+            $.operate.saveTab(ctx + "reportTemplate/editSave", data);
+        }
+    }
+</script>
+</body>
+</html>

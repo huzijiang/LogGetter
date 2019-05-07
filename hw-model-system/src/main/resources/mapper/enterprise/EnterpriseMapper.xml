@@ -2,20 +2,30 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.suixingpay.hw.system.mapper.EnterpriseMapper">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseMapper">
 
-    <resultMap type="Enterprise" id="EnterpriseResult">
-        <id     property="enterpriseId"       column="enterprise_id"      />
-        <result property="name"       column="name"      />
-        <result property="address"    column="address"   />
-        <result property="uscd"     column="uscd"    />
-        <result property="createDate"        column="create_date"        />
-        <result property="creater"  column="creater"  />
-        <result property="admin"          column="admin"          />
-        <result property="logo"       column="logo"       />
+    <resultMap type="com.suixingpay.hw.enterprise.domain.Enterprise" id="EnterpriseResult">
+        <id     property="enterpriseId" column="enterprise_id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="uscd" column="uscd"    />
+        <result property="createDate" column="create_date"/>
+        <result property="creater" column="creater"/>
+        <result property="admin" column="admin"/>
+        <result property="logo" column="logo"/>
     </resultMap>
 
-    <select id="selectEnterpriseList" parameterType="com.suixingpay.hw.system.domain.Enterprise" resultMap="EnterpriseResult">
+    <!--表名-->
+    <sql id="table">
+		t_enterprise
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		enterprise_id,name,address,uscd,create_date,creater,admin,logo
+	</sql>
+
+    <select id="selectEnterpriseList" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise" resultMap="EnterpriseResult">
        SELECT enterprise_id,NAME,address,uscd,create_date,creater,admin,logo FROM t_enterprise where 1 = 1
         <if test="enterpriseId != null and enterpriseId != 0">
             AND enterprise_id like concat('%', #{enterpriseId}, '%')
@@ -58,7 +68,7 @@
  		delete from t_enterprise where enterprise_id = #{enterprise_id}
  	</delete>
 
-    <!--<select id="selectEnterpriseUserByEnterpriseId" parameterType="int" resultMap="com.suixingpay.hw.system.domain.EnterpriseUser">-->
+    <!--<select id="selectEnterpriseUserByEnterpriseId" parameterType="int" resultMap="com.suixingpay.hw.enterprise.domain.EnterpriseUser">-->
 		<!--SELECT user_id,enterprise_id,account,password,name,phone,email,state,job_number,wx_open_id,wx_chatHead,qicq,create_date FROM t_enterprise_user-->
         <!--where enterprise_id = #{enterprise_id}-->
 	<!--</select>-->
@@ -74,7 +84,7 @@
         </foreach>
     </delete>
 
-    <update id="updateEnterpriseInfo" parameterType="com.suixingpay.hw.system.domain.Enterprise">
+    <update id="updateEnterpriseInfo" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise">
         update t_enterprise
         <set>
             <if test="enterpriseId != null and enterpriseId != 0">enterprise_id = #{enterpriseId},</if>
@@ -89,7 +99,7 @@
         where enterprise_id = #{enterpriseId}
     </update>
 
-    <insert id="insertEnterprise" parameterType="com.suixingpay.hw.system.domain.Enterprise">
+    <insert id="insertEnterprise" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise">
         insert into t_enterprise(
         <if test="name != null and name != ''">enterprise_id,</if>
         <if test="name != null and name != ''">name,</if>
@@ -112,7 +122,7 @@
     </insert>
 
 
-    <insert id="insertEnterpriseUser" parameterType="com.suixingpay.hw.system.domain.EnterpriseUser">
+    <insert id="insertEnterpriseUser" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseUser">
         insert into t_enterprise_user(
         user_id,
         <if test="enterpriseId != null and enterpriseId != 0">enterprise_id,</if>
@@ -147,4 +157,12 @@
     <select id="checkEnterpriseIdUnique" parameterType="int" resultType="int">
 		select count(1) from t_enterprise where enterprise_id=#{enterpriseId}
 	</select>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="EnterpriseResult">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
 </mapper>
