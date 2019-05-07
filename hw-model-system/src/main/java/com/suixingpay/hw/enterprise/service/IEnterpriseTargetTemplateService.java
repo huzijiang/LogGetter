@@ -53,4 +53,11 @@ public interface IEnterpriseTargetTemplateService {
      * @return 变更数
      */
     int deleteBatchIds(String ids);
+
+    /**
+     * 查询所有
+     *
+     * @return List<EnterpriseTargetTemplate>
+     */
+    List<EnterpriseTargetTemplate> findAll();
 }

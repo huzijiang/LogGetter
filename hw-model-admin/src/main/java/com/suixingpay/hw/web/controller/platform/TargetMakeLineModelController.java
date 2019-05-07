@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -106,5 +107,11 @@ public class TargetMakeLineModelController extends BaseController {
     public AjaxResult remove(String ids) {
         //todo 删除企业标记线表里相关联的数据
         return toAjax(targetMakeLineModelService.deleteBatchIds(ids));
+    }
+
+    @RequestMapping("/findOneById")
+    @ResponseBody
+    public AjaxResult  findOneById(@RequestParam("targetMakeLineModelId") Integer targetMakeLineModelId) {
+        return AjaxResult.success().put("targetMakeLineModel", targetMakeLineModelService.findOneById(targetMakeLineModelId));
     }
 }

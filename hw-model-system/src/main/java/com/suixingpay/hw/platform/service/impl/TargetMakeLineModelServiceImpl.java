@@ -53,4 +53,9 @@ public class TargetMakeLineModelServiceImpl implements ITargetMakeLineModelServi
         Integer[] targetModelIds = Convert.toIntArray(ids);
         return makeLineModelMapper.deleteBatchIds(targetModelIds);
     }
+
+    @Override
+    public List<TargetMakeLineModel> selectByTargetModelTempId(Integer targetModelTempId) {
+        return makeLineModelMapper.selectByTargetModelTempId(targetModelTempId);
+    }
 }

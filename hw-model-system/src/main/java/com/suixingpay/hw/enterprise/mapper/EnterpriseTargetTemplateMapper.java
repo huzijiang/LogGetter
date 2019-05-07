@@ -54,4 +54,11 @@ public interface EnterpriseTargetTemplateMapper {
      * @return 变更数
      */
     int deleteBatchIds(@Param("ids") Integer[] ids);
+
+    /**
+     * 查询所有
+     *
+     * @return List<EnterpriseTargetTemplate>
+     */
+    List<EnterpriseTargetTemplate> findAll();
 }

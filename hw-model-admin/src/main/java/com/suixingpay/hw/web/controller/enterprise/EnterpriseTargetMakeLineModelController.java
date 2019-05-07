@@ -4,14 +4,20 @@ import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetMakeLineModel;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
+import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetMakeLineModelService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.platform.domain.TargetMakeLineModel;
+import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
+import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
+import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
+import com.suixingpay.hw.platform.service.ITargetModelService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,10 +40,22 @@ import java.util.List;
 public class EnterpriseTargetMakeLineModelController extends BaseController {
 
     @Autowired
-    private IEnterpriseTargetMakeLineModelService targetMakeLineModelService;
+    private IEnterpriseTargetMakeLineModelService entTargetMakeLineModelService;
 
     @Autowired
-    private IEnterpriseService enterpriseService;
+    private IEnterpriseReportTemplateService entReportTempService;
+
+    @Autowired
+    private IReportTemplateService reportTemplateService;
+
+    @Autowired
+    private ITargetModelService targetModelService;
+
+    @Autowired
+    private ITargetModelContentTemplateService tmctService;
+
+    @Autowired
+    private ITargetMakeLineModelService targetMakeLineModelService;
 
     /**
      * 进入指标模板列表页面
@@ -44,9 +63,6 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @RequiresPermissions("enterprise:targetMakeLine:view")
     @RequestMapping("/view")
     public String view(ModelMap modelMap) {
-        // 获取所有企业名称
-        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
-        modelMap.put("enterpriseList", enterpriseList);
         return "enterprise/targetmakeline/enterpriseTargetMakeLineModel";
     }
 
@@ -58,15 +74,25 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseTargetMakeLineModel targetMakeLineModel) {
         startPage();
-        List<EnterpriseTargetMakeLineModel> reportTemplateList = targetMakeLineModelService.find(targetMakeLineModel);
+        List<EnterpriseTargetMakeLineModel> reportTemplateList = entTargetMakeLineModelService.find(targetMakeLineModel);
         return getDataTable(reportTemplateList);
     }
 
     /**
      * 进入指标模板添加页面
      */
-    @RequestMapping("/add")
-    public String add(){
+    @RequestMapping("/add/{enterpriseId}/{entReportTempId}/{entTargetTempId}")
+    public String add(@PathVariable("enterpriseId") Integer enterpriseId, @PathVariable("entReportTempId") Integer entReportTempId, @PathVariable("entTargetTempId") Integer entTargetTempId, ModelMap modelMap){
+
+        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(entReportTempId);
+        List<Integer> targetModelIds = reportTemplateService
+                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+
+        modelMap.put("enterpriseId", enterpriseId);
+        modelMap.put("enterpriseReportId", entReportTempId);
+        modelMap.put("enterpriseTargetTemplateId", entTargetTempId);
+        modelMap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+
         return "enterprise/targetmakeline/enterpriseTargetMakeLineModelAdd";
     }
 
@@ -78,8 +104,9 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(EnterpriseTargetMakeLineModel targetMakeLineModel) {
         targetMakeLineModel.setEnterpriseTargetMakeLineModelId((Integer) IdUtil.getManyId("t_enterprise_target_make_line_model",1).get(0));
+        targetMakeLineModel.setLastChangeDate(new Date());
         targetMakeLineModel.setLastChanger((ShiroUtils.getUserId()).intValue());
-        targetMakeLineModelService.add(targetMakeLineModel);
+        entTargetMakeLineModelService.add(targetMakeLineModel);
         return AjaxResult.success();
     }
 
@@ -88,7 +115,16 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
      */
     @RequestMapping("/edit/{enterpriseTargetMakeLineModelId}")
     public String edit(@PathVariable("enterpriseTargetMakeLineModelId") Integer enterpriseTargetMakeLineModelId, ModelMap mmap) {
-        mmap.put("enterpriseTargetMakeLineModel", targetMakeLineModelService.findOneById(enterpriseTargetMakeLineModelId));
+        EnterpriseTargetMakeLineModel entTargetMakeLineModel = entTargetMakeLineModelService.findOneById(enterpriseTargetMakeLineModelId);
+
+        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(entTargetMakeLineModel.getEnterpriseReportId());
+        List<Integer> targetModelIds = reportTemplateService
+                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+
+        mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+        mmap.put("targetModelTempList", tmctService.selectByTargetModelId(entTargetMakeLineModel.getTargetModelId()));
+        mmap.put("makeLineList", targetMakeLineModelService.selectByTargetModelTempId(entTargetMakeLineModel.getTargetModelTemplateId()));
+        mmap.put("enterpriseTargetMakeLineModel", entTargetMakeLineModel);
         return "enterprise/targetmakeline/enterpriseTargetMakeLineModelEdit";
     }
 
@@ -99,7 +135,9 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @RequestMapping("/editSave")
     @ResponseBody
     public AjaxResult editSave(EnterpriseTargetMakeLineModel targetMakeLineModel) {
-        return toAjax(targetMakeLineModelService.updateById(targetMakeLineModel));
+        targetMakeLineModel.setLastChangeDate(new Date());
+        targetMakeLineModel.setLastChanger(ShiroUtils.getUserId().intValue());
+        return toAjax(entTargetMakeLineModelService.updateById(targetMakeLineModel));
     }
 
     /**
@@ -109,7 +147,7 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        return toAjax(targetMakeLineModelService.deleteBatchIds(ids));
+        return toAjax(entTargetMakeLineModelService.deleteBatchIds(ids));
     }
 
 }

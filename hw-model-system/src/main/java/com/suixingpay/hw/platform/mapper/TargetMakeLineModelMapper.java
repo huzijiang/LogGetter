@@ -63,4 +63,12 @@ public interface TargetMakeLineModelMapper {
      * @return 变更数
      */
     int deleteBatchIds(@Param("ids") Integer[] ids);
+
+    /**
+     * 查询（根据指标展示模型编号）
+     *
+     * @param targetModelTempId 指标展示模型编号
+     * @return List<TargetMakeLineModel>
+     */
+    List<TargetMakeLineModel> selectByTargetModelTempId(Integer targetModelTempId);
 }

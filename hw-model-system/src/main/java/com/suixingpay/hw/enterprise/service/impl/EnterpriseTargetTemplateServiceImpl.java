@@ -50,4 +50,9 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
         Integer[] targetModelIds = Convert.toIntArray(ids);
         return targetTemplateMapper.deleteBatchIds(targetModelIds);
     }
+
+    @Override
+    public List<EnterpriseTargetTemplate> findAll() {
+        return targetTemplateMapper.findAll();
+    }
 }

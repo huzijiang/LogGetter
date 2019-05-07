@@ -1,12 +1,8 @@
 package com.suixingpay.hw.framework.web.service;
 
 import com.suixingpay.hw.common.utils.StringUtils;
-import com.suixingpay.hw.enterprise.domain.Enterprise;
-import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
-import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
-import com.suixingpay.hw.enterprise.service.IEnterpriseOrgTreeService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseService;
+import com.suixingpay.hw.enterprise.domain.*;
+import com.suixingpay.hw.enterprise.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +24,12 @@ public class PlatformCommonService {
 
     @Autowired
     private IEnterpriseReportTemplateService entReportTempService;
+
+    @Autowired
+    private IEnterpriseTargetTemplateService entTargetTempService;
+
+    @Autowired
+    private IEnterpriseTargetMakeLineModelService entTMLModelService;
 
     /**
      * 获取所有企业
@@ -51,5 +53,21 @@ public class PlatformCommonService {
      */
     public List<EnterpriseReportTemplate> getEntReportTempList() {
         return entReportTempService.find(new EnterpriseReportTemplate());
+    }
+
+    /**
+     * 获取所有 企业指标模板
+     * @return List<EnterpriseTargetTemplate>
+     */
+    public List<EnterpriseTargetTemplate> getEntTargetTempList() {
+        return entTargetTempService.findAll();
+    }
+
+    /**
+     * 获取所有 企业指标标记线模板
+     * @return List<EnterpriseTargetMakeLineModel>
+     */
+    public List<EnterpriseTargetMakeLineModel> getEntMakeLineList() {
+        return entTMLModelService.findAll();
     }
 }

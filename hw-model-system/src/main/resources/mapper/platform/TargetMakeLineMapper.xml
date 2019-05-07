@@ -63,6 +63,14 @@
         <include refid="dynamicWhere"/>
     </select>
 
+    <select id="selectByTargetModelTempId" resultMap="targetMakeLineModel" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="table"/>
+        where target_model_template_id = #{targetModelTemplateId}
+    </select>
+
     <!--删除：根据主键ID删除-->
     <delete id="deleteById" parameterType="java.lang.Integer">
         DELETE FROM

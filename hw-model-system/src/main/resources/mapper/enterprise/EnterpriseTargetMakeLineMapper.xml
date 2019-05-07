@@ -76,6 +76,14 @@
         <include refid="dynamicWhere"/>
     </select>
 
+    <select id="selectByEntTargetTempId" resultMap="enterpriseTargetMakeLineModel" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="table"/>
+        where target_model_template_id = #{targetModelTemplateId}
+    </select>
+
     <!-- 查询总数（根据实体查询） -->
     <select id="count" resultMap="enterpriseTargetMakeLineModel" resultType="java.lang.Long">
         SELECT COUNT(*) FROM
@@ -116,7 +124,7 @@
             <if test="description != null and description != ''">description,</if>
             <if test="markValue != null and markValue != '' ">mark_value,</if>
             <if test="lastChanger != null ">last_changer,</if>
-            last_change_date
+            <if test="lastChangeDate != null ">last_change_date,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="enterpriseTargetMakeLineModelId != null"> #{enterpriseTargetMakeLineModelId}, </if>
@@ -130,7 +138,7 @@
             <if test="description != null and description != ''">#{description},</if>
             <if test="markValue != null and markValue != '' ">#{markValue},</if>
             <if test="lastChanger != null ">#{lastChanger},</if>
-            sysdate()
+            <if test="lastChangeDate != null ">#{lastChangeDate},</if>
         </trim>
     </insert>
 

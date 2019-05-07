@@ -63,4 +63,19 @@ public interface EnterpriseTargetMakeLineModelMapper {
      */
     int deleteBatchIds(@Param("ids") Integer[] ids);
 
+    /**
+     * 查询（根据企业指标模型编号）
+     *
+     * @param entTargetTempId 企业指标模型编号
+     * @return List<EnterpriseTargetMakeLineModel>
+     */
+    List<EnterpriseTargetMakeLineModel> selectByEntTargetTempId(Integer entTargetTempId);
+
+    /**
+     * 查询所有
+     *
+     * @return List<EnterpriseTargetMakeLineModel>
+     */
+    List<EnterpriseTargetMakeLineModel> findAll();
+
 }

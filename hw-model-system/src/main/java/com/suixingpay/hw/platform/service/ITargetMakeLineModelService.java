@@ -13,7 +13,6 @@ import java.util.List;
  * @version: V1.0
  * @review: liuyan/2019-04-25T10:13:59.354+08:00
  */
-@Service
 public interface ITargetMakeLineModelService {
 
     /**
@@ -64,4 +63,11 @@ public interface ITargetMakeLineModelService {
      */
     int deleteBatchIds(String ids);
 
+    /**
+     * 查询（根据指标展示模型编号）
+     *
+     * @param targetModelTempId 指标展示模型编号
+     * @return List<TargetMakeLineModel>
+     */
+    List<TargetMakeLineModel> selectByTargetModelTempId(Integer targetModelTempId);
 }

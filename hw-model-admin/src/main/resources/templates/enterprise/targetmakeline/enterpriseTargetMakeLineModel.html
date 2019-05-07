@@ -15,17 +15,29 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								标记线名称：<input type="text" name="lineName"/>
-							</li>
-							<li>
 								企业名称：
-								<select name="enterpriseName">
+								<select name="enterpriseId" id="enterpriseIdSelect" th:with="enterpriseList=${@platformDict.getEnterpriseList()}">
 									<option value="">所有</option>
 									<option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
 								</select>
 							</li>
 							<li>
-								标记值：<input type="text" name="markValue"/>
+								报告名称：
+								<select name="enterpriseReportTemplateId" id="entReportTempSelect">
+									<option>所有</option>
+								</select>
+							</li>
+							<li>
+								指标名称：
+								<select name="enterpriseTargetTemplateId" id="entTargetTempSelect">
+									<option>所有</option>
+								</select>
+							</li>
+							<li>
+								指标标记线名称：
+								<select name="enterpriseTargetMakeLineModelId" id="entTargetMakeLineModelSelect">
+									<option>所有</option>
+								</select>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -37,11 +49,8 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-	        	<a class="btn btn-success" onclick="$.operate.exportETMLModelPage()">
-	                <i class="fa fa-plus"></i> 导入
-	            </a>
-				<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetMakeLine:save">
-	                <i class="fa fa-plus"></i> 自定义
+				<a class="btn btn-success" onclick="addEntTMLModelTemp()" shiro:hasPermission="enterprise:targetMakeLine:save">
+	                <i class="fa fa-plus"></i> 新增
 	            </a>
 	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetMakeLine:edit">
 		            <i class="fa fa-edit"></i> 修改
@@ -63,6 +72,10 @@
 		var editFlag = [[${@permission.hasPermi('enterprise:targetMakeLine:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('enterprise:targetMakeLine:remove')}]];
 		var prefix = ctx + "enterprise/targetMakeLine";
+
+		var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
+		var entReportTempData = [[${@platformDict.getEntReportTempList()}]];
+		var entTargetTempData = [[${@platformDict.getEntTargetTempList()}]];
 
         //对查询结果显示的table进行控制
 		$(function() {
@@ -90,16 +103,6 @@
 					visible: false
 		        },
 		        {
-		            field: 'enterpriseReportId',
-		            title: '企业报告模板编号',
-					visible: false
-		        },
-		        {
-		            field: 'enterpriseTargetTemplateId',
-		            title: '企业指标模板编号',
-					visible: false
-		        },
-		        {
 		            field: 'targetMakeLineModelId',
 		            title: '平台指标标记线模型编号',
 					visible: false
@@ -111,13 +114,24 @@
 		        },
 				{
 					field: 'enterpriseId',
-					title: '企业编号',
-					visible: false
+					title: '企业名称',
+					formatter: function (value, row, index) {
+						return $.table.exchangeEnterpriseDisplay(enterpriseData, value);
+					}
 				},
 				{
-					field: 'targetModelId',
-					title: '平台指标模型编号',
-					visible: false
+					field: 'enterpriseReportId',
+					title: '报告名称',
+					formatter: function (value, row, index) {
+						return $.table.exchangeEntReportTempDisplay(entReportTempData, value);
+					}
+				},
+				{
+					field: 'enterpriseTargetTemplateId',
+					title: '指标名称',
+					formatter: function (value, row, index) {
+						return $.table.exchangeEntTargetTempDisplay(entTargetTempData, value);
+					}
 				},
 				{
 					field: 'lineName',
@@ -128,8 +142,14 @@
 					title: '标记值'
 				},
 				{
+					field: 'targetModelId',
+					title: '平台指标模型编号',
+					visible: false
+				},
+				{
 					field: 'description',
-					title: '描述'
+					title: '描述',
+					visible: false
 				},
 				{
 					field: 'lastChangeDate',
@@ -155,6 +175,90 @@
 		    };
 		    //对页面所有进行初始化
 		    $.table.init(options);
+		}
+
+		//由 企业 触发 该企业的报告模板
+		$('#enterpriseIdSelect').change(function () {
+			var enterpriseId = $(this).children('option:selected').val();
+			if ($.common.isEmpty(enterpriseId)) {
+				$.modal.alertWarning("请先选择企业");
+				return;
+			}
+			$.ajax({
+				url: ctx + "getEntReportTemp",
+				type: "POST",
+				data: "enterpriseId=" +  enterpriseId,
+				success: function (result) {
+					var entReportTempList = result.entReportTempList;
+					var entReportTempSelect = document.getElementById('entReportTempSelect');
+					entReportTempSelect.innerHTML = '';
+					entReportTempSelect.append(new Option((entReportTempList.length == 0 ? "该公司暂无报告" : "未选择"), ""));
+					$.each(entReportTempList,function (index, entReportTemp) {
+						entReportTempSelect.options.add(new Option(entReportTemp.name,entReportTemp.enterpriseReportTemplateId));
+					});
+				}
+			});
+		});
+
+		//由 该企业的报告模板 触发 该企业的指标模板
+		$('#entReportTempSelect').change(function () {
+			var entReportTempId = $(this).children('option:selected').val();
+			if ($.common.isEmpty(entReportTempId)) {
+				$.modal.alertWarning("请先选择企业报告");
+				return;
+			}
+			$.ajax({
+				url: ctx + "getEntTargetTemp",
+				type: "POST",
+				data: "entReportTempId=" +  entReportTempId,
+				success: function (result) {
+					var entTargetTempList = result.entTargetTempList;
+					var entTargetTempSelect = document.getElementById('entTargetTempSelect');
+					entTargetTempSelect.innerHTML = '';
+					entTargetTempSelect.append(new Option((entTargetTempList.length == 0 ? "该报告暂无指标" : "未选择"), ""));
+
+					$.each(entTargetTempList,function (index, entTargetTemp) {
+						entTargetTempSelect.options.add(new Option(entTargetTemp.name,entTargetTemp.enterpriseTargetTemplateId));
+					});
+				}
+			});
+		});
+
+		//由 该企业的指标模板 触发 该企业的指标标记线模板
+		$('#entTargetTempSelect').change(function () {
+			var entTargetTempId = $(this).children('option:selected').val();
+			if ($.common.isEmpty(entTargetTempId)) {
+				$.modal.alertWarning("请先选择企业指标");
+				return;
+			}
+			$.ajax({
+				url: ctx + "getEntMakeLineList",
+				type: "POST",
+				data: "entTargetTempId=" +  entTargetTempId,
+				success: function (result) {
+					var entMakeLineList = result.entMakeLineList;
+					var entTargetMakeLineModelSelect = document.getElementById('entTargetMakeLineModelSelect');
+					entTargetMakeLineModelSelect.innerHTML = '';
+					entTargetMakeLineModelSelect.append(new Option((entMakeLineList.length == 0 ? "该指标暂无标记线" : "未选择"), ""));
+
+					$.each(entMakeLineList,function (index, entMakeLine) {
+						entTargetMakeLineModelSelect.options.add(new Option(entMakeLine.lineName,entMakeLine.enterpriseTargetMakeLineModelId));
+					});
+				}
+			});
+		});
+
+		//添加 企业指标标记线模板
+		function addEntTMLModelTemp() {
+			var currentEnterpriseId = $("#enterpriseIdSelect").find("option:selected").val();
+			var currentEntReportTempId = $("#entReportTempSelect").find("option:selected").val();
+			var currentEntTargetTempId = $("#entTargetTempSelect").find("option:selected").val();
+			if ($.common.isEmpty(currentEnterpriseId) || $.common.isEmpty(currentEntReportTempId) || $.common.isEmpty(currentEntTargetTempId)) {
+				$.modal.alertWarning("请将企业、报告以及指标选择完整");
+				return;
+			}
+			//进入 添加 企业指标标记线模板
+			$.operate.addEntTMLModelTempTab(currentEnterpriseId, currentEntReportTempId, currentEntTargetTempId);
 		}
 	</script>
 </body>

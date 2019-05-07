@@ -7,12 +7,10 @@ import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
-import com.suixingpay.hw.enterprise.service.IEnterpriseOrgTreeService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
+import com.suixingpay.hw.enterprise.service.*;
 import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
+import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +53,12 @@ public class PlatformCommonController {
 
     @Autowired
     private IEnterpriseOrgTreeService entOrgTreeService;
+
+    @Autowired
+    private IEnterpriseTargetMakeLineModelService entTMLModelService;
+
+    @Autowired
+    private ITargetMakeLineModelService targetMakeLineModelService;
 
     /**
      * 进入选择平台指标模型页面
@@ -275,6 +279,30 @@ public class PlatformCommonController {
     @ResponseBody
     public AjaxResult getTargetModelTempList(@RequestParam("targetModelId")  Integer targetModelId) {
         return AjaxResult.success().put("targetModelTempList", tmctService.selectByTargetModelId(targetModelId));
+    }
+
+    /**
+     * 根据 企业指标模型编号 获取 企业指标标记线模板
+     *
+     * @param entTargetTempId 企业指标模型编号
+     * @return
+     */
+    @RequestMapping("/getEntMakeLineList")
+    @ResponseBody
+    public AjaxResult getEntMakeLineList(@RequestParam("entTargetTempId")  Integer entTargetTempId) {
+        return AjaxResult.success().put("entMakeLineList", entTMLModelService.selectByEntTargetTempId(entTargetTempId));
+    }
+
+    /**
+     * 根据 指标模型展示编号 获取 指标标记线模型
+     *
+     * @param targetModelTempId 企业指标模型编号
+     * @return
+     */
+    @RequestMapping("/getMakeLineList")
+    @ResponseBody
+    public AjaxResult getMakeLineList(@RequestParam("targetModelTempId")  Integer targetModelTempId) {
+        return AjaxResult.success().put("makeLineList", targetMakeLineModelService.selectByTargetModelTempId(targetModelTempId));
     }
 
 }

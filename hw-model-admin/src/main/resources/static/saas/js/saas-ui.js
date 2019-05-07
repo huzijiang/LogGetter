@@ -305,6 +305,17 @@
 				return actions.join('');
 			},
 
+			// 企业指标编号 -> 企业指标名称
+			exchangeEntTargetTempDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, entTargetTemp) {
+					if (entTargetTemp.enterpriseTargetTemplateId == ('' + value)) {
+						actions.push("<span>" + entTargetTemp.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
 
 			// 回显 checkbox
 			checkBoxDisplayCallback: function(dbExistTargetModelIds, row, value) {
@@ -1003,6 +1014,16 @@
 				$.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(enterpriseId));
 			},
 
+			//添加 企业指标标模板页面
+			addEntTargetTempTab: function(enterpriseId, entReportTempId) {
+				$.modal.openTab("添加指标模板", ctx + "enterprise/targetTemplate/add/" + enterpriseId + "/" + entReportTempId);
+			},
+
+			//添加 企业指标标记线模板页面
+			addEntTMLModelTempTab: function(enterpriseId, entReportTempId, entTargetTempId) {
+				$.modal.openTab("添加指标模板", ctx + "enterprise/targetMakeLine/add/" + enterpriseId + "/" + entReportTempId + "/" + entTargetTempId);
+			},
+
             // 添加信息
             add: function(id) {
                 $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id));
@@ -1011,9 +1032,7 @@
             addTab: function (id) {
                 $.modal.openTab("添加" + $.table._option.modalName, $.operate.addUrl(id));
             },
-			addEntTargetTempTab: function(enterpriseId, entReportTempId) {
-				$.modal.openTab("添加指标模板", ctx + "enterprise/targetTemplate/add/" + enterpriseId + "/" + entReportTempId);
-			},
+
             // 添加信息 全屏
             addFull: function(id) {
             	var url = $.common.isEmpty(id) ? $.table._option.createUrl : $.table._option.createUrl.replace("{id}", id);

@@ -89,7 +89,6 @@
 
     $('#targetModelSelect').change(function () {
         var currentTargetModelId = $(this).children('option:selected').val();
-        console.log("currentTargetModelId", currentTargetModelId);
         if ($.common.isEmpty(currentTargetModelId)) {
             $.modal.alertWarning("请先选择平台指标模型");
             return;
