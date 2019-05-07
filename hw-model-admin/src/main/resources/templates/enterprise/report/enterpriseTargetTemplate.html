@@ -13,31 +13,34 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            企业指标模板编号：<input type="text" name="enterpriseTargetTemplateId"/>
+                            企业名称：
+                            <select name="enterpriseId" id="enterpriseIdSelect" th:with="enterpriseList=${@platformDict.getEnterpriseList()}">
+                                <option value="">所有</option>
+                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
+                            </select>
                         </li>
                         <li>
-                            企业报告模板编号：<input type="text" name="enterpriseReportTemplateId"/>
+                            报告名称：
+                            <select name="enterpriseReportTemplateId" id="entReportTempSelect">
+                                <option>所有</option>
+                            </select>
                         </li>
                         <li>
-                            平台指标模型展示内容模型编号：<input type="text" name="targetModelTemplateId"/>
+                            指标名称：
+                            <select name="enterpriseTargetTemplateId" id="entTargetTempSelect">
+                                <option>所有</option>
+                            </select>
                         </li>
                         <li>
-                            名称：<input type="text" name="name"/>
+                            指标主题：
+                            <input type="text" />
                         </li>
                         <li>
-                            公司编号：<input type="text" name="enterpriseId"/>
-                        </li>
-                        <li>
-                            展现方式：<input type="text" name="showWay"/>
-                        </li>
-                        <li>
-                            归属的列或行：<input type="text" name="belongQueue"/>
-                        </li>
-                        <li>
-                            在行和列的排序序号：<input type="text" name="sn"/>
-                        </li>
-                        <li>
-                            groupName：<input type="text" name="groupName"/>
+                            展现方式：
+                            <select name="showWay" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -49,7 +52,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="enterprise:targetTemplate:save">
+            <a class="btn btn-success" onclick="addEntTargetTemp()" shiro:hasPermission="enterprise:targetTemplate:save">
                 <i class="fa fa-plus"></i> 新增
             </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="enterprise:targetTemplate:edit">
@@ -71,6 +74,10 @@
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('enterprise:targetTemplate:edit')}]];
     var removeFlag = [[${@permission.hasPermi('enterprise:targetTemplate:remove')}]];
+
+    var targetShowWayData = [[${@fangCloudDict.getType('TargetShowWay')}]];
+    var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
+    var entReportTempData = [[${@platformDict.getEntReportTempList()}]];
 
     $(function() {
         var panehHidden = false;
@@ -100,39 +107,49 @@
                     visible: false
                 },
                 {
-                    field: 'enterpriseReportTemplateId',
-                    title: '企业报告模板编号',
-                    visible: false
-                },
-                {
                     field: 'targetModelTemplateId',
                     title: '平台指标模型展示内容模型编号',
                     visible: false
                 },
                 {
-                    field: 'name',
-                    title: '企业指标模板名称'
+                    field: 'enterpriseId',
+                    title: '企业名称',
+                    formatter: function (value, row, index) {
+                        return $.table.exchangeEnterpriseDisplay(enterpriseData, value);
+                    }
                 },
                 {
-                    field: 'enterpriseId',
-                    title: '公司编号',
-                    visible: false
+                    field: 'enterpriseReportTemplateId',
+                    title: '报告名称',
+                    formatter: function (value, row, index) {
+                        return $.table.exchangeEntReportTempDisplay(entReportTempData, value);
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '指标名称'
                 },
                 {
                     field: 'showWay',
-                    title: '展现方式'
+                    title: '指标展现方式',
+                    formatter: function (value, row, index) {
+                        return $.table.selectFangCloudDictLabel(targetShowWayData, value);
+                    }
                 },
                 {
                     field: 'belongQueue',
-                    title: '归属的列或行'
+                    title: '归属的列或行',
+                    visible: false
                 },
                 {
                     field: 'sn',
-                    title: '在行和列的排序序号'
+                    title: '在行和列的排序序号',
+                    visible: false
                 },
                 {
                     field: 'groupName',
-                    title: 'groupName'
+                    title: 'groupName',
+                    visible: false
                 },
                 {
                     field: 'templateContent',
@@ -151,6 +168,63 @@
                 }]
         };
         $.table.init(options);
+    }
+
+    //由 企业 触发 该企业的报告模板
+    $('#enterpriseIdSelect').change(function () {
+        var enterpriseId = $(this).children('option:selected').val();
+        if ($.common.isEmpty(enterpriseId)) {
+            $.modal.alertWarning("请选择企业");
+            return;
+        }
+        $.ajax({
+            url: ctx + "getEntReportTemp",
+            type: "POST",
+            data: "enterpriseId=" +  enterpriseId,
+            success: function (result) {
+                var entReportTempSelect = document.getElementById('entReportTempSelect');
+                entReportTempSelect.innerHTML = '';
+                entReportTempSelect.append(new Option("未选择", ""));
+                $.each(result.entReportTempList,function (index, entReportTemp) {
+                    entReportTempSelect.options.add(new Option(entReportTemp.name,entReportTemp.enterpriseReportTemplateId));
+                });
+            }
+        });
+    });
+
+    //由 该企业的报告模板 触发 该企业的指标模板
+    $('#entReportTempSelect').change(function () {
+        var entReportTempId = $(this).children('option:selected').val();
+        if ($.common.isEmpty(entReportTempId)) {
+            $.modal.alertWarning("请选择企业报告模板");
+            return;
+        }
+        $.ajax({
+            url: ctx + "getEntTargetTemp",
+            type: "POST",
+            data: "entReportTempId=" +  entReportTempId,
+            success: function (result) {
+                $('#entTargetTempDiv').css('display', 'block');
+                var entTargetTempSelect = document.getElementById('entTargetTempSelect');
+                entTargetTempSelect.innerHTML = '';
+                entTargetTempSelect.append(new Option("未选择", ""));
+                $.each(result.entTargetTempList,function (index, entTargetTemp) {
+                    entTargetTempSelect.options.add(new Option(entTargetTemp.name,entTargetTemp.enterpriseTargetTemplateId));
+                });
+            }
+        });
+    });
+
+    //添加 企业指标模板
+    function addEntTargetTemp() {
+        var currentEnterpriseId = $("#enterpriseIdSelect").find("option:selected").val();
+        var currentEntReportTempId = $("#entReportTempSelect").find("option:selected").val();
+        if ($.common.isEmpty(currentEnterpriseId) || $.common.isEmpty(currentEntReportTempId)) {
+            $.modal.alertWarning("请将企业以及报告选择完整");
+            return;
+        }
+        //进入 添加 企业报告模板页面
+        $.operate.addEntTargetTempTab(currentEnterpriseId, currentEntReportTempId);
     }
 </script>
 </body>

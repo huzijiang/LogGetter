@@ -58,4 +58,12 @@ public interface ITargetModelContentTemplateService {
      * @return 变更数
      */
     int deleteBatchIds(String ids);
+
+    /**
+     * 查询（根据平台指标编号查询）
+     *
+     * @param targetModelId 平台指标编号
+     * @return List<TargetModelContentTemplate>
+     */
+    List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId);
 }

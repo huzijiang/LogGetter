@@ -48,4 +48,9 @@ public class TargetModelContentTemplateServiceImpl implements ITargetModelConten
     public int deleteBatchIds(String ids) {
         return targetModelContentTemplateMapper.deleteBatchIds(Convert.toIntArray(ids));
     }
+
+    @Override
+    public List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId) {
+        return targetModelContentTemplateMapper.selectByTargetModelId(targetModelId);
+    }
 }

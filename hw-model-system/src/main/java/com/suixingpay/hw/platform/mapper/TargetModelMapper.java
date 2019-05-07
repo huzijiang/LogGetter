@@ -79,4 +79,12 @@ public interface TargetModelMapper {
      * @return
      */
     int addReportTargetRelation(@Param("reportTemplateId") Integer reportTemplateId,@Param("targetModelId") Integer targetModelId);
+
+    /**
+     * 根据 模型编号集合 查询
+     *
+     * @param targetModelIds 模型编号集合
+     * @return List<TargetModel>
+     */
+    List<TargetModel> selectByIds(List<Integer> targetModelIds);
 }

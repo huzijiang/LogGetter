@@ -66,6 +66,17 @@
         <include refid="dynamicWhere"/>
     </select>
 
+    <select id="findByPlatformEntId" resultMap="enterpriseOrgTree" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        <where>
+            1 = 1
+            <if test="platformEnterpriseId != null and platformEnterpriseId != ''"> AND platform_enterprise_id = #{platformEnterpriseId} </if>
+        </where>
+    </select>
+
     <!-- 查询总数（根据实体查询） -->
     <select id="count" resultMap="enterpriseOrgTree" resultType="java.lang.Long">
         SELECT COUNT(*) FROM

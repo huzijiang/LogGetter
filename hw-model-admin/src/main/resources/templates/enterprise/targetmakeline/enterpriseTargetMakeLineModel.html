@@ -15,31 +15,14 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								企业指标模型标记线id：<input type="text" name="enterpriseTargetMakeLineModelId"/>
-							</li>
-							<li>
-								企业报告id：<input type="text" name="enterpriseReportId"/>
-							</li>
-							<li>
-								企业指标模版id：<input type="text" name="enterpriseTargetTemplateId"/>
-							</li>
-							<li>
-								指标模型标记线id：<input type="text" name="targetMakeLineModelId"/>
-							</li>
-							<li>
-								指标模型模版id：<input type="text" name="targetModelTemplateId"/>
-							</li>
-							<li>
-								企业id：<input type="text" name="enterpriseId"/>
-							</li>
-							<li>
-								指标模型id：<input type="text" name="targetModelId"/>
-							</li>
-							<li>
 								标记线名称：<input type="text" name="lineName"/>
 							</li>
 							<li>
-								描述：<input type="text" name="description"/>
+								企业名称：
+								<select name="enterpriseName">
+									<option value="">所有</option>
+									<option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
+								</select>
 							</li>
 							<li>
 								标记值：<input type="text" name="markValue"/>
@@ -97,57 +80,66 @@
 		        createUrl: prefix + "/add",
 		        updateUrl: prefix + "/edit/{id}",
 		        removeUrl: prefix + "/remove",
-		        modalName: "企业指标模型标记线模型",
+		        modalName: "企业指标标记线模板",
 		        columns: [{
 		            checkbox: true
 		        },
 		        {
 		            field: 'enterpriseTargetMakeLineModelId',
-		            title: '企业指标模型标记线id'
+		            title: '企业指标标记线模板编号',
+					visible: false
 		        },
 		        {
 		            field: 'enterpriseReportId',
-		            title: '企业报告id',
+		            title: '企业报告模板编号',
+					visible: false
 		        },
 		        {
 		            field: 'enterpriseTargetTemplateId',
-		            title: '企业指标模版id'
+		            title: '企业指标模板编号',
+					visible: false
 		        },
 		        {
 		            field: 'targetMakeLineModelId',
-		            title: '指标模型标记线id'
+		            title: '平台指标标记线模型编号',
+					visible: false
 		        },
 		        {
                     field: 'targetModelTemplateId',
-		        	title: '指标模型模版id',
+		        	title: '平台指标展示模型编号',
+					visible: false
 		        },
 				{
 					field: 'enterpriseId',
-					title: '企业id',
+					title: '企业编号',
+					visible: false
 				},
 				{
 					field: 'targetModelId',
-					title: '指标模型id',
+					title: '平台指标模型编号',
+					visible: false
 				},
 				{
 					field: 'lineName',
-					title: '标记线名称',
-				},
-				{
-					field: 'description',
-					title: '描述',
+					title: '标记线名称'
 				},
 				{
 					field: 'markValue',
-					title: '标记值',
+					title: '标记值'
+				},
+				{
+					field: 'description',
+					title: '描述'
 				},
 				{
 					field: 'lastChangeDate',
 					title: '最后改变日期',
+					visible: false
 				},
 				{
 					field: 'lastChanger',
 					title: '最后改变人',
+					visible: false
 				},
 
 		        {

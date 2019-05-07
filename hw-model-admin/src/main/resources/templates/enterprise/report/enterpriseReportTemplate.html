@@ -13,60 +13,39 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            企业报告模板编号：<input type="text" name="enterpriseReportTemplateId"/>
+                            企业名称：
+                            <select name="enterpriseId" id="enterpriseIdSelect" th:with="enterpriseList=${@platformDict.getEnterpriseList()}">
+                                <option value="">所有</option>
+                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
+                            </select>
                         </li>
                         <li>
-                            企业编号：<input type="text" name="enterpriseId"/>
+                            报告名称：<input type="text" name="name"/>
                         </li>
                         <li>
-                            平台报告模型编号：<input type="text" name="reportTemplateId"/>
+                            报告类型：
+                            <select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
-                            名称：<input type="text" name="name"/>
+                            生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        <li>
+                            报告状态：
+                            <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
-                        <li>
-                            别名：<input type="text" name="reportAlias"/>
-                        </li>
-                        <li>
-                            描述：<input type="text" name="description"/>
-                        </li>
-                        <li>
-                            状态：<select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            是否首页展示：<select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            归属部门：<select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            归属组织级别：<select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            受众：<select name="audiences" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        </li>
-                        <li>
-                            生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')} ">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        </li>
-                        <li class="select-time">
-                            <label>创建日期： </label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        <li>归属组织：
+                            <select id="belongOrgSelect" name="belongOrg">
+                                <option value="">所有</option>
+                            </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -78,7 +57,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="reportTemplate:add">
+            <a class="btn btn-success" onclick="addEntReportTemp()" shiro:hasPermission="reportTemplate:add">
                 <i class="fa fa-plus"></i> 新增
             </a>
         </div>
@@ -101,6 +80,7 @@
     var belongOrgLevelData = [[${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}]];
     var stateData = [[${@fangCloudDict.getType('ReportTypeState')}]];
     var typeData = [[${@fangCloudDict.getType('ReportType')}]];
+    var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
 
 
     $(function() {
@@ -115,7 +95,7 @@
     function queryReportList() {
         var options = {
             url: ctx + "enterprise/reportTemplate/list",
-            createUrl: ctx + "enterprise/reportTemplate/add",
+            createUrl: ctx + "enterprise/reportTemplate/add/{id}",
             updateUrl: ctx + "enterprise/reportTemplate/edit/{id}",
             removeUrl: ctx + "enterprise/reportTemplate/remove",
             sortName: "createDate",
@@ -129,8 +109,10 @@
                 },
                 {
                     field: 'enterpriseId',
-                    title: '企业编号',
-                    visible: false
+                    title: '企业名称',
+                    formatter: function (value, row, index) {
+                        return $.table.exchangeEnterpriseDisplay(enterpriseData, value);
+                    }
                 },
                 {
                     field: 'reportTemplateId',
@@ -139,43 +121,46 @@
                 },
                 {
                     field: 'name',
-                    title: '名称'
+                    title: '报告名称'
                 },
                 {
                     field: 'reportAlias',
-                    title: '别名'
+                    title: '报告别名'
                 },
                 {
                     field: 'description',
-                    title: '描述'
+                    title: '描述',
+                    visible: false
                 },
                 {
                     field: 'state',
-                    title: '状态',
+                    title: '报告状态',
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(stateData, value);
                     }
                 },
                 {
                     field: 'type',
-                    title: '是否首页展示',
+                    title: '报告类型',
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(typeData, value);
                     }
                 },
                 {
                     field: 'belongOrg',
-                    title: '归属部门',
+                    title: '归属组织',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    }
+                    },
+                    visible: false
                 },
                 {
                     field: 'belongOrgLevel',
-                    title: '归属组织级别',
+                    title: '归属层级',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    }
+                    },
+                    visible: false
                 },
                 {
                     field: 'audiences',
@@ -183,7 +168,8 @@
                     align: 'center',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(audiencesData, value);
-                    }
+                    },
+                    visible: false
                 },
                 {
                     field: 'createDate',
@@ -216,6 +202,39 @@
                 }]
         };
         $.table.init(options);
+    }
+
+    //由 归属企业 触发 归属组织
+    $('#enterpriseIdSelect').change(function () {
+        var enterpriseId = $(this).children('option:selected').val();
+        if ($.common.isEmpty(enterpriseId)) {
+            $.modal.alertWarning("请先选择企业");
+            return;
+        }
+        $.ajax({
+            url: ctx + "/getOrgList",
+            type: "POST",
+            data: "platformEntId=" +  enterpriseId,
+            success: function (result) {
+                var belongOrgSelect = document.getElementById('belongOrgSelect');
+                belongOrgSelect.innerHTML = '';
+                belongOrgSelect.append(new Option("所有", ""));
+                $.each(result.orgList,function (index, org) {
+                    belongOrgSelect.options.add(new Option(org.name,org.orgId));
+                });
+            }
+        });
+    });
+
+    //添加 企业报告模板
+    function addEntReportTemp() {
+        var currentEnterpriseId = $("#enterpriseIdSelect").find("option:selected").val();
+        if ($.common.isEmpty(currentEnterpriseId)) {
+            $.modal.alertWarning("请先选择企业");
+            return;
+        }
+        //进入 添加 企业报告模板页面
+        $.operate.addTab(currentEnterpriseId);
     }
 </script>
 </body>

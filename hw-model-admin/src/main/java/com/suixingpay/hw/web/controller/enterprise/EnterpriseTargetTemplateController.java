@@ -3,12 +3,17 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
 import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
+import com.suixingpay.hw.platform.domain.TargetModel;
 import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
+import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
+import com.suixingpay.hw.platform.service.ITargetModelService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +43,18 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @Autowired
     private ITargetModelContentTemplateService tmctService;
 
+    @Autowired
+    private IReportTemplateService reportTemplateService;
+
+    @Autowired
+    private ITargetModelService targetModelService;
+
     /**
      * 进入企业指标模板列表页面
      */
     @RequiresPermissions("enterprise:targetTemplate:view")
     @RequestMapping("/view")
-    public String view() {
+    public String view(ModelMap modelMap) {
         return "enterprise/report/enterpriseTargetTemplate";
     }
 
@@ -62,8 +73,17 @@ public class EnterpriseTargetTemplateController extends BaseController {
     /**
      * 进入企业指标模板添加页面
      */
-    @RequestMapping("/add")
-    public String add() {
+    @RequestMapping("/add/{enterpriseId}/{entReportTempId}")
+    public String add(@PathVariable("enterpriseId") Integer enterpriseId, @PathVariable("entReportTempId") Integer entReportTempId, ModelMap modelMap) {
+
+        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(entReportTempId);
+        List<Integer> targetModelIds = reportTemplateService
+                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+
+        modelMap.put("enterpriseReportTemplateId", entReportTempId);
+        modelMap.put("enterpriseId", enterpriseId);
+        modelMap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+
         return "enterprise/report/enterpriseTargetTemplateAdd";
     }
 
@@ -74,10 +94,17 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseTargetTemplate template) {
-        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(template.getEnterpriseReportTemplateId());
-        template.setEnterpriseId(entReportTemp.getEnterpriseId());
-        template.setEnterpriseTargetTemplateId((Integer) IdUtil.getManyId("t_enterprise_target_template",1).get(0));
+        //组装入库数据
+        packageData4Db(template);
         return toAjax(entTargetTempService.add(template));
+    }
+
+    private void packageData4Db(EnterpriseTargetTemplate template) {
+        TargetModelContentTemplate tmct = tmctService.findOneById(template.getTargetModelTemplateId());
+        template.setEnterpriseTargetTemplateId((Integer) IdUtil.getManyId("t_enterprise_target_template",1).get(0));
+        template.setTemplateContent(tmct.getTemplateContent());
+        template.setSn(tmct.getSn());
+        template.setBelongQueue(tmct.getBelongQueue());
     }
 
     /**
@@ -86,11 +113,18 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/edit/{enterpriseTargetTemplateId}")
     public String edit(@PathVariable("enterpriseTargetTemplateId") Integer enterpriseTargetTemplateId, ModelMap mmap) {
         EnterpriseTargetTemplate entTargetTemp = entTargetTempService.findOneById(enterpriseTargetTemplateId);
+        
         EnterpriseReportTemplate entReportTemp = entReportTempService
                 .findOneById(entTargetTemp.getEnterpriseReportTemplateId());
+
+        List<Integer> targetModelIds = reportTemplateService
+                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+
         TargetModelContentTemplate tmct = tmctService.findOneById(entTargetTemp.getTargetModelTemplateId());
-        mmap.put("entReportName", entReportTemp.getName());
-        mmap.put("tmctName", tmct.getName());
+
+        mmap.put("targetModelId", tmct.getTargetModelId());
+        mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+        mmap.put("targetModelTempList", tmctService.selectByTargetModelId(tmct.getTargetModelId()));
         mmap.put("targetTemplate", entTargetTempService.findOneById(enterpriseTargetTemplateId));
         return "enterprise/report/enterpriseTargetTemplateEdit";
     }
@@ -102,8 +136,6 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @RequestMapping("/editSave")
     @ResponseBody
     public AjaxResult editSave(EnterpriseTargetTemplate template) {
-        EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(template.getEnterpriseReportTemplateId());
-        template.setEnterpriseId(entReportTemp.getEnterpriseId());
         return toAjax(entTargetTempService.updateById(template));
     }
 

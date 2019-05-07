@@ -55,7 +55,10 @@ public class EnterpriseReportTemplateController  extends BaseController {
      */
     @RequiresPermissions("enterprise:reportTemplate:view")
     @RequestMapping("/view")
-    public String view() {
+    public String view(ModelMap modelMap) {
+        // 获取所有企业名称
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        modelMap.put("enterpriseList", enterpriseList);
         return "enterprise/report/enterpriseReportTemplate";
     }
 
@@ -74,10 +77,10 @@ public class EnterpriseReportTemplateController  extends BaseController {
     /**
      * 进入报告模板添加页面
      */
-    @RequestMapping("/add")
-    public String add(ModelMap mmap) {
-        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
-        mmap.put("enterpriseList", enterpriseList);
+    @RequestMapping("/add/{enterpriseId}")
+    public String add(@PathVariable("enterpriseId") Integer enterpriseId, ModelMap mmap) {
+        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseId));
+        mmap.put("enterpriseId", enterpriseId);
         return "enterprise/report/enterpriseReportTemplateAdd";
     }
 
@@ -88,8 +91,6 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseReportTemplate template) {
-        ReportTemplate reportTemplate = reportTemplateService.findOneById(template.getReportTemplateId());
-        template.setMakeCycle(reportTemplate.getMakeCycle());
         template.setEnterpriseReportTemplateId((Integer) IdUtil.getManyId("t_enterprise_report_template",1).get(0));
         template.setCreateDate(new Date());
         template.setCreater(ShiroUtils.getUserId().intValue());
@@ -104,15 +105,10 @@ public class EnterpriseReportTemplateController  extends BaseController {
         EnterpriseReportTemplate enterpriseReportTemplate = entReportTemplateService.findOneById(enterpriseReportTemplateId);
         ReportTemplate reportTemplate = reportTemplateService.findOneById(enterpriseReportTemplate.getReportTemplateId());
         mmap.put("enterpriseReportTemplate", enterpriseReportTemplate);
-        mmap.put("name", reportTemplate.getName());
+        mmap.put("reportTempName", reportTemplate.getName());
 //        mmap.put("id", reportTemplate);
 
-        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
-        mmap.put("enterpriseList", enterpriseList);
-
-        EnterpriseOrgTree enterpriseOrgTree = new EnterpriseOrgTree();
-        enterpriseOrgTree.setPlatformEnterpriseId(enterpriseReportTemplate.getEnterpriseId());
-        mmap.put("orgList", enterpriseOrgTreeService.find(enterpriseOrgTree));
+        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseReportTemplate.getEnterpriseId()));
 
         return "enterprise/report/enterpriseReportTemplateEdit";
     }
@@ -124,8 +120,6 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @RequestMapping("/editSave")
     @ResponseBody
     public AjaxResult editSave(EnterpriseReportTemplate template) {
-        ReportTemplate reportTemplate = reportTemplateService.findOneById(template.getReportTemplateId());
-        template.setMakeCycle(reportTemplate.getMakeCycle());
         return toAjax(entReportTemplateService.updateById(template));
     }
 

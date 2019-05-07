@@ -94,5 +94,10 @@ public class EnterpriseServiceImpl implements IEnterpriseService
         }
         return 0;
     }
+
+    @Override
+    public List<Enterprise> findAll() {
+        return enterpriseMapper.findAll();
+    }
 }
 

@@ -42,7 +42,6 @@
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm searchBtn" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            <a class="btn btn-warning btn-rounded btn-sm displayBtn" onclick="checkboxDisplay()"><i class="fa fa-refresh"></i>&nbsp;回显</a>
                         </li>
                     </ul>
                 </div>
@@ -60,7 +59,7 @@
     var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
     var targetModelLevelData = [[${@fangCloudDict.getType('TargetModelLevel')}]];
     var targetModelStateData = [[${@fangCloudDict.getType('TargetModelState')}]];
-
+    var dbExistTargetModelIds = [[${targetModelList}]];
     $(function() {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -70,8 +69,24 @@
         queryReportList();
         //根据 makeCycle 字段筛选结果集
         document.getElementsByClassName("searchBtn")[0].onclick();
-        //checkboxDisplay();
     });
+
+    var overAllIds = [];                // 全局保存选中行的对象
+    $.each(dbExistTargetModelIds, function (index, dbExistTargetModelId) {
+        overAllIds.push(dbExistTargetModelId);
+    });
+
+    function examine(type,datas){            // 操作类型，选中的行
+        if(type.indexOf('uncheck')==-1){
+            $.each(datas,function(i,v){        // 如果是选中则添加选中行的 id
+                overAllIds.push(v);
+            });
+        }else{
+            $.each(datas,function(i,v){
+                overAllIds.splice(overAllIds.indexOf(v),1);     // 删除取消选中行的 id
+            });
+        }
+    }
 
     function queryReportList() {
         var options = {
@@ -81,7 +96,10 @@
             modalName: "指标模板",
             columns: [
                 {
-                    checkbox: true
+                    checkbox: true,
+                    formatter: function (value, row, index) {
+                        return $.table.checkBoxDisplayCallback(dbExistTargetModelIds, row, value);
+                    }
                 },
                 {
                     field: 'targetModelId',
@@ -122,21 +140,21 @@
                     }
                 }]
         };
+        $('#bootstrap-table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
+            var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
+            examine(e.type,datas);                                 // 保存到全局 Set() 里
+        });
+
         $.table.init(options);
     }
+
+    console.log("overAllIds = ", overAllIds);
 
     function submitHandler() {
         var url = [[${reportModelId}]] == 0 ? 'getSingleModelDisplay' : 'addSaveTargetModel';
         $.operate.selectTargetModelSuccess(url, [[${reportModelId}]], [[${targetModelList}]]);
     }
 
-    function checkboxDisplay() {
-        console.log("checkboxDisplay......enter");
-        var rows = $('#' + $.table._option.id).bootstrapTable('getData');
-        console.log("rows = ", rows);
-        var dataArr = [[${targetModelList}]];
-        $.operate.checkboxDisplay(dataArr);
-    }
 </script>
 </body>
 </html>

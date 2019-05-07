@@ -10,28 +10,10 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
-                    <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="请输入企业报告模板名称" class="form-control" type="text" maxlength="40" th:field="*{name}" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">别名：</label>
-                    <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="请输入企业报告模板别名" class="form-control" type="text" maxlength="40" th:field="*{reportAlias}">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台报告模型：</label>
                     <div class="col-sm-6">
-                        <input name="reportTemplateId" th:value="${id}" class="form-control templateId" type="hidden" th:field="*{reportTemplateId}" required>
-                        <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly>
+                        <input name="reportTemplateId" class="form-control reportTempId" type="hidden" th:field="*{reportTemplateId}" required>
+                        <input th:value="${reportTempName}" class="form-control reportTempName" placeholder="请点击右侧按钮进行选择" readonly>
                     </div>
                     <div class="col-sm-2">
                         <a class="btn btn-success btn-sm" onclick="$.operate.selectReportModel('平台报告模型','toAddReportModelPage')">
@@ -42,7 +24,49 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>状态：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" autocomplete="off" placeholder="请输入企业报告模板名称" class="form-control entReportTempName" type="text" maxlength="40" th:field="*{name}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">报告别名：</label>
+                    <div class="col-sm-8">
+                        <input name="name" autocomplete="off" placeholder="请输入企业报告模板别名" class="form-control" type="text" maxlength="40" th:field="*{reportAlias}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
+                    <div class="col-sm-8">
+                        <input autocomplete="off" placeholder="与平台报告模型生成周期一致" class="form-control entReportMakeCycleChinese" type="text" readonly>
+                        <input name="makeCycle" class="entReportMakeCycle" type="text" hidden>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属层级：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}" required>
+                                <option value="">未选择</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{belongOrgLevel}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告状态：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}" required>
@@ -57,15 +81,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">描述：</label>
-                    <div class="col-sm-8">
-                        <input name="description" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="200" th:field="*{description}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>受众：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告受众：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="audiences" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportAudiences')}" required>
@@ -76,24 +92,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属组织级别：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}" required>
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{belongOrgLevel}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否首页展示：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告类型(是否首页)：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
@@ -111,9 +112,9 @@
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属企业：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select id="enterpriseIdSelect" name="enterpriseId" class="form-control m-b" th:with="enterpriseList=${enterpriseList}" required>
+                            <select name="enterpriseId" id="enterpriseIdSelect" class="form-control m-b" th:with="enterprise=${@platformDict.getEnterpriseList()}" required>
                                 <option value="">未选择</option>
-                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}" th:field="*{enterpriseId}"></option>
+                                <option th:each="platformDict : ${enterprise}" th:text="${platformDict.name}" th:value="${platformDict.enterpriseId}" th:field="*{enterpriseId}"></option>
                             </select>
                         </div>
                     </div>
@@ -121,7 +122,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属部门：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属组织：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select id="belongOrgSelect" name="belongOrg" class="form-control m-b" th:with="orgList=${orgList}" required>
@@ -129,6 +130,16 @@
                                 <option th:each="org : ${orgList}" th:text="${org.name}" th:value="${org.orgId}" th:field="*{belongOrg}"></option>
                             </select>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">报告描述：</label>
+                    <div class="col-sm-8">
+                        <input name="description" autocomplete="off" placeholder="请输入描述信息" class="form-control" type="text" maxlength="200" th:field="*{description}">
                     </div>
                 </div>
             </div>
@@ -143,16 +154,40 @@
 </div>
 <div th:include="include::footer"></div>
 <script th:src="@{/ajax/libs/select/select2.js}"></script>
-<script>
+<script  th:inline="javascript">
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
+
+    $(function() {
+        var entReportTemp = [[${enterpriseReportTemplate}]];
+        $('.entReportMakeCycleChinese').attr("value", formatterData(makeCycleData, entReportTemp.makeCycle));
+        $('.entReportMakeCycle').attr("value", entReportTemp.makeCycle);
+    });
+
     function submitHandler() {
         if ($.validate.form()) {
             var data = $("#form-reportTemplate-edit").serializeArray();
             $.operate.saveTab(ctx + "enterprise/reportTemplate/editSave", data);
         }
     }
-    function changeDisplay(id, name) {
-        $('.templateId').attr("value",id);
-        $('.templateName').attr("value",name);
+
+    function changeDisplay(obj) {
+        $('.reportTempId').attr("value", obj.reportTemplateId);
+        $('.reportTempName').attr("value", obj.name);
+
+        $('.entReportTempName').attr("value", obj.name);
+        $('.entReportMakeCycleChinese').attr("value", formatterData(makeCycleData, obj.makeCycle));
+        $('.entReportMakeCycle').attr("value", obj.makeCycle);
+    }
+
+    function formatterData(data, value) {
+        var actions = [];
+        $.each(data, function(index, item) {
+            if (item.value == ('' + value)) {
+                actions.push(item.valueDesc);
+                return false;
+            }
+        });
+        return actions.join(value);
     }
 
     //由 归属企业 触发 归属组织
@@ -162,10 +197,13 @@
             $.modal.alertWarning("请选择归属企业");
             return;
         }
+
+        //TODO 后期修改获取组织结构方式
+        //var orgList = [[${@platformDict.getEntOrgList(enterpriseIdSelected)}]];
         $.ajax({
-            url: ctx + "enterprise/reportTemplate/getOrg",
+            url: ctx + "getOrgList",
             type: "POST",
-            data: "enterpriseId=" +  enterpriseId,
+            data: "platformEntId=" +  enterpriseId,
             success: function (result) {
                 var belongOrgSelect = document.getElementById('belongOrgSelect');
                 belongOrgSelect.innerHTML = '';
@@ -173,7 +211,6 @@
                 $.each(result.orgList,function (index, org) {
                     belongOrgSelect.options.add(new Option(org.name,org.orgId));
                 });
-
             }
         });
     });

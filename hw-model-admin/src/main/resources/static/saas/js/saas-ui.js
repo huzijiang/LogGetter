@@ -281,6 +281,42 @@
 				return actions.join('');
 			},
 
+			// 企业编号 -> 企业名称
+			exchangeEnterpriseDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, enterprise) {
+					if (enterprise.enterpriseId == ('' + value)) {
+						actions.push("<span>" + enterprise.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
+			// 企业报告编号 -> 企业报告名称
+			exchangeEntReportTempDisplay: function(datas, value) {
+				var actions = [];
+				$.each(datas, function(index, entReportTemp) {
+					if (entReportTemp.enterpriseReportTemplateId == ('' + value)) {
+						actions.push("<span>" + entReportTemp.name + "</span>");
+						return false;
+					}
+				});
+				return actions.join('');
+			},
+
+
+			// 回显 checkbox
+			checkBoxDisplayCallback: function(dbExistTargetModelIds, row, value) {
+            	if (dbExistTargetModelIds.indexOf(row.targetModelId) != -1) {
+					return {
+						//disabled : true, //设置是否可用
+						checked : true //设置选中
+					};
+				}
+				return value;
+			},
+
             // 显示表格指定列
             showColumn: function(column) {
                 $("#" + $.table._option.id).bootstrapTable('showColumn', column);
@@ -740,47 +776,6 @@
 				$.modal.open("导入企业指标标记线模板", ctx + "toExportETtMLModelPage");
 			},
 
-			//判断元素是否在数组中
-			contain: function(arr, obj) {
-        		$.each(arr, function (index, item) {
-					return item == obj;
-				});
-			},
-
-			//获取当前分页所有的targetModelIds
-			getCurrentTargetModelIds: function() {
-				var rows = $('#' + $.table._option.id).bootstrapTable('getData');
-				console.log("rows = ", rows);
-				var currentTargetModelIds = [];
-				$.each(rows, function (index, row) {
-					currentTargetModelIds.push(row.targetModelId);
-				});
-				return currentTargetModelIds;
-			},
-
-
-			/**
-			 *checkbox回显已经选过的数据
-			 *
-			 * @param dbExistTargetModelIds 待回显的数据
-			 */
-			checkboxDisplay: function(dbExistTargetModelIds) {
-				console.log("dbExistTargetModelIds = ", dbExistTargetModelIds);
-        		if (dbExistTargetModelIds.length == 0) {
-        			return;
-				}
-        		//获取当前分页出现的所有 targetModelId
-				var currentTargetModelIds = $.operate.getCurrentTargetModelIds();
-				//回显当前分页的 targetModelId
-				for (var i = 0; i < dbExistTargetModelIds.length; i++) {
-					for (var j = 0; j < currentTargetModelIds.length; j++) {
-						if (dbExistTargetModelIds[i] == currentTargetModelIds[j]) {
-							$('#' + $.table._option.id).bootstrapTable('check', j);
-						}
-					}
-				}
-
-			},
 
 			//弹窗：选择企业报告模板
 			selectEnterpriseReportTemp: function(type, url) {
@@ -797,8 +792,9 @@
 					type: 'POST',
 					data: 'entReportTempId=' + rows,
 					success: function (result) {
+						debugger;
 						if (result.code == web_status.SUCCESS) {
-							parent.window.changeDisplayForEntReportTemp(rows, result.modelMap.name, result.modelMap.id);
+							parent.window.changeDisplay(result.modelMap.entReportTemp);
 							$.modal.close();
 						} else {
 							$.modal.alertError(result.msg);
@@ -851,7 +847,7 @@
 					data: 'reportModelId=' + rows,
 					success: function (result) {
 						if (result.code == web_status.SUCCESS) {
-							parent.window.changeDisplay(rows, result.modelMap.name);
+							parent.window.changeDisplay(result.modelMap.reportModel);
 							$.modal.close();
 						} else {
 							$.modal.alertError(result.msg);
@@ -862,8 +858,8 @@
 
 
 			//弹窗：选择平台指标模型
-			selectTargetModel: function(type, url) {
-				$.modal.open("选择" + type, ctx + url);
+			selectTargetModel: function(type, url, enterpriseId) {
+				$.modal.open("选择" + type, ctx + url +"/" + enterpriseId);
 			},
 			selectTargetModelSuccess: function(url, reportModelId, dbExisttargetModelIds) {
 				var rows = $.table.selectFirstColumns();
@@ -1002,6 +998,11 @@
 				})
 			},
 
+			//添加 企业报告模板页面
+			addEntReportTempTab: function(enterpriseId) {
+				$.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(enterpriseId));
+			},
+
             // 添加信息
             add: function(id) {
                 $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id));
@@ -1010,8 +1011,8 @@
             addTab: function (id) {
                 $.modal.openTab("添加" + $.table._option.modalName, $.operate.addUrl(id));
             },
-			toAddTargetPage: function(id,makeCycle) {
-				$.modal.openTab("添加指标模板", ctx + "targetModel/add/" + id + "/" + makeCycle);
+			addEntTargetTempTab: function(enterpriseId, entReportTempId) {
+				$.modal.openTab("添加指标模板", ctx + "enterprise/targetTemplate/add/" + enterpriseId + "/" + entReportTempId);
 			},
             // 添加信息 全屏
             addFull: function(id) {

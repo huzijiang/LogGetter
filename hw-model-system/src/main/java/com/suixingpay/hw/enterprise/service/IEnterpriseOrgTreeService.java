@@ -12,4 +12,12 @@ public interface IEnterpriseOrgTreeService {
      * @return 企业组织结构列表
      */
     List<EnterpriseOrgTree> find(EnterpriseOrgTree enterpriseOrgTree);
+
+    /**
+     * 根据 平台编号 获取组织结构
+     *
+     * @param platformEntId 平台企业编号
+     * @return List<EnterpriseOrgTree>
+     */
+    List<EnterpriseOrgTree> findByPlatformEntId(Integer platformEntId);
 }

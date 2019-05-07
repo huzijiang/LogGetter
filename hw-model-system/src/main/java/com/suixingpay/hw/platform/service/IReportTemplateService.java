@@ -68,4 +68,12 @@ public interface IReportTemplateService {
      * @return
      */
     int insertReportTargetRelation(String ids, Integer reportTemplateId);
+
+    /**
+     * 删除：根据 平台报告模型编号 平台报告模型与平台指标模型映射关系
+     *
+     * @param reportTemplateId 平台报告模型编号
+     * @return 变更数
+     */
+    int deleteReportTargetRelation(@Param("reportTemplateId") Integer reportTemplateId);
 }

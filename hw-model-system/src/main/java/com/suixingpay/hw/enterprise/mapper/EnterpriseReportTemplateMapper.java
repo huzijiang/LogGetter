@@ -45,4 +45,11 @@ public interface EnterpriseReportTemplateMapper {
      * @return 变更数
      */
     int deleteById(Integer reportTemplateId);
+
+    /**
+     * 获取所有 企业报告模板
+     *
+     * @return List<EnterpriseReportTemplate>
+     */
+    List<EnterpriseReportTemplate> findAll();
 }

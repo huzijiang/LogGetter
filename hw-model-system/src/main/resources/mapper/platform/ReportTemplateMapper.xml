@@ -165,4 +165,8 @@
             </foreach>
     </insert>
 
+    <delete id="deleteReportTargetRelation" parameterType="java.lang.Integer">
+        delete from t_report_target_relation_model where report_template_id = #{reportTemplateId}
+    </delete>
+
 </mapper>

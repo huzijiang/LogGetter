@@ -43,4 +43,9 @@ public class EnterpriseReportTemplateServiceImpl implements IEnterpriseReportTem
     public int deleteById(Integer reportTemplateId) {
         return enterpriseReportTemplateMapper.deleteById(reportTemplateId);
     }
+
+    @Override
+    public List<EnterpriseReportTemplate> findAll() {
+        return null;
+    }
 }

@@ -65,4 +65,9 @@ public class TargetModelServiceImpl implements ITargetModelService {
     public int addReportTargetRelation(Integer reportTemplateId, Integer targetModelId) {
         return targetModelMapper.addReportTargetRelation(reportTemplateId, targetModelId);
     }
+
+    @Override
+    public List<TargetModel> selectByIds(List<Integer> targetModelIds) {
+        return targetModelMapper.selectByIds(targetModelIds);
+    }
 }

@@ -3,8 +3,10 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetMakeLineModel;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetMakeLineModelService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
@@ -33,12 +35,18 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     @Autowired
     private IEnterpriseTargetMakeLineModelService targetMakeLineModelService;
 
+    @Autowired
+    private IEnterpriseService enterpriseService;
+
     /**
      * 进入指标模板列表页面
      */
     @RequiresPermissions("enterprise:targetMakeLine:view")
     @RequestMapping("/view")
-    public String view() {
+    public String view(ModelMap modelMap) {
+        // 获取所有企业名称
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        modelMap.put("enterpriseList", enterpriseList);
         return "enterprise/targetmakeline/enterpriseTargetMakeLineModel";
     }
 

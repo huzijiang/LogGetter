@@ -54,4 +54,9 @@ public class ReportTemplateServiceImpl implements IReportTemplateService {
     public int insertReportTargetRelation(String ids, Integer reportTemplateId) {
         return reportTemplateMapper.insertReportTargetRelation(Convert.toIntArray(ids), reportTemplateId);
     }
+
+    @Override
+    public int deleteReportTargetRelation(Integer reportTemplateId) {
+        return reportTemplateMapper.deleteReportTargetRelation(reportTemplateId);
+    }
 }

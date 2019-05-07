@@ -113,5 +113,10 @@ public interface IEnterpriseService
      */
     public int checkEnterpriseIdUnique(int enterpriseId);
 
-
+    /**
+     * 获取所有企业
+     *
+     * @return List<Enterprise>
+     */
+    List<Enterprise> findAll();
 }

@@ -37,7 +37,7 @@ public interface TargetModelContentTemplateMapper {
     int updateById(TargetModelContentTemplate targetModelContentTemplate);
 
     /**
-     * 查询（根据指标模板编号查询）
+     * 查询（根据平台指标模型内容模板编号查询）
      *
      * @param targetModelTemplateId 平台指标模型内容模板编号
      * @return 平台指标模型内容模板
@@ -59,4 +59,12 @@ public interface TargetModelContentTemplateMapper {
      * @return 变更数
      */
     int deleteBatchIds(@Param("ids") Integer[] ids);
+
+    /**
+     * 查询（根据平台指标编号查询）
+     *
+     * @param targetModelId 平台指标编号
+     * @return List<TargetModelContentTemplate>
+     */
+    List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId);
 }

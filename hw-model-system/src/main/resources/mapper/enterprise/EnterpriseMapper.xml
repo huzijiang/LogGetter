@@ -4,16 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseMapper">
 
-    <resultMap type="Enterprise" id="EnterpriseResult">
-        <id     property="enterpriseId"       column="enterprise_id"      />
-        <result property="name"       column="name"      />
-        <result property="address"    column="address"   />
-        <result property="uscd"     column="uscd"    />
-        <result property="createDate"        column="create_date"        />
-        <result property="creater"  column="creater"  />
-        <result property="admin"          column="admin"          />
-        <result property="logo"       column="logo"       />
+    <resultMap type="com.suixingpay.hw.enterprise.domain.Enterprise" id="EnterpriseResult">
+        <id     property="enterpriseId" column="enterprise_id"/>
+        <result property="name" column="name"/>
+        <result property="address" column="address"/>
+        <result property="uscd" column="uscd"    />
+        <result property="createDate" column="create_date"/>
+        <result property="creater" column="creater"/>
+        <result property="admin" column="admin"/>
+        <result property="logo" column="logo"/>
     </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_enterprise
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		enterprise_id,name,address,uscd,create_date,creater,admin,logo
+	</sql>
 
     <select id="selectEnterpriseList" parameterType="com.suixingpay.hw.enterprise.domain.Enterprise" resultMap="EnterpriseResult">
        SELECT enterprise_id,NAME,address,uscd,create_date,creater,admin,logo FROM t_enterprise where 1 = 1
@@ -147,4 +157,12 @@
     <select id="checkEnterpriseIdUnique" parameterType="int" resultType="int">
 		select count(1) from t_enterprise where enterprise_id=#{enterpriseId}
 	</select>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="EnterpriseResult">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
 </mapper>

@@ -70,6 +70,16 @@
         <include refid="dynamicWhere"/>
     </select>
 
+    <select id="selectByIds" resultMap="targetModel">
+        Select
+        <include refid="Base_Column_List" />
+        from <include refid="table" />
+        where target_model_id in
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <!-- 查询总数（根据实体查询） -->
     <select id="count" resultMap="targetModel" resultType="java.lang.Long">
         SELECT COUNT(*) FROM

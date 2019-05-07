@@ -1,7 +1,16 @@
 package com.suixingpay.hw.web.controller.platform;
 
 import com.suixingpay.hw.common.core.domain.AjaxResult;
+import com.suixingpay.hw.common.core.text.Convert;
+import com.suixingpay.hw.common.utils.StringUtils;
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
+import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
+import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
+import com.suixingpay.hw.enterprise.service.IEnterpriseOrgTreeService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
+import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
 import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
@@ -15,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @description:
@@ -35,6 +46,15 @@ public class PlatformCommonController {
 
     @Autowired
     private IEnterpriseReportTemplateService entReportTempService;
+
+    @Autowired
+    private IEnterpriseService enterpriseService;
+
+    @Autowired
+    private IEnterpriseTargetTemplateService entTargetTempService;
+
+    @Autowired
+    private IEnterpriseOrgTreeService entOrgTreeService;
 
     /**
      * 进入选择平台指标模型页面
@@ -107,6 +127,12 @@ public class PlatformCommonController {
     public AjaxResult addSaveTargetModel(HttpServletRequest request) {
         String ids = request.getParameter("targetModelIds");
         Integer reportTemplateId = Integer.parseInt(request.getParameter("reportModelId"));
+
+        //先删除库中已经存在的 平台指标模型 到 平台报告模型 的映射关系
+        if (!StringUtils.isEmpty(ids)) {
+            reportTemplateService.deleteReportTargetRelation(reportTemplateId);
+        }
+        //再插入现在建立的映射关系
         reportTemplateService.insertReportTargetRelation(ids, reportTemplateId);
         return AjaxResult.success();
     }
@@ -151,8 +177,9 @@ public class PlatformCommonController {
     @RequestMapping("/getSingleReportModelDisplay")
     @ResponseBody
     public AjaxResult getSingleReportModelDisplay(@RequestParam("reportModelId") Integer reportModelId, ModelMap modelMap){
-        modelMap.put("name", reportTemplateService.findOneById(reportModelId).getName());
-        modelMap.put("id", reportModelId);
+//        modelMap.put("name", reportTemplateService.findOneById(reportModelId).getName());
+//        modelMap.put("id", reportModelId);
+        modelMap.put("reportModel", reportTemplateService.findOneById(reportModelId));
         return AjaxResult.success().put("modelMap", modelMap);
     }
 
@@ -183,8 +210,9 @@ public class PlatformCommonController {
     @RequestMapping("/getSingleEntReportTempDisplay")
     @ResponseBody
     public AjaxResult getSingleEntReportTempDisplay(@RequestParam("entReportTempId") Integer entReportTempId, ModelMap modelMap){
-        modelMap.put("name", entReportTempService.findOneById(entReportTempId).getName());
-        modelMap.put("id", entReportTempId);
+//        modelMap.put("name", entReportTempService.findOneById(entReportTempId).getName());
+//        modelMap.put("id", entReportTempId);
+        modelMap.put("entReportTemp", entReportTempService.findOneById(entReportTempId));
         return AjaxResult.success().put("modelMap", modelMap);
     }
 
@@ -192,8 +220,61 @@ public class PlatformCommonController {
      * 进入：导入企业指标标记线模板页面
      */
     @RequestMapping("toExportETtMLModelPage")
-    public String toExportETtMLModelPage() {
-        return "mini/exportETMlModelPage";
+    public String toExportETtMLModelPage(ModelMap modelMap) {
+        // 获取所有企业名称
+        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
+        modelMap.put("enterpriseList", enterpriseList);
+        return "mini/exportETMLModelPage";
+    }
+
+    /**
+     * 根据 企业编号 获取 企业报告模板
+     * @param enterpriseId 企业编号
+     * @return
+     */
+    @RequestMapping("/getEntReportTemp")
+    @ResponseBody
+    public AjaxResult getEntReportTemp(@RequestParam("enterpriseId")  Integer enterpriseId) {
+        EnterpriseReportTemplate template = new EnterpriseReportTemplate();
+        template.setEnterpriseId(enterpriseId);
+        return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
+    }
+
+    /**
+     * 根据 企业报告模板编号 获取 企业指标模板
+     * @param entReportTempId 企业报告模板编号
+     * @return
+     */
+    @RequestMapping("/getEntTargetTemp")
+    @ResponseBody
+    public AjaxResult getEntTargetTemp(@RequestParam("entReportTempId")  Integer entReportTempId) {
+        EnterpriseTargetTemplate template = new EnterpriseTargetTemplate();
+        template.setEnterpriseReportTemplateId(entReportTempId);
+        return AjaxResult.success().put("entTargetTempList", entTargetTempService.find(template));
+    }
+
+    /**
+     * 根据 平台企业编号 获取 组织结构
+     *
+     * @param platformEntId 平台企业编号
+     * @return
+     */
+    @RequestMapping("/getOrgList")
+    @ResponseBody
+    public AjaxResult getOrg(@RequestParam("platformEntId")  Integer platformEntId) {
+        return AjaxResult.success().put("orgList", entOrgTreeService.findByPlatformEntId(platformEntId));
+    }
+
+    /**
+     * 根据 平台指标模型编号 获取 平台指标展示模型
+     *
+     * @param targetModelId 平台指标模型编号
+     * @return
+     */
+    @RequestMapping("/getTargetModelTempList")
+    @ResponseBody
+    public AjaxResult getTargetModelTempList(@RequestParam("targetModelId")  Integer targetModelId) {
+        return AjaxResult.success().put("targetModelTempList", tmctService.selectByTargetModelId(targetModelId));
     }
 
 }
