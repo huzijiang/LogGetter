@@ -2,9 +2,11 @@ package com.suixingpay.hw.system.service.impl;
 
 import com.suixingpay.hw.common.utils.PasswordEncoder;
 import com.suixingpay.hw.common.utils.StringUtils;
-import com.suixingpay.hw.system.domain.*;
-import com.suixingpay.hw.system.mapper.*;
-import com.suixingpay.hw.system.service.IEnterpriseService;
+
+import com.suixingpay.hw.enterprise.domain.Enterprise;
+import com.suixingpay.hw.enterprise.domain.EnterpriseUser;
+import com.suixingpay.hw.enterprise.mapper.EnterpriseMapper;
+import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +95,11 @@ public class EnterpriseServiceImpl implements IEnterpriseService
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public List<Enterprise> findAll() {
+        return enterpriseMapper.findAll();
     }
 
     /**
