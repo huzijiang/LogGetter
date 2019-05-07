@@ -3,17 +3,11 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
-import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetMakeLineModel;
-import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
 import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseTargetMakeLineModelService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseTargetTemplateService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
-import com.suixingpay.hw.platform.domain.TargetMakeLineModel;
-import com.suixingpay.hw.platform.domain.TargetModelContentTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
@@ -62,8 +56,8 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
      */
     @RequiresPermissions("enterprise:targetMakeLine:view")
     @RequestMapping("/view")
-    public String view(ModelMap modelMap) {
-        return "enterprise/targetmakeline/enterpriseTargetMakeLineModel";
+    public String view() {
+        return "enterprise/template/enterpriseTargetMakeLineModel";
     }
 
     /**
@@ -79,21 +73,27 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     }
 
     /**
-     * 进入指标模板添加页面
+     * 进入：添加 企业指标标记线模板页面
+     *
+     * @param enterpriseId 企业编号
+     * @param entReportTempId 企业报告模板编号
+     * @param entTargetTempId 企业指标模板编号
+     * @param modelMap  ModelMap
+     * @return  进入：添加 企业指标标记线模板页面
      */
     @RequestMapping("/add/{enterpriseId}/{entReportTempId}/{entTargetTempId}")
     public String add(@PathVariable("enterpriseId") Integer enterpriseId, @PathVariable("entReportTempId") Integer entReportTempId, @PathVariable("entTargetTempId") Integer entTargetTempId, ModelMap modelMap){
-
+        //获取：企业报告模板
         EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(entReportTempId);
-        List<Integer> targetModelIds = reportTemplateService
-                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+        //获取：需前台展示的平台指标模型的编号
+        List<Integer> targetModelIds = reportTemplateService.selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
 
         modelMap.put("enterpriseId", enterpriseId);
         modelMap.put("enterpriseReportId", entReportTempId);
         modelMap.put("enterpriseTargetTemplateId", entTargetTempId);
         modelMap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
 
-        return "enterprise/targetmakeline/enterpriseTargetMakeLineModelAdd";
+        return "enterprise/template/enterpriseTargetMakeLineModelAdd";
     }
 
     /**
@@ -111,21 +111,26 @@ public class EnterpriseTargetMakeLineModelController extends BaseController {
     }
 
     /**
-     * 修改指标模板
+     * 进入：修改 企业指标标记线模板页面
+     *
+     * @param entTargetMakeLineModelId 企业指标标记线模板编号
+     * @param modelMap ModelMap
+     * @return 进入：修改 企业指标标记线模板页面
      */
-    @RequestMapping("/edit/{enterpriseTargetMakeLineModelId}")
-    public String edit(@PathVariable("enterpriseTargetMakeLineModelId") Integer enterpriseTargetMakeLineModelId, ModelMap mmap) {
-        EnterpriseTargetMakeLineModel entTargetMakeLineModel = entTargetMakeLineModelService.findOneById(enterpriseTargetMakeLineModelId);
-
+    @RequestMapping("/edit/{entTargetMakeLineModelId}")
+    public String edit(@PathVariable("entTargetMakeLineModelId") Integer entTargetMakeLineModelId, ModelMap modelMap) {
+        //获取：企业指标标记线模板
+        EnterpriseTargetMakeLineModel entTargetMakeLineModel = entTargetMakeLineModelService.findOneById(entTargetMakeLineModelId);
+        //获取：企业报告模板
         EnterpriseReportTemplate entReportTemp = entReportTempService.findOneById(entTargetMakeLineModel.getEnterpriseReportId());
-        List<Integer> targetModelIds = reportTemplateService
-                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
+        //获取：需前台展示的平台指标模型的编号
+        List<Integer> targetModelIds = reportTemplateService.selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
 
-        mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
-        mmap.put("targetModelTempList", tmctService.selectByTargetModelId(entTargetMakeLineModel.getTargetModelId()));
-        mmap.put("makeLineList", targetMakeLineModelService.selectByTargetModelTempId(entTargetMakeLineModel.getTargetModelTemplateId()));
-        mmap.put("enterpriseTargetMakeLineModel", entTargetMakeLineModel);
-        return "enterprise/targetmakeline/enterpriseTargetMakeLineModelEdit";
+        modelMap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+        modelMap.put("targetModelTempList", tmctService.selectByTargetModelId(entTargetMakeLineModel.getTargetModelId()));
+        modelMap.put("makeLineList", targetMakeLineModelService.selectByTargetModelTempId(entTargetMakeLineModel.getTargetModelTemplateId()));
+        modelMap.put("enterpriseTargetMakeLineModel", entTargetMakeLineModel);
+        return "enterprise/template/enterpriseTargetMakeLineModelEdit";
     }
 
     /**

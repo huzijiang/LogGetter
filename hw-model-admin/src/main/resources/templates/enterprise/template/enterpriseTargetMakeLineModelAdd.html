@@ -95,6 +95,7 @@
             }
         }
 
+        //平台指标模型 触发 选择平台指标展示模型
         $('#targetModelSelect').change(function () {
             var currentTargetModelId = $(this).children('option:selected').val();
             if ($.common.isEmpty(currentTargetModelId)) {
@@ -117,6 +118,7 @@
             });
         });
 
+        //平台指标展示模型 触发 选择平台指标标记线模型
         $('#targetModelTempSelect').change(function () {
             var currentTargetModelTempId = $(this).children('option:selected').val();
             if ($.common.isEmpty(currentTargetModelTempId)) {
@@ -139,6 +141,7 @@
             });
         });
 
+        //平台指标标记线模型 触发 设置字段lineName markValue description 默认值
         $('#targetMakeLineModelSelect').change(function () {
             var currentTargetMakeLineModelId = $(this).children('option:selected').val();
             if ($.common.isEmpty(currentTargetMakeLineModelId)) {

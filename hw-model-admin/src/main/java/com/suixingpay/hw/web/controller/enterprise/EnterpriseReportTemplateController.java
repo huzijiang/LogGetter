@@ -3,16 +3,13 @@ package com.suixingpay.hw.web.controller.enterprise;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
-import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.service.IEnterpriseOrgTreeService;
 import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
-import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.platform.domain.ReportTemplate;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
-import com.suixingpay.hw.platform.service.ITargetModelService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,24 +39,15 @@ public class EnterpriseReportTemplateController  extends BaseController {
     private IReportTemplateService reportTemplateService;
 
     @Autowired
-    private IEnterpriseService enterpriseService;
-
-    @Autowired
     private IEnterpriseOrgTreeService enterpriseOrgTreeService;
-
-    @Autowired
-    private ITargetModelService targetModelService;
 
     /**
      * 进入报告模板列表页面
      */
     @RequiresPermissions("enterprise:reportTemplate:view")
     @RequestMapping("/view")
-    public String view(ModelMap modelMap) {
-        // 获取所有企业名称
-        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
-        modelMap.put("enterpriseList", enterpriseList);
-        return "enterprise/report/enterpriseReportTemplate";
+    public String view() {
+        return "enterprise/template/enterpriseReportTemplate";
     }
 
     /**
@@ -81,7 +69,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     public String add(@PathVariable("enterpriseId") Integer enterpriseId, ModelMap mmap) {
         mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseId));
         mmap.put("enterpriseId", enterpriseId);
-        return "enterprise/report/enterpriseReportTemplateAdd";
+        return "enterprise/template/enterpriseReportTemplateAdd";
     }
 
     /**
@@ -110,7 +98,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
 
         mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseReportTemplate.getEnterpriseId()));
 
-        return "enterprise/report/enterpriseReportTemplateEdit";
+        return "enterprise/template/enterpriseReportTemplateEdit";
     }
 
     /**

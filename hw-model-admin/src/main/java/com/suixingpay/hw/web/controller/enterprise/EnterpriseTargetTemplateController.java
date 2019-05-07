@@ -54,8 +54,8 @@ public class EnterpriseTargetTemplateController extends BaseController {
      */
     @RequiresPermissions("enterprise:targetTemplate:view")
     @RequestMapping("/view")
-    public String view(ModelMap modelMap) {
-        return "enterprise/report/enterpriseTargetTemplate";
+    public String view() {
+        return "enterprise/template/enterpriseTargetTemplate";
     }
 
     /**
@@ -84,7 +84,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
         modelMap.put("enterpriseId", enterpriseId);
         modelMap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
 
-        return "enterprise/report/enterpriseTargetTemplateAdd";
+        return "enterprise/template/enterpriseTargetTemplateAdd";
     }
 
     /**
@@ -126,7 +126,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
         mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
         mmap.put("targetModelTempList", tmctService.selectByTargetModelId(tmct.getTargetModelId()));
         mmap.put("targetTemplate", entTargetTempService.findOneById(enterpriseTargetTemplateId));
-        return "enterprise/report/enterpriseTargetTemplateEdit";
+        return "enterprise/template/enterpriseTargetTemplateEdit";
     }
 
     /**
