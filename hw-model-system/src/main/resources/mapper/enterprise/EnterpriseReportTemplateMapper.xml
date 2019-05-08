@@ -81,6 +81,7 @@
 		 FROM 
 		 <include refid="table" />
 		 <include refid="dynamicWhere"/>
+		 order by make_cycle
 	</select>
 
 	<!-- 查询总数（根据实体查询） -->

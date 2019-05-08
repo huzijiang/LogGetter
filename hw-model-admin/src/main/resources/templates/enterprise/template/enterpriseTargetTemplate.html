@@ -78,6 +78,7 @@
     var targetShowWayData = [[${@fangCloudDict.getType('TargetShowWay')}]];
     var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
     var entReportTempData = [[${@platformDict.getEntReportTempList()}]];
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
 
     $(function() {
         var panehHidden = false;
@@ -122,7 +123,7 @@
                     field: 'enterpriseReportTemplateId',
                     title: '报告名称',
                     formatter: function (value, row, index) {
-                        return $.table.exchangeEntReportTempDisplay(entReportTempData, value);
+                        return $.table.exchangeEntReportTempDisplay(entReportTempData, value, makeCycleData);
                     }
                 },
                 {
@@ -186,7 +187,13 @@
                 entReportTempSelect.innerHTML = '';
                 entReportTempSelect.append(new Option("未选择", ""));
                 $.each(result.entReportTempList,function (index, entReportTemp) {
-                    entReportTempSelect.options.add(new Option(entReportTemp.name,entReportTemp.enterpriseReportTemplateId));
+                    var makeCycle = entReportTemp.makeCycle;
+                    $.each(makeCycleData, function(index, fangCloudDict) {
+                        if (fangCloudDict.value == ('' + entReportTemp.makeCycle)) {
+                            makeCycle = fangCloudDict.valueDesc;
+                        }
+                    });
+                    entReportTempSelect.options.add(new Option( makeCycle+ "_" + entReportTemp.name,entReportTemp.enterpriseReportTemplateId));
                 });
             }
         });

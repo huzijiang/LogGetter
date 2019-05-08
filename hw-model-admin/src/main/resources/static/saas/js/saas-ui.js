@@ -294,11 +294,19 @@
 			},
 
 			// 企业报告编号 -> 企业报告名称
-			exchangeEntReportTempDisplay: function(datas, value) {
+			exchangeEntReportTempDisplay: function(datas, value, makeCycleData) {
+            	var makeCycle = "生成周期";
 				var actions = [];
 				$.each(datas, function(index, entReportTemp) {
+
+					$.each(makeCycleData, function(index, fangCloudDict) {
+						if (fangCloudDict.value == ('' + entReportTemp.makeCycle)) {
+							makeCycle = fangCloudDict.valueDesc;
+						}
+					});
+
 					if (entReportTemp.enterpriseReportTemplateId == ('' + value)) {
-						actions.push("<span>" + entReportTemp.name + "</span>");
+						actions.push("<span>" + makeCycle + "_" + entReportTemp.name + "</span>");
 						return false;
 					}
 				});
