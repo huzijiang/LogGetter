@@ -75,13 +75,9 @@
                left join t_enterprise ent on report.enterprise_id = ent.enterprise_id
                left join t_enterprise_report_publish_info reportPub on report.enterprise_report_Id = reportPub.enterprise_report_Id
                left join t_report_template reportTemp on report.report_template_id = reportTemp.report_template_id
-               left join t_enterprise_report_target_data_relation reportWithTarget on report.enterprise_report_Id = reportWithTarget.enterprise_report_Id
-               left join t_enterprise_target_data target on reportWithTarget.enterprise_target_data_id = target.enterprise_target_data_id
+               left join t_enterprise_target_data target on report.enterprise_report_Id = target.enterprise_report_Id
                left join t_enterprise_target_data_full_content targetFullCon on target.enterprise_target_data_id = targetFullCon.enterprise_target_data_id
-        where 1=1
-        <if test="reportId != null and reportId != ''">
-            AND report.enterprise_report_id like concat('%', #{reportId}, '%')
-        </if>
+        where report.enterprise_report_id = #{reportId}
     </select>
 
     <insert id="batchInsertTargetDataPublishInfo" parameterType="java.util.Map">

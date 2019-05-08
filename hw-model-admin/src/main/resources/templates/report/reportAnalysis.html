@@ -53,7 +53,6 @@
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
 
         var reportTargetDataList = [[${reportTargetDataList}]];
-        console.log("reportTargetDataList: ", reportTargetDataList);
         initData(reportTargetDataList);
         if (reportTargetDataList[0].enterpriseTargetDataId != null) {
             generateTargetPanel(reportTargetDataList);
@@ -119,7 +118,14 @@
             echartsArray.push(echarts.init(document.getElementById('echarts'+i)));
         }
         for (var i = 0; i < reportTargetDataList.length; i++) {
-            var option = eval('(' + reportTargetDataList[i].targetDataFullContent + ')');
+            var targetDataFullContent = JSON.parse(reportTargetDataList[i].targetDataFullContent);
+            var optionTitle = targetDataFullContent.title;
+            var optionTemp = targetDataFullContent.option; // object
+            if (!$.common.isEmpty(JSON.stringify(optionTitle))) {
+                optionTemp.title = eval({text: optionTitle});
+            }
+            //console.log("optionTemp = ", optionTemp);
+            var option = eval('(' + JSON.stringify(optionTemp) + ')');
             echartsArray[i].setOption(option);
         }
     }
@@ -135,11 +141,11 @@
         var flag = false;
         for (var i = 0; i < reportTargetDataList.length; i++) {
             var resultTextareaElement = document.getElementById("textarea" + i);
-            if (resultTextareaElement.value == '') {
+            /*if (resultTextareaElement.value == '') {
                 $.modal.alertWarning("请将每个指标对应的分析内容填写完整！");
                 flag = true;
                 break;
-            }
+            }*/
             var item = {
                 "enterpriseTargetDataId": resultTextareaElement.getAttribute("key-targetDataId"),
                 "targetDataPublishContent": resultTextareaElement.value
