@@ -53,4 +53,9 @@ public class ReportManageServiceImpl implements IReportManageService {
             Integer enterpriseReportId) {
         return reportManageMapper.insertEnterpriseReportPublishInfo(reportPublishInfoId, reportPublishContent, enterpriseReportId);
     }
+
+    @Override
+    public List<ReportInfo> selectEntReportByEntId(Integer enterpriseId) {
+        return reportManageMapper.selectEntReportByEntId(enterpriseId);
+    }
 }

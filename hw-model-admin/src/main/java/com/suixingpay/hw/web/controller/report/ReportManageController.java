@@ -6,6 +6,7 @@ import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.common.utils.JsonUtils;
+import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.report.domain.ReportInfo;
 import com.suixingpay.hw.report.domain.TargetDataInfo;
@@ -33,21 +34,14 @@ public class ReportManageController extends BaseController {
     @Autowired
     private IReportManageService reportManageService;
 
-    @Autowired
-    private IEnterpriseService enterpriseService;
-
     /**
      * 进入报告列表页面
      *
-     * @param modelMap
      * @return
      */
     @RequiresPermissions("report:view")
     @RequestMapping("/view")
-    public String toReportListPage(ModelMap modelMap) {
-        // 获取所有企业名称
-        List<Enterprise> enterpriseList = enterpriseService.selectEnterpriseList(new Enterprise());
-        modelMap.put("enterpriseList", enterpriseList);
+    public String toReportListPage() {
         return "report/reportList";
     }
 
@@ -77,7 +71,26 @@ public class ReportManageController extends BaseController {
     @RequestMapping("/analysis/{enterpriseReportId}")
     public String analysis(@PathVariable("enterpriseReportId") Integer enterpriseReportId, ModelMap mmap) {
         List<ReportInfo> reportTargetDataList = reportManageService.selectReportTargetDataList(enterpriseReportId);
+
+        //筛选：指标结果集 groupName 是 Hp_qua_effi、Hp_tired_index 和 Hp_comp_rank 表示该指标内容(json)中有函数
+        List<ReportInfo> entTargetDataWithFunctionList = new ArrayList<>();
+
+        List<ReportInfo> entTargetDataShowECharsList = new ArrayList<>();
+
+        reportTargetDataList.forEach(reportTargetData ->{
+            String groupName = reportTargetData.getGroupName();
+            boolean isExist = !StringUtils.isEmpty(groupName) && ("Hp_qua_effi".equals(groupName) || "Hp_tired_index".equals(groupName) || "Hp_comp_rank".equals(groupName));
+            if (isExist) {
+                entTargetDataWithFunctionList.add(reportTargetData);
+            } else {
+                entTargetDataShowECharsList.add(reportTargetData);
+            }
+
+        });
+
         mmap.put("reportTargetDataList", reportTargetDataList);
+        mmap.put("entTargetDataWithFunctionList", entTargetDataWithFunctionList);
+        mmap.put("entTargetDataShowECharsList", entTargetDataShowECharsList);
         return "report/reportAnalysis";
     }
 

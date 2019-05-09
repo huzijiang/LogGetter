@@ -1,10 +1,8 @@
 package com.suixingpay.hw.web.controller.platform;
 
 import com.suixingpay.hw.common.core.domain.AjaxResult;
-import com.suixingpay.hw.common.core.text.Convert;
 import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.enterprise.domain.Enterprise;
-import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 import com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate;
 import com.suixingpay.hw.enterprise.service.*;
@@ -13,6 +11,7 @@ import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelService;
+import com.suixingpay.hw.report.service.IReportManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,6 +57,9 @@ public class PlatformCommonController {
 
     @Autowired
     private ITargetMakeLineModelService targetMakeLineModelService;
+
+    @Autowired
+    private IReportManageService reportManageService;
 
     /**
      * 进入选择平台指标模型页面
@@ -242,6 +243,17 @@ public class PlatformCommonController {
         EnterpriseReportTemplate template = new EnterpriseReportTemplate();
         template.setEnterpriseId(enterpriseId);
         return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
+    }
+
+    /**
+     * 根据 企业编号 获取 企业报告
+     * @param enterpriseId 企业编号
+     * @return
+     */
+    @RequestMapping("/getEntReport")
+    @ResponseBody
+    public AjaxResult getEntReport(@RequestParam("enterpriseId")  Integer enterpriseId) {
+        return AjaxResult.success().put("entReportTempList", reportManageService.selectEntReportByEntId(enterpriseId));
     }
 
     /**

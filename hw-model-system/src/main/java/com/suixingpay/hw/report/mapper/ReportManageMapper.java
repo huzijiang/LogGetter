@@ -60,4 +60,12 @@ public interface ReportManageMapper {
     int insertEnterpriseReportPublishInfo(@Param("reportPublishInfoId") Integer reportPublishInfoId,
                                           @Param("reportPublishContent") String reportPublishContent,
                                           @Param("enterpriseReportId") Integer enterpriseReportId);
+
+    /**
+     * 查询企业报告（根据企业编号）
+     *
+     * @param enterpriseId 企业编号
+     * @return List<ReportInfo>
+     */
+    List<ReportInfo> selectEntReportByEntId(Integer enterpriseId);
 }

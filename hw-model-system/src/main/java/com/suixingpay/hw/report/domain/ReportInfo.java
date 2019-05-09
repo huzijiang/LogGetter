@@ -51,6 +51,9 @@ public class ReportInfo extends ReportInfoPo implements Serializable {
      */
     private String reportPublishContent;
 
+    /** 企业指标模板表（t_enterprise_target_template）：group_name **/
+    private String groupName;
+
     /** 请求参数 */
     private Map<String, Object> params;
 

@@ -14,29 +14,16 @@
                     <ul>
                         <li>
                             企业名称：
-                            <select name="enterpriseName">
+                            <select name="enterpriseId" id="enterpriseIdSelect" th:with="enterpriseList=${@platformDict.getEnterpriseList()}">
                                 <option value="">所有</option>
-                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.name}"></option>
+                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
                             </select>
                         </li>
                         <li>
-                            企业编号：<input type="text" name="enterpriseId"/>
-                        </li>
-                        <li>
-                            报告名称：<input type="text" name="reportName"/>
-                        </li>
-                        <li>
-                            报告编号：<input type="text" name="reportId"/>
-                        </li>
-                        <li>
-                            报告模版编号：<input type="text" name="reportTemplateId"/>
-                        </li>
-                        <li>
-                            报告状态：<select name="state">
-                            <option value="">所有</option>
-                            <option value="00">启用</option>
-                            <option value="01">停用</option>
-                        </select>
+                            报告名称：
+                            <select name="reportId" id="entReportTempSelect">
+                                <option>所有</option>
+                            </select>
                         </li>
                         <li>
                             发布状态：<select name="publishState">
@@ -46,16 +33,11 @@
                         </select>
                         </li>
                         <li>
-                            报告生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('ReportMakeCycle')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        </li>
-                        <li class="select-time">
-                            <label>报告快照日期： </label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            报告生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -82,7 +64,7 @@
 
 <script th:inline="javascript">
     var analysisFlag = [[${@permission.hasPermi('report:analysis')}]];
-    var datas = [[${@fangCloudDict.getType('ReportMakeCycle')}]];
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
 
     $(function() {
         var panehHidden = false;
@@ -103,7 +85,8 @@
             columns: [
                 {
                     field: 'enterpriseId',
-                    title: '企业编号'
+                    title: '企业编号',
+                    visible: false
                 },
                 {
                     field: 'enterpriseName',
@@ -111,23 +94,25 @@
                 },
                 {
                     field: 'reportId',
-                    title: '报告编号'
+                    title: '报告编号',
+                    visible: false
                 },
                 {
                     field: 'reportName',
                     title: '报告名称'
                 },
                 {
-                    field: 'reportTemplateId',
-                    title: '报告模版编号'
+                    field: 'makeCycle',
+                    title: '报告生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
+                    }
                 },
                 {
-                    field: 'state',
-                    title: '报告状态',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        return reportStateTools(row);
-                    }
+                    field: 'reportTemplateId',
+                    title: '报告模版编号',
+                    visible: false
                 },
                 {
                     field: 'publishState',
@@ -138,15 +123,8 @@
                 },
                 {
                     field: 'makeDate',
-                    title: '报告快照日期'
-                },
-                {
-                    field: 'makeCycle',
-                    title: '报告生成周期',
-                    align: 'center',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(datas, value);
-                    }
+                    title: '报告快照日期',
+                    visible: false
                 },
                 {
                     title: '操作',
@@ -162,31 +140,29 @@
         $.table.init(options);
     }
 
-    /* 报告状态显示 */
-    function reportStateTools(row) {
-        if (row.state == 01) {
-            return '<i class=\"fa fa-toggle-off text-info fa-2x \" onclick="reportEnable(\'' + row.reportId + '\')"></i> ';
-        } else {
-            return '<i class=\"fa fa-toggle-on text-info fa-2x \" onclick="reportDisable(\'' + row.reportId + '\')"></i> ';
-        }
-    }
-
-    /* 报告：停用 */
-    function reportDisable(reportId) {
-        $.modal.alertWarning("抱歉，该功能暂时未启用");
-        // $.modal.confirm("确定启用该报告？", function() {
-        //     $.operate.post("report/changeReportState", { "reportId": reportId, "state": '01' });
-        // })
-    }
-
-    /* 报告：启用 */
-    function reportEnable(reportId) {
-        $.modal.alertWarning("抱歉，该功能暂时未启用");
-        // $.modal.confirm("确定停用该报告？", function() {
-        //     $.operate.post("report/changeReportState", { "reportId": reportId, "state": '00' });
-        // })
-    }
-
+    //由 企业 触发 该企业的报告
+    $('#enterpriseIdSelect').change(function () {
+        var enterpriseId = $(this).children('option:selected').val();
+        $.ajax({
+            url: ctx + "getEntReport",
+            type: "POST",
+            data: "enterpriseId=" +  enterpriseId,
+            success: function (result) {
+                var entReportTempSelect = document.getElementById('entReportTempSelect');
+                entReportTempSelect.innerHTML = '';
+                entReportTempSelect.append(new Option("所有", ""));
+                $.each(result.entReportTempList,function (index, entReport) {
+                    var makeCycle = entReport.makeCycle;
+                    $.each(makeCycleData, function(index, fangCloudDict) {
+                        if (fangCloudDict.value == ('' + entReport.makeCycle)) {
+                            makeCycle = fangCloudDict.valueDesc;
+                        }
+                    });
+                    entReportTempSelect.options.add(new Option( makeCycle+ "_" + entReport.reportName,entReport.reportId));
+                });
+            }
+        });
+    });
     /* 报告发布状态：显示 */
     function publishStateTools(row) {
         if (row.publishState == 01) {

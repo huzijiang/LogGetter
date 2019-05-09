@@ -56,4 +56,12 @@ public interface IReportManageService {
      * @return  变更数
      */
     int insertEnterpriseReportPublishInfo(Integer reportPublishInfoId,  String reportPublishContent, Integer enterpriseReportId);
+
+    /**
+     * 查询企业报告（根据企业编号）
+     *
+     * @param enterpriseId 企业编号
+     * @return List<ReportInfo>
+     */
+    List<ReportInfo> selectEntReportByEntId(Integer enterpriseId);
 }

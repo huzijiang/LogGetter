@@ -18,9 +18,9 @@
     <resultMap id="targetDataList" type="com.suixingpay.hw.report.domain.ReportInfo">
         <id     property="reportId"               column="enterprise_report_id" />
         <result property="enterpriseTargetDataId" column="enterprise_target_data_id" />
-        <result property="reportDescContent"      column="reportDescContent" />
-        <result property="enterpriseName"         column="name" />
+        <result property="enterpriseId"           column="enterprise_id" />
         <result property="targetDataFullContent"  column="targetDataFullContent" />
+        <result property="groupName"              column="group_name" />
     </resultMap>
 
     <sql id="listColumn">
@@ -65,7 +65,7 @@
         </if>
     </select>
 
-    <select id="selectReportTargetDataList" parameterType="java.lang.Integer" resultMap="targetDataList">
+<!--    <select id="selectReportTargetDataList" parameterType="java.lang.Integer" resultMap="targetDataList">
         select report.enterprise_report_Id,
                target.enterprise_target_data_id,
                reportPub.content as reportDescContent,
@@ -78,6 +78,22 @@
                left join t_enterprise_target_data target on report.enterprise_report_Id = target.enterprise_report_Id
                left join t_enterprise_target_data_full_content targetFullCon on target.enterprise_target_data_id = targetFullCon.enterprise_target_data_id
         where report.enterprise_report_id = #{reportId}
+    </select>-->
+
+    <!-- TODO 暂时查询 belong_org_level='01' and part_content_id is null 数据-->
+    <select id="selectReportTargetDataList" parameterType="java.lang.Integer" resultMap="targetDataList">
+        select tett.group_name,
+               tetdfc.enterprise_id,
+               tetdfc.enterprise_report_id,
+               tetdfc.enterprise_target_data_id,
+               tetdfc.full_content_id,
+               tetdfc.content as targetDataFullContent
+        from t_enterprise_report ter
+               left join t_enterprise_target_data tetd on ter.enterprise_id = tetd.enterprise_id
+               left join t_enterprise_target_data_full_content tetdfc on tetd.enterprise_target_data_id = tetdfc.enterprise_target_data_id
+               left join t_enterprise_target_template tett on tetd.enterprise_target_template_Id = tett.enterprise_target_template_Id
+        where tetd.enterprise_report_id=#{reportId} and tetd.belong_org_level='01' and tetd.part_content_id is null
+        group by tetdfc.full_content_id;
     </select>
 
     <insert id="batchInsertTargetDataPublishInfo" parameterType="java.util.Map">
@@ -118,5 +134,11 @@
         values
             (#{reportPublishInfoId, jdbcType=INTEGER}, #{reportPublishContent, jdbcType=CHAR}, #{enterpriseReportId, jdbcType=INTEGER})
     </insert>
+
+    <select id="selectEntReportByEntId" parameterType="java.lang.Integer" resultMap="reportInfoList">
+        select enterprise_report_Id, report_template_id, enterprise_id, make_cycle, make_date, state, publish_state, report_name
+        from t_enterprise_report
+        where enterprise_id = #{enterpriseId}
+    </select>
 
 </mapper>
