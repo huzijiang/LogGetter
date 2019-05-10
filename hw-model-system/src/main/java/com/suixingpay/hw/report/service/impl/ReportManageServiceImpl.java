@@ -39,8 +39,8 @@ public class ReportManageServiceImpl implements IReportManageService {
     }
 
     @Override
-    public int updateReportPublishState(String publisher, Integer enterpriseReportId) {
-        return reportManageMapper.updateReportPublishState(publisher, enterpriseReportId);
+    public int updateReportPublishState(String publisher, String publishState, Integer enterpriseReportId) {
+        return reportManageMapper.updateReportPublishState(publisher, publishState, enterpriseReportId);
     }
 
     @Override
@@ -57,5 +57,15 @@ public class ReportManageServiceImpl implements IReportManageService {
     @Override
     public List<ReportInfo> selectEntReportByEntId(Integer enterpriseId) {
         return reportManageMapper.selectEntReportByEntId(enterpriseId);
+    }
+
+    @Override
+    public void deleteReportPublishInfoByReportId(Integer reportId) {
+        reportManageMapper.deleteReportPublishInfoByReportId(reportId);
+    }
+
+    @Override
+    public void deleteTargetPublishInfoByTargetIds(List<Integer> targetIds) {
+        reportManageMapper.deleteTargetPublishInfoByTargetIds(targetIds);
     }
 }

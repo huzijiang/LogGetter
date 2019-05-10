@@ -61,36 +61,20 @@ public class ReportManageController extends BaseController {
     }
 
     /**
-     * 进入报告分析页面
+     * 进入报告分析/查看页面
      *
      * @param enterpriseReportId
+     * @param type  区分：分析页面、查看页面
      * @param mmap
      * @return
      */
     @RequiresPermissions("report:analysis")
-    @RequestMapping("/analysis/{enterpriseReportId}")
-    public String analysis(@PathVariable("enterpriseReportId") Integer enterpriseReportId, ModelMap mmap) {
+    @RequestMapping("/analysis/{enterpriseReportId}/{type}")
+    public String analysis(@PathVariable("enterpriseReportId") Integer enterpriseReportId, @PathVariable("type") String type, ModelMap mmap) {
         List<ReportInfo> reportTargetDataList = reportManageService.selectReportTargetDataList(enterpriseReportId);
 
-        //筛选：指标结果集 groupName 是 Hp_qua_effi、Hp_tired_index 和 Hp_comp_rank 表示该指标内容(json)中有函数
-        List<ReportInfo> entTargetDataWithFunctionList = new ArrayList<>();
-
-        List<ReportInfo> entTargetDataShowECharsList = new ArrayList<>();
-
-        reportTargetDataList.forEach(reportTargetData ->{
-            String groupName = reportTargetData.getGroupName();
-            boolean isExist = !StringUtils.isEmpty(groupName) && ("Hp_qua_effi".equals(groupName) || "Hp_tired_index".equals(groupName) || "Hp_comp_rank".equals(groupName));
-            if (isExist) {
-                entTargetDataWithFunctionList.add(reportTargetData);
-            } else {
-                entTargetDataShowECharsList.add(reportTargetData);
-            }
-
-        });
-
+        mmap.put("type", type);
         mmap.put("reportTargetDataList", reportTargetDataList);
-        mmap.put("entTargetDataWithFunctionList", entTargetDataWithFunctionList);
-        mmap.put("entTargetDataShowECharsList", entTargetDataShowECharsList);
         return "report/reportAnalysis";
     }
 
@@ -104,46 +88,59 @@ public class ReportManageController extends BaseController {
     @RequestMapping(value = "/publish")
     @ResponseBody
     public AjaxResult reportPublish(@RequestBody String jsonStr) {
-        logger.info(">>>报告发布[{}]", jsonStr);
         try {
             Map<String, Object> map = JsonUtils.fromJson(jsonStr);
             Integer enterpriseReportId = (Integer) map.get("enterpriseReportId");
             String reportPublishContent = (String) map.get("reportPublishContent");
-
+            logger.info(">>>报告发布,报告编号：[{}]", enterpriseReportId);
             Map<Integer, TargetDataInfo> mapParam = new HashMap<>();
             List<TargetDataInfo> targetDataInfoList = new ArrayList<>();
+            List<Integer> targetIds = new ArrayList<>();
 
             JSONArray jsonArray = (JSONArray) map.get("paramData");
             for (int i = 0; i < jsonArray.size(); i++) {
                 TargetDataInfo targetDataInfo = new TargetDataInfo();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                int enterpriseTargetDataId = Integer.parseInt((String) jsonObject.get("enterpriseTargetDataId"));
+                targetIds.add(enterpriseTargetDataId);
+
                 targetDataInfo.setPublisher(ShiroUtils.getUserId().intValue());
-                targetDataInfo.setEnterpriseTargetDataId(Integer.parseInt((String) jsonObject.get("enterpriseTargetDataId")));
+                targetDataInfo.setEnterpriseTargetDataId(enterpriseTargetDataId);
+                targetDataInfo.setPublishState("01");
                 targetDataInfo.setTargetDataPublishContent((String) jsonObject.get("targetDataPublishContent"));
                 mapParam.put((Integer) IdUtil.getManyId("t_enterprise_target_data_publish_info",1).get(0), targetDataInfo);
                 targetDataInfoList.add(targetDataInfo);
             }
+            //删除：报告发布表中之前发布的内容
+            reportManageService.deleteReportPublishInfoByReportId(enterpriseReportId);
+            //删除：报告对应的指标发布表中之前发布的内容
+            reportManageService.deleteTargetPublishInfoByTargetIds(targetIds);
 
+            //插入：报告对应的指标发布表中
             reportManageService.batchInsertTargetDataPublishInfo(mapParam);
-            reportManageService.updateReportPublishState(ShiroUtils.getLoginName(), enterpriseReportId);
+            //更新：报告表发布状态
+            reportManageService.updateReportPublishState(ShiroUtils.getLoginName(), "01", enterpriseReportId);
+            //更新：报告对应的指标发布状态
             reportManageService.updateEnterpriseTargetDataPublishState(targetDataInfoList);
+            //插入：报告对应的指标发布表中
             reportManageService.insertEnterpriseReportPublishInfo((Integer) IdUtil.getManyId("t_enterprise_report_publish_info",1).get(0), reportPublishContent, enterpriseReportId);
         }catch (Exception e) {
-            return AjaxResult.error("发布指标出现异常！请联系相关人员解决！");
+            logger.error("发布异常：[{}]", e.getMessage());
+            return AjaxResult.error("发布出现异常！请联系相关人员解决！");
         }
         return AjaxResult.success();
     }
 
     /**
-     * 更新报告应用状态
+     * 再次发布报告：仅仅是将报告状态值：发布（01）变为未发布（00）
      *
-     * @param reportId
-     * @param state
+     * @param reportId 报告编号
      * @return
      */
-    @RequiresPermissions("report:changeReportState")
-    @RequestMapping("/changeReportState")
-    public AjaxResult changeReportState(@RequestParam("reportId") Integer reportId, @RequestParam("state") String state) {
-        return AjaxResult.success();
+    @RequestMapping("/publishAgain/{id}")
+    @ResponseBody
+    public AjaxResult publishAgain(@PathVariable("id") Integer reportId) {
+        return toAjax(reportManageService.updateReportPublishState(ShiroUtils.getLoginName(), "00", reportId));
     }
 }

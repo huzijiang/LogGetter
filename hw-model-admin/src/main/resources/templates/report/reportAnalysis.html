@@ -4,37 +4,34 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<script th:src="@{/ueditor/ueditor.config.js}"></script>
+<script th:src="@{/ueditor/ueditor.all.js}"></script>
 <style>
-    .echarts-row{
+    .target-row{
         margin: 10px;height:330px;background: #fff;border-radius: 6px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);
     }
-    .echarts-col{
+    .target-col{
         padding-top: 10px;padding-left: 10px;
-    }
-    .baseInfo-row{
-        margin: 10px;height:330px;background: #fff;border-radius: 6px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);
     }
 </style>
 <body class="gray-bg">
 <div class="container ui-layout-center">
-    <div class="row echarts-row">
-        <div class="col-md-12 echarts-col">
+    <div class="row target-row">
+        <div class="col-md-12 target-col">
             <h2><p class="enterpriseNameArea"></p></h2>
             <hr>
             <div>
-                <textarea id="reportPublishContent" rows="12" style="resize:none;min-width: 100%;height: 100%;" placeholder="请填写报告分析结果..."></textarea>
+                <script id="reportPublishContentContainer" type="text/plain"></script>
             </div>
         </div>
     </div>
-    <div class="echarts-container">
-        <div id="tipDiv" style="display: none;text-align: center;">
-            <h3>暂时没有任何指标！</h3>
-        </div>
+    <div class="target-container">
+
     </div>
 
     <div style="float: bottom;margin-bottom: 10px;text-align: center;">
-        <button class="btn btn-success" onclick="reportPublish()" th:style="${reportTargetDataList[0].enterpriseTargetDataId == null} ? 'display:none;'">发布</button>
-        <button class="btn btn-danger" onclick="closeItem()">取消</button>
+        <button class="btn btn-success" onclick="reportPublish()" th:style="${type == 'detail'} ? 'display:none;'">发布</button>
+        <button class="btn btn-danger" onclick="closeItem()">退出</button>
     </div>
 </div>
 
@@ -42,8 +39,60 @@
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
 <!-- 引入 ECharts 文件 -->
 <script th:src="@{/js/echarts.min.js}"></script>
+<script type="text/javascript">
+
+</script>
 <script th:inline="javascript">
     var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
+    var type = [[${type}]];
+    var reportTargetDataList = [[${reportTargetDataList}]];
+
+    var ue = UE.getEditor('reportPublishContentContainer', {
+        toolbars: [
+            [
+                'undo', //撤销
+                'redo', //重做
+                'bold', //加粗
+                'indent', //首行缩进
+                'italic', //斜体
+                'underline', //下划线
+                'strikethrough', //删除线
+                'subscript', //下标
+                'formatmatch', //格式刷
+                'preview', //预览
+                'horizontal', //分隔线
+                'cleardoc', //清空文档
+                'fontfamily', //字体
+                'fontsize', //字号
+                'paragraph', //段落格式
+                'emotion', //表情
+                'spechars', //特殊字符
+                'justifyleft', //居左对齐
+                'justifyright', //居右对齐
+                'justifycenter', //居中对齐
+                'justifyjustify', //两端对齐
+                'forecolor', //字体颜色
+                'backcolor', //背景色
+                'insertorderedlist', //有序列表
+                'insertunorderedlist', //无序列表
+                'fullscreen', //全屏
+                'lineheight' //行间距
+            ]
+        ],
+        autoHeightEnabled: true,
+        autoFloatEnabled: true,
+        elementPathEnabled : false
+    });
+    ue.ready(function() {
+        var reportPublishContent = reportTargetDataList[0].reportPublishContent;
+        var uePlaceholder =  "请填写报告分析结果...";
+        ue.setHeight(170);
+        if (type == "detail") {
+            ue.setDisabled();
+            uePlaceholder = "该报告暂无分析内容"
+        }
+        ue.setContent($.common.isEmpty(reportPublishContent) ? uePlaceholder : reportPublishContent);
+    });
 
     $(function() {
         var panehHidden = false;
@@ -52,15 +101,9 @@
         }
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
 
-        var entTargetDataShowECharsList = [[${entTargetDataShowECharsList}]];
-        var entTargetDataWithFunctionList = [[${entTargetDataWithFunctionList}]];
-        var reportTargetDataList = [[${reportTargetDataList}]];
-
         initData(reportTargetDataList);
-        generateTargetPanel(entTargetDataShowECharsList);
-        loopShowTargetData(entTargetDataShowECharsList);
-        generateTargetPanel4NotUseEcharts(entTargetDataWithFunctionList);
-        loopShowTargetData4NotUseEcharts(entTargetDataWithFunctionList);
+        generateTargetPanel(reportTargetDataList);
+        loopShowTargetData(reportTargetDataList);
     });
 
     /**
@@ -75,115 +118,90 @@
             }
         });
 
-        $(".enterpriseNameArea").html(enterpriseName + "-报告各指标情况：");
+        $(".enterpriseNameArea").html(enterpriseName + "——" + reportTargetDataList[0].reportName);
     }
 
     /**
      * 生成每个指标所在的面板区域
      */
-    function generateTargetPanel(entTargetDataShowECharsList) {
-        var echartsContainer = document.getElementsByClassName('echarts-container')[0];
+    function generateTargetPanel(reportTargetDataList) {
+        var targetContainer = document.getElementsByClassName('target-container')[0];
 
-        for (var count = 0; count < entTargetDataShowECharsList.length; count++) {
+        for (var count = 0; count < reportTargetDataList.length; count++) {
+            // 分类：指标结果集 groupName 是 Hp_qua_effi、Hp_tired_index、Hp_comp_rank
+            // 表示直接展示该指标内容(json串)，无需渲染成 ECharts
+            var groupName = reportTargetDataList[count].groupName;
+            var notShowEChars = !$.common.isEmpty(groupName) && ("Hp_qua_effi" == groupName || "Hp_tired_index" == groupName || "Hp_comp_rank" == groupName);
 
-            var echartsRowDiv = document.createElement("div");
-            echartsRowDiv.setAttribute("class","row echarts-row");
+            var targetRowDiv = document.createElement("div");
+            targetRowDiv.setAttribute("class","row target-row");
 
-            var echartsColDiv = document.createElement("div");
-            echartsColDiv.setAttribute("class","col-md-12 echarts-col");
+            var targetColDiv = document.createElement("div");
+            targetColDiv.setAttribute("class","col-md-12 target-col");
 
-            var echartsDiv = document.createElement("div");
-            echartsDiv.setAttribute("id", "echarts" + count);
-            echartsDiv.setAttribute("style", "float:left;width: 70%;height: 300px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);");
+            var targetPanelDiv = document.createElement("div");
+            targetPanelDiv.setAttribute("id", "targetPanel" + count);
+            targetPanelDiv.setAttribute("style", "float:left;width: 70%;height: 300px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);");
 
-            var textareaDiv = document.createElement("div");
-            textareaDiv.setAttribute("style", "margin-right:5px;padding-top: 10px;float:right;width: 28%;height: 300px;");
+            var targetTextarea = document.createElement("textarea");
+            if(notShowEChars) {
+                targetTextarea.setAttribute("row", "30");
+                targetTextarea.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
+                targetTextarea.setAttribute("readonly", "readonly");
+            }
 
-            var textAreaElement = document.createElement("textarea");
-            textAreaElement.setAttribute("row", "30");
-            textAreaElement.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
-            textAreaElement.setAttribute("placeholder", "填入分析内容...");
-            textAreaElement.setAttribute("id", "textarea"+count);
-            textAreaElement.setAttribute("key-targetDataId", entTargetDataShowECharsList[count].enterpriseTargetDataId);
+            var targetPublishTextareaDiv = document.createElement("div");
+            targetPublishTextareaDiv.setAttribute("style", "margin-right:5px;padding-top: 10px;float:right;width: 28%;height: 300px;");
 
-            echartsContainer.appendChild(echartsRowDiv);
-            echartsRowDiv.appendChild(echartsColDiv);
-            echartsColDiv.appendChild(echartsDiv);
-            textareaDiv.appendChild(textAreaElement);
-            echartsColDiv.appendChild(textareaDiv);
-        }
-    }
 
-    /**
-     * 生成每个指标所在的面板区域：json 中有函数直接展示 json
-     */
-    function generateTargetPanel4NotUseEcharts(entTargetDataWithFunctionList) {
-        var echartsContainer = document.getElementsByClassName('echarts-container')[0];
+            var targetDataPublishContent = reportTargetDataList[count].targetDataPublishContent;
+            var targetPublishTextareaElement = document.createElement("textarea");
+            targetPublishTextareaElement.setAttribute("row", "30");
+            targetPublishTextareaElement.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
+            targetPublishTextareaElement.setAttribute("id", "publishTextarea"+count);
+            targetPublishTextareaElement.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
+            if (type == "detail") {
+                targetPublishTextareaElement.readOnly = true;
+            }
+            targetPublishTextareaElement.innerHTML = $.common.isEmpty(targetDataPublishContent) ? "该指标暂无分析内容" : targetDataPublishContent;
 
-        for (var count = 0; count < entTargetDataWithFunctionList.length; count++) {
-
-            var echartsRowDiv = document.createElement("div");
-            echartsRowDiv.setAttribute("class","row echarts-row");
-
-            var echartsColDiv = document.createElement("div");
-            echartsColDiv.setAttribute("class","col-md-12 echarts-col");
-
-            var notEchartsTextareaDiv = document.createElement("div");
-            notEchartsTextareaDiv.setAttribute("style", "float:left;width: 60%;height: 300px;box-shadow: 1px 1px 3px rgba(0,0,0,.2)");
-
-            var notEchartsTextarea = document.createElement("textarea");
-            notEchartsTextarea.setAttribute("row", "30");
-            notEchartsTextarea.setAttribute("id", "notEcharts" + count);
-            notEchartsTextarea.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
-            notEchartsTextarea.setAttribute("readonly", "readonly");
-
-            var textareaDiv = document.createElement("div");
-            textareaDiv.setAttribute("style", "margin-right:10px;padding-top: 10px;float:right;width: 30%;height: 300px;");
-
-            var textAreaElement = document.createElement("textarea");
-            textAreaElement.setAttribute("row", "30");
-            textAreaElement.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
-            textAreaElement.setAttribute("placeholder", "填入分析内容...");
-            textAreaElement.setAttribute("id", "notEchartsTextarea"+count);
-            textAreaElement.setAttribute("key-targetDataId", entTargetDataWithFunctionList[count].enterpriseTargetDataId);
-
-            echartsContainer.appendChild(echartsRowDiv);
-            echartsRowDiv.appendChild(echartsColDiv);
-            echartsColDiv.appendChild(notEchartsTextareaDiv);
-            notEchartsTextareaDiv.appendChild(notEchartsTextarea);
-            textareaDiv.appendChild(textAreaElement);
-            echartsColDiv.appendChild(textareaDiv);
+            targetContainer.appendChild(targetRowDiv);
+            targetRowDiv.appendChild(targetColDiv);
+            targetColDiv.appendChild(targetPanelDiv);
+            if(notShowEChars){
+                targetPanelDiv.appendChild(targetTextarea);
+            }
+            targetPublishTextareaDiv.appendChild(targetPublishTextareaElement);
+            targetColDiv.appendChild(targetPublishTextareaDiv);
         }
     }
 
     /**
      * 循环展示各个指标
      */
-    function loopShowTargetData(entTargetDataShowECharsList) {
-        var echartsArray = [];
-        for (var i = 0; i < entTargetDataShowECharsList.length; i++) {
-            echartsArray.push(echarts.init(document.getElementById('echarts'+i)));
-        }
-        for (var i = 0; i < entTargetDataShowECharsList.length; i++) {
-            var targetDataFullContent = JSON.parse(entTargetDataShowECharsList[i].targetDataFullContent);
-            var optionTitle = targetDataFullContent.title;
-            var optionTemp = targetDataFullContent.option; // object
-            if (!$.common.isEmpty(JSON.stringify(optionTitle))) {
-                optionTemp.title = eval({text: optionTitle,x:'center',bottom: '0'});
-            }
-            //console.log("optionTemp = ", optionTemp);
-            var option = eval('(' + JSON.stringify(optionTemp) + ')');
-            echartsArray[i].setOption(option);
-        }
-    }
+    function loopShowTargetData(reportTargetDataList) {
 
-    /**
-     * 循环展示各个指标：json 中有函数直接展示 json
-     */
-    function loopShowTargetData4NotUseEcharts(entTargetDataWithFunctionList) {
-        for (var i = 0; i < entTargetDataWithFunctionList.length; i++) {
-            var targetDataFullContent = entTargetDataWithFunctionList[i].targetDataFullContent;
-            document.getElementById('notEcharts' + i).innerHTML = targetDataFullContent;
+        for (var count = 0; count < reportTargetDataList.length; count++) {
+
+            var groupName = reportTargetDataList[count].groupName;
+            var notShowEChars = !$.common.isEmpty(groupName) && ("Hp_qua_effi" == groupName || "Hp_tired_index" == groupName || "Hp_comp_rank" == groupName);
+
+            var targetDataFullContent = reportTargetDataList[count].targetDataFullContent;
+
+            if (notShowEChars) {
+                document.getElementById('targetPanel'+count).firstChild.innerHTML = targetDataFullContent;
+            }else {
+                var chart = echarts.init(document.getElementById('targetPanel'+count));
+
+                targetDataFullContent = JSON.parse(targetDataFullContent);
+                var optionTitle = targetDataFullContent.title;
+                var optionTemp = targetDataFullContent.option; // object
+                if (!$.common.isEmpty(JSON.stringify(optionTitle))) {
+                    optionTemp.title = eval({text: optionTitle});
+                }
+                var option = eval('(' + JSON.stringify(optionTemp) + ')');
+                chart.setOption(option);
+            }
         }
     }
 
@@ -191,12 +209,12 @@
      * 发布报告
      */
     function reportPublish() {
-        var entTargetDataShowECharsList = [[${entTargetDataShowECharsList}]];
-        var enterpriseReportId = entTargetDataShowECharsList[0].reportId;
+        // var entTargetDataShowECharsList = [[${entTargetDataShowECharsList}]];
+        var enterpriseReportId = reportTargetDataList[0].reportId;
 
         var itemArray = [];
-        for (var i = 0; i < entTargetDataShowECharsList.length; i++) {
-            var resultTextareaElement = document.getElementById("textarea" + i);
+        for (var i = 0; i < reportTargetDataList.length; i++) {
+            var resultTextareaElement = document.getElementById("publishTextarea" + i);
             var item = {
                 "enterpriseTargetDataId": resultTextareaElement.getAttribute("key-targetDataId"),
                 "targetDataPublishContent": resultTextareaElement.value
@@ -204,20 +222,9 @@
             itemArray.push(item);
         }
 
-        var entTargetDataWithFunctionList = [[${entTargetDataWithFunctionList}]];
-        for (var j = 0; j < entTargetDataWithFunctionList.length; j++) {
-            var resultNotEchartsTextareaElement = document.getElementById("notEchartsTextarea" + j);
-            var itemNotEcharts = {
-                "enterpriseTargetDataId": resultNotEchartsTextareaElement.getAttribute("key-targetDataId"),
-                "targetDataPublishContent": resultNotEchartsTextareaElement.value
-            };
-            itemArray.push(itemNotEcharts);
-        }
+        var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":ue.getContent(), "paramData": itemArray};
+        // console.log("jsonData:", JSON.stringify(jsonData));
 
-        var reportPublishContent = document.getElementById("reportPublishContent").value;
-
-        var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":reportPublishContent, "paramData": itemArray};
-        console.log("jsonData:", JSON.stringify(jsonData));
         $.operate.publishReport(ctx + "report/publish", jsonData);
     }
 

@@ -50,4 +50,9 @@ public class ReportInfoPo {
      * 报告快照生成周期
      */
     private String makeCycle;
+
+    /**
+     * 报告发布时间
+     */
+    private Date publishDate;
 }

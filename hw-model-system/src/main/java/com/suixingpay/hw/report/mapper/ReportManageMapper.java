@@ -38,10 +38,13 @@ public interface ReportManageMapper {
     /**
      * 更新企业报告发布状态
      * @param publisher 发布者
+     * @param publishState 发布状态
      * @param enterpriseReportId 报告编号
      * @return  变更数
      */
-    int updateReportPublishState(@Param("publisher") String publisher, @Param("enterpriseReportId") Integer enterpriseReportId);
+    int updateReportPublishState(@Param("publisher") String publisher,
+                                 @Param("publishState") String publishState,
+                                 @Param("enterpriseReportId") Integer enterpriseReportId);
 
     /**
      * 更新报告指标发布状态
@@ -68,4 +71,18 @@ public interface ReportManageMapper {
      * @return List<ReportInfo>
      */
     List<ReportInfo> selectEntReportByEntId(Integer enterpriseId);
+
+    /**
+     * 删除：报告发布表
+     *
+     * @param reportId 报告编号
+     */
+    void deleteReportPublishInfoByReportId(Integer reportId);
+
+    /**
+     * 删除：报告对应的指标发布表
+     *
+     * @param targetIds 指标编号
+     */
+    void deleteTargetPublishInfoByTargetIds(@Param("ids") List<Integer> targetIds);
 }

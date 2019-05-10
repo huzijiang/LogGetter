@@ -17,11 +17,6 @@ public class ReportInfo extends ReportInfoPo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 企业名称
-     */
-    private String enterpriseName;
-
-    /**
      * 企业报告指标编号
      */
     private Integer enterpriseTargetDataId;

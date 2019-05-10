@@ -709,6 +709,15 @@
          	        }
             	});
             },
+
+			//报告发布：再次发布
+			publishAgain: function(id) {
+				$.modal.confirm("确定再次发布该条" + $.table._option.modalName + "信息吗？", function() {
+					var url = ctx + "report/publishAgain/"+ id;
+					$.operate.get(url);
+				});
+			},
+
             // 删除信息
             remove: function(id) {
         		$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
@@ -771,8 +780,9 @@
             },
 
 			// 报告分析：页面展示
-			analysisTab: function(id) {
-				$.modal.openTab("分析" + $.table._option.modalName, $.operate.analysisUrl(id));
+			analysisTab: function(id, type) {
+				var title = (type == "detail") ? "查看" : "分析";
+				$.modal.openTab( title + $.table._option.modalName, "/report/analysis/"+ id + "/" + type);
 			},
 			// 报告分析：跳转的地址处理
 			analysisUrl: function(id) {
