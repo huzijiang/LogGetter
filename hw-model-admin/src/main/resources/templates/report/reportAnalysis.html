@@ -47,6 +47,7 @@
     var type = [[${type}]];
     var reportTargetDataList = [[${reportTargetDataList}]];
 
+    //初始化：报告发布富文本编辑框
     var ue = UE.getEditor('reportPublishContentContainer', {
         toolbars: [
             [
@@ -79,17 +80,20 @@
                 'lineheight' //行间距
             ]
         ],
-        autoHeightEnabled: true,
+        autoHeightEnabled: false,
         autoFloatEnabled: true,
-        elementPathEnabled : false
+        elementPathEnabled : false,
+        maximumWords: 1000
     });
     ue.ready(function() {
         var reportPublishContent = reportTargetDataList[0].reportPublishContent;
         var uePlaceholder =  "请填写报告分析结果...";
-        ue.setHeight(170);
+        ue.setHeight(160);
         if (type == "detail") {
-            ue.setDisabled();
-            uePlaceholder = "该报告暂无分析内容"
+            //去富文本编辑器 "本地保存" 提示框
+            $(".edui-editor-messageholder.edui-default").css({ "visibility": "hidden" });
+            ue.setDisabled(['fullscreen','preview']);
+            uePlaceholder = "该报告暂无分析内容";
         }
         ue.setContent($.common.isEmpty(reportPublishContent) ? uePlaceholder : reportPublishContent);
     });
@@ -100,7 +104,7 @@
             panehHidden = true;
         }
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
-
+        console.log("reportTargetDataList = ", reportTargetDataList);
         initData(reportTargetDataList);
         generateTargetPanel(reportTargetDataList);
         loopShowTargetData(reportTargetDataList);
@@ -153,17 +157,11 @@
             var targetPublishTextareaDiv = document.createElement("div");
             targetPublishTextareaDiv.setAttribute("style", "margin-right:5px;padding-top: 10px;float:right;width: 28%;height: 300px;");
 
-
-            var targetDataPublishContent = reportTargetDataList[count].targetDataPublishContent;
-            var targetPublishTextareaElement = document.createElement("textarea");
-            targetPublishTextareaElement.setAttribute("row", "30");
-            targetPublishTextareaElement.setAttribute("style", "resize:none;min-width: 100%;height: 100%;");
-            targetPublishTextareaElement.setAttribute("id", "publishTextarea"+count);
-            targetPublishTextareaElement.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
-            if (type == "detail") {
-                targetPublishTextareaElement.readOnly = true;
-            }
-            targetPublishTextareaElement.innerHTML = $.common.isEmpty(targetDataPublishContent) ? "该指标暂无分析内容" : targetDataPublishContent;
+            var targetIdInput = document.createElement("input");
+            targetIdInput.hidden = true;
+            targetIdInput.setAttribute("id", "targetIdInput" +  count);
+            targetIdInput.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
+            targetIdInput.value = reportTargetDataList[count].targetDataPublishContent;
 
             targetContainer.appendChild(targetRowDiv);
             targetRowDiv.appendChild(targetColDiv);
@@ -171,9 +169,74 @@
             if(notShowEChars){
                 targetPanelDiv.appendChild(targetTextarea);
             }
-            targetPublishTextareaDiv.appendChild(targetPublishTextareaElement);
+            targetPublishTextareaDiv.innerHTML = '<script id="targetPublishUEditor' + count +'" type="text/plain"><//script>';
+            targetPublishTextareaDiv.appendChild(targetIdInput);
             targetColDiv.appendChild(targetPublishTextareaDiv);
+
         }
+
+        for (var i = 0; i < reportTargetDataList.length; i++) {
+            UE.getEditor('targetPublishUEditor'+i, {
+                toolbars: [
+                    [
+                        'undo', //撤销
+                        'redo', //重做
+                        'bold', //加粗
+                        'indent', //首行缩进
+                        'italic', //斜体
+                        'underline', //下划线
+                        'strikethrough', //删除线
+                        'subscript', //下标
+                        'formatmatch', //格式刷
+                        'preview', //预览
+                        'horizontal', //分隔线
+                        'cleardoc', //清空文档
+                        'fontfamily', //字体
+                        'fontsize', //字号
+                        'paragraph', //段落格式
+                        'emotion', //表情
+                        'spechars', //特殊字符
+                        'justifyleft', //居左对齐
+                        'justifyright', //居右对齐
+                        'justifycenter', //居中对齐
+                        'justifyjustify', //两端对齐
+                        'forecolor', //字体颜色
+                        'backcolor', //背景色
+                        'insertorderedlist', //有序列表
+                        'insertunorderedlist', //无序列表
+                        'fullscreen', //全屏
+                        'lineheight' //行间距
+                    ]
+                ],
+                autoHeightEnabled: false,
+                autoFloatEnabled: true,
+                elementPathEnabled : false,
+                maximumWords: 1000
+            }).ready(function () {
+                this.setHeight(175);
+            });
+        }
+
+        var targetUEditorArray = [];
+        for (var j = 0; j < reportTargetDataList.length; j++) {
+            var item = {
+                "uEditor": UE.getEditor('targetPublishUEditor'+j),
+                "resultTargetInput": document.getElementById("targetIdInput" + j).value
+            };
+            targetUEditorArray.push(item);
+        }
+
+        $.each(targetUEditorArray, function (index, targetUEditor) {
+            targetUEditor.uEditor.ready(function () {
+                var targetUePlaceholder =  "请填写报告分析结果...";
+                $(".edui-editor-messageholder.edui-default").css({ "visibility": "hidden" });
+                if (type == "detail") {
+                    targetUEditor.uEditor.setDisabled(['fullscreen','preview']);
+                    targetUePlaceholder = "该指标暂无分析内容";
+                }
+                targetUEditor.uEditor.setContent($.common.isEmpty(targetUEditor.resultTargetInput) ? targetUePlaceholder : targetUEditor.resultTargetInput);
+            })
+        })
     }
 
     /**
@@ -209,21 +272,19 @@
      * 发布报告
      */
     function reportPublish() {
-        // var entTargetDataShowECharsList = [[${entTargetDataShowECharsList}]];
         var enterpriseReportId = reportTargetDataList[0].reportId;
 
         var itemArray = [];
         for (var i = 0; i < reportTargetDataList.length; i++) {
-            var resultTextareaElement = document.getElementById("publishTextarea" + i);
+            var targetPublishUEditor = UE.getEditor("targetPublishUEditor" + i);
+            var resultTargetIdInput = document.getElementById("targetIdInput" + i);
             var item = {
-                "enterpriseTargetDataId": resultTextareaElement.getAttribute("key-targetDataId"),
-                "targetDataPublishContent": resultTextareaElement.value
+                "enterpriseTargetDataId": resultTargetIdInput.getAttribute("key-targetDataId"),
+                "targetDataPublishContent": targetPublishUEditor.getContent()
             };
             itemArray.push(item);
         }
-
         var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":ue.getContent(), "paramData": itemArray};
-        // console.log("jsonData:", JSON.stringify(jsonData));
 
         $.operate.publishReport(ctx + "report/publish", jsonData);
     }
