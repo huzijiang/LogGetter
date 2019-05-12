@@ -48,7 +48,7 @@
     var reportTargetDataList = [[${reportTargetDataList}]];
 
     //初始化：报告发布富文本编辑框
-    var ue = UE.getEditor('reportPublishContentContainer', {
+    var ueReportPublish = UE.getEditor('reportPublishContentContainer', {
         toolbars: [
             [
                 'undo', //撤销
@@ -85,17 +85,17 @@
         elementPathEnabled : false,
         maximumWords: 1000
     });
-    ue.ready(function() {
+    ueReportPublish.ready(function() {
         var reportPublishContent = reportTargetDataList[0].reportPublishContent;
         var uePlaceholder =  "请填写报告分析结果...";
-        ue.setHeight(160);
+        ueReportPublish.setHeight(160);
         if (type == "detail") {
             //去富文本编辑器 "本地保存" 提示框
             $(".edui-editor-messageholder.edui-default").css({ "visibility": "hidden" });
-            ue.setDisabled(['fullscreen','preview']);
+            ueReportPublish.setDisabled(['fullscreen','preview']);
             uePlaceholder = "该报告暂无分析内容";
         }
-        ue.setContent($.common.isEmpty(reportPublishContent) ? uePlaceholder : reportPublishContent);
+        ueReportPublish.setContent($.common.isEmpty(reportPublishContent) ? uePlaceholder : reportPublishContent);
     });
 
     $(function() {
@@ -104,7 +104,7 @@
             panehHidden = true;
         }
         $('body').layout({ initClosed: panehHidden, west__size: 185 });
-        console.log("reportTargetDataList = ", reportTargetDataList);
+
         initData(reportTargetDataList);
         generateTargetPanel(reportTargetDataList);
         loopShowTargetData(reportTargetDataList);
@@ -121,12 +121,16 @@
                 enterpriseName = enterprise.name;
             }
         });
-
         $(".enterpriseNameArea").html(enterpriseName + "——" + reportTargetDataList[0].reportName);
     }
 
     /**
      * 生成每个指标所在的面板区域
+     * 结构：
+     * <div class="targets-container">
+     *     <div class="row target-row">
+     *         <div class="col-md-12 target-col">
+     *             <div id="targetPanel"+count>
      */
     function generateTargetPanel(reportTargetDataList) {
         var targetContainer = document.getElementsByClassName('target-container')[0];
@@ -147,6 +151,7 @@
             targetPanelDiv.setAttribute("id", "targetPanel" + count);
             targetPanelDiv.setAttribute("style", "float:left;width: 70%;height: 300px;box-shadow: 1px 1px 3px rgba(0,0,0,.2);");
 
+            //直接展示 json 串的 Textarea
             var targetTextarea = document.createElement("textarea");
             if(notShowEChars) {
                 targetTextarea.setAttribute("row", "30");
@@ -154,27 +159,32 @@
                 targetTextarea.setAttribute("readonly", "readonly");
             }
 
+            //装载上面创建的直接展示 json 串的 Textarea
             var targetPublishTextareaDiv = document.createElement("div");
             targetPublishTextareaDiv.setAttribute("style", "margin-right:5px;padding-top: 10px;float:right;width: 28%;height: 300px;");
 
+            //隐藏域：存放指标编号 = 指标发布内容，方便"查看"和"发布"时回显和数据传至后台入库
             var targetIdInput = document.createElement("input");
             targetIdInput.hidden = true;
             targetIdInput.setAttribute("id", "targetIdInput" +  count);
             targetIdInput.setAttribute("key-targetDataId", reportTargetDataList[count].enterpriseTargetDataId);
             targetIdInput.value = reportTargetDataList[count].targetDataPublishContent;
 
+            //组装上面创建的各个元素
             targetContainer.appendChild(targetRowDiv);
             targetRowDiv.appendChild(targetColDiv);
             targetColDiv.appendChild(targetPanelDiv);
             if(notShowEChars){
                 targetPanelDiv.appendChild(targetTextarea);
             }
+            //指标发布的富文本编辑框
             targetPublishTextareaDiv.innerHTML = '<script id="targetPublishUEditor' + count +'" type="text/plain"><//script>';
             targetPublishTextareaDiv.appendChild(targetIdInput);
             targetColDiv.appendChild(targetPublishTextareaDiv);
 
         }
 
+        //初始化：指标发布的富文本编辑框
         for (var i = 0; i < reportTargetDataList.length; i++) {
             UE.getEditor('targetPublishUEditor'+i, {
                 toolbars: [
@@ -217,6 +227,7 @@
             });
         }
 
+        //获取各个：指标发布的富文本编辑框
         var targetUEditorArray = [];
         for (var j = 0; j < reportTargetDataList.length; j++) {
             var item = {
@@ -226,6 +237,7 @@
             targetUEditorArray.push(item);
         }
 
+        //附值：指标发布的富文本编辑框
         $.each(targetUEditorArray, function (index, targetUEditor) {
             targetUEditor.uEditor.ready(function () {
                 var targetUePlaceholder =  "请填写报告分析结果...";
@@ -252,8 +264,10 @@
             var targetDataFullContent = reportTargetDataList[count].targetDataFullContent;
 
             if (notShowEChars) {
+                //直接展示 json
                 document.getElementById('targetPanel'+count).firstChild.innerHTML = targetDataFullContent;
             }else {
+                //渲染成 ECharts
                 var chart = echarts.init(document.getElementById('targetPanel'+count));
 
                 targetDataFullContent = JSON.parse(targetDataFullContent);
@@ -273,7 +287,7 @@
      */
     function reportPublish() {
         var enterpriseReportId = reportTargetDataList[0].reportId;
-
+        //组装传至后台的数据
         var itemArray = [];
         for (var i = 0; i < reportTargetDataList.length; i++) {
             var targetPublishUEditor = UE.getEditor("targetPublishUEditor" + i);
@@ -288,7 +302,6 @@
 
         $.operate.publishReport(ctx + "report/publish", jsonData);
     }
-
 </script>
 </body>
 </html>

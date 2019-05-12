@@ -887,10 +887,10 @@
 
 
 			//弹窗：选择平台指标模型
-			selectTargetModel: function(type, url, enterpriseId) {
-				$.modal.open("选择" + type, ctx + url +"/" + enterpriseId);
+			selectTargetModel: function(type, url) {
+				$.modal.open("选择" + type, ctx + url);
 			},
-			selectTargetModelSuccess: function(url, reportModelId, dbExisttargetModelIds) {
+			selectTargetModelSuccess: function(url, reportModelId) {
 				var rows = $.table.selectFirstColumns();
 
 				if ($.common.isEmpty(rows)) {

@@ -6,13 +6,10 @@ import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.common.utils.JsonUtils;
-import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.report.domain.ReportInfo;
 import com.suixingpay.hw.report.domain.TargetDataInfo;
 import com.suixingpay.hw.report.service.IReportManageService;
-import com.suixingpay.hw.enterprise.domain.Enterprise;
-import com.suixingpay.hw.enterprise.service.IEnterpriseService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @description: 报告管理 controller
@@ -37,7 +37,7 @@ public class ReportManageController extends BaseController {
     /**
      * 进入报告列表页面
      *
-     * @return
+     * @return 报告列表页面
      */
     @RequiresPermissions("report:view")
     @RequestMapping("/view")
@@ -48,8 +48,8 @@ public class ReportManageController extends BaseController {
     /**
      * 获取报告列表
      *
-     * @param reportInfo
-     * @return
+     * @param reportInfo 搜索条件
+     * @return 分页好的结果集
      */
     @RequiresPermissions("report:list")
     @RequestMapping("/list")
@@ -63,26 +63,26 @@ public class ReportManageController extends BaseController {
     /**
      * 进入报告分析/查看页面
      *
-     * @param enterpriseReportId
-     * @param type  区分：分析页面、查看页面
-     * @param mmap
-     * @return
+     * @param enterpriseReportId 企业报告模板编号
+     * @param type 区分：type = analysis 分析页面、type = detail 查看页面
+     * @param modelMap ModelMap
+     * @return 报告分析/查看页面
      */
     @RequiresPermissions("report:analysis")
     @RequestMapping("/analysis/{enterpriseReportId}/{type}")
-    public String analysis(@PathVariable("enterpriseReportId") Integer enterpriseReportId, @PathVariable("type") String type, ModelMap mmap) {
+    public String analysis(@PathVariable("enterpriseReportId") Integer enterpriseReportId, @PathVariable("type") String type, ModelMap modelMap) {
         List<ReportInfo> reportTargetDataList = reportManageService.selectReportTargetDataList(enterpriseReportId);
 
-        mmap.put("type", type);
-        mmap.put("reportTargetDataList", reportTargetDataList);
+        modelMap.put("type", type);
+        modelMap.put("reportTargetDataList", reportTargetDataList);
         return "report/reportAnalysis";
     }
 
     /**
      * 报告发布
      *
-     * @param jsonStr
-     * @return
+     * @param jsonStr 入库数据
+     * @return 响应信息
      */
     @RequiresPermissions("report:publish")
     @RequestMapping(value = "/publish")
@@ -136,7 +136,7 @@ public class ReportManageController extends BaseController {
      * 再次发布报告：仅仅是将报告状态值：发布（01）变为未发布（00）
      *
      * @param reportId 报告编号
-     * @return
+     * @return 响应信息
      */
     @RequestMapping("/publishAgain/{id}")
     @ResponseBody
