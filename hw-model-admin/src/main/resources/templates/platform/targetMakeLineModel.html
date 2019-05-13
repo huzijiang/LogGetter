@@ -14,19 +14,16 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								平台指标标记线模型编号：<input type="text" name="targetMakeLineModelId"/>
+								编号：<input type="text" name="targetMakeLineModelId"/>
 							</li>
 							<li>
 								平台指标模型编号：<input type="text" name="targetModelId"/>
 							</li>
 							<li>
-								平台指标模型展示内容模型编号：<input type="text" name="targetModelTemplateId"/>
+								平台指标展示模型编号：<input type="text" name="targetModelTemplateId"/>
 							</li>
 							<li>
 								名称：<input type="text" name="lineName"/>
-							</li>
-							<li>
-								描述：<input type="text" name="description"/>
 							</li>
 							<li>
 								默认值：<input type="text" name="defaultValue"/>
@@ -47,9 +44,9 @@
 	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="targetMakeLineModel:edit">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-	            <!--<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="targetMakeLineModel:remove">-->
-	                <!--<i class="fa fa-remove"></i> 删除-->
-	            <!--</a>-->
+	            <a class="btn btn-danger btn-del" onclick="$.operate.removeAll()" shiro:hasPermission="targetMakeLineModel:remove" disabled>
+	                <i class="fa fa-remove"></i> 删除
+	            </a>
 	        </div>
 	        <!--查询结果显示table-->
 	        <div class="col-sm-12 select-table table-striped">
@@ -89,8 +86,7 @@
 		        },
 		        {
 		            field: 'targetMakeLineModelId',
-		            title: '平台指标标记线模型编号',
-					visible: false
+		            title: '编号'
 		        },
 		        {
 		            field: 'targetModelId',
@@ -99,16 +95,17 @@
 		        },
 		        {
 		            field: 'targetModelTemplateId',
-		            title: '平台指标模型展示内容模型编号',
+		            title: '平台指标展示模型编号',
 					visible: false
 		        },
 		        {
 		            field: 'lineName',
-		            title: '名称'
+		            title: '标记线名称'
 		        },
 		        {
                     field: 'description',
-		        	title: '描述'
+		        	title: '描述',
+					visible: false
 		        },
 				{
 					field: 'defaultValue',

@@ -60,6 +60,7 @@
     var targetModelLevelData = [[${@fangCloudDict.getType('TargetModelLevel')}]];
     var targetModelStateData = [[${@fangCloudDict.getType('TargetModelState')}]];
     var dbExistTargetModelIds = [[${targetModelList}]];
+    console.log("dbExistTargetModelIds = ", dbExistTargetModelIds);
     $(function() {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -71,19 +72,20 @@
         document.getElementsByClassName("searchBtn")[0].onclick();
     });
 
-    var overAllIds = [];                // 全局保存选中行的对象
+    var back2ServiceIds = [];                // 全局对象：返回到后台的 Ids
     $.each(dbExistTargetModelIds, function (index, dbExistTargetModelId) {
-        overAllIds.push(dbExistTargetModelId);
+        back2ServiceIds.push(dbExistTargetModelId);
     });
 
-    function examine(type,datas){            // 操作类型，选中的行
+    // 操作类型，选中的行
+    function examine(type,datas){
         if(type.indexOf('uncheck')==-1){
             $.each(datas,function(i,v){        // 如果是选中则添加选中行的 id
-                overAllIds.push(v);
+                back2ServiceIds.push(v.targetModelId);
             });
         }else{
             $.each(datas,function(i,v){
-                overAllIds.splice(overAllIds.indexOf(v),1);     // 删除取消选中行的 id
+                back2ServiceIds.splice(back2ServiceIds.indexOf(v.targetModelId),1);     // 删除取消选中行的 id
             });
         }
     }
@@ -91,14 +93,14 @@
     function queryReportList() {
         var options = {
             url: ctx + "targetModel/list",
-            sortName: "createDate",
-            sortOrder: "desc",
+            sortName: "targetModelId",
+            //sortOrder: "desc",
             modalName: "指标模板",
             columns: [
                 {
                     checkbox: true,
                     formatter: function (value, row, index) {
-                        return $.table.checkBoxDisplayCallback(dbExistTargetModelIds, row, value);
+                        return $.table.checkBoxDisplayCallback(back2ServiceIds, row, value);
                     }
                 },
                 {
@@ -111,7 +113,8 @@
                 },
                 {
                     field: 'description',
-                    title: '描述'
+                    title: '描述',
+                    visible: false
                 },
                 {
                     field: 'collationCode',
@@ -142,17 +145,17 @@
         };
         $('#bootstrap-table').on('uncheck.bs.table check.bs.table check-all.bs.table uncheck-all.bs.table',function(e,rows){
             var datas = $.isArray(rows) ? rows : [rows];        // 点击时获取选中的行或取消选中的行
+            console.log(typeof datas);
+            console.log("datas = ", datas);
             examine(e.type,datas);                                 // 保存到全局 Set() 里
         });
 
         $.table.init(options);
     }
 
-    console.log("overAllIds = ", overAllIds);
-
     function submitHandler() {
         var url = [[${reportModelId}]] == 0 ? 'getSingleModelDisplay' : 'addSaveTargetModel';
-        $.operate.selectTargetModelSuccess(url, [[${reportModelId}]], [[${targetModelList}]]);
+        $.operate.selectTargetModelSuccess(url, [[${reportModelId}]], back2ServiceIds);
     }
 
 </script>

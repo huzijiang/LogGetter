@@ -70,20 +70,24 @@ public class TargetModelController extends BaseController {
         targetModel.setCreateDate(new Date());
         targetModel.setCreater(ShiroUtils.getUserId().intValue());
         targetModelService.add(targetModel);
-
-        //targetModelService.addReportTargetRelation(targetModel.getReportTemplateId(), targetModel.getTargetModelId());
-
         return AjaxResult.success();
     }
 
     /**
-     * 修改指标模板 TODO 若为空 处理
+     * 修改指标模板
      */
     @RequestMapping("/edit/{targetModelId}")
-    public String edit(@PathVariable("targetModelId") Integer targetModelId, ModelMap mmap) {
+    public String edit(@PathVariable("targetModelId") Integer targetModelId, ModelMap modelMap) {
         TargetModel targetModel = targetModelService.findOneById(targetModelId);
-        mmap.put("targetModel", targetModel);
-        mmap.put("name", targetModelService.findOneById(targetModel.getTargetModelId()).getName());
+        Integer childModelId = targetModel.getChildModelId();
+        String childModelName = "";
+        //获取：该指标的子指标模型
+        if (childModelId != null) {
+            childModelName = targetModelService.findOneById(targetModel.getTargetModelId()).getName();
+        }
+
+        modelMap.put("targetModel", targetModel);
+        modelMap.put("childModelName", childModelName);
         return "platform/targetModelEdit";
     }
 
@@ -104,7 +108,10 @@ public class TargetModelController extends BaseController {
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
-        targetModelService.deleteRelationIds(ids);
-        return toAjax(targetModelService.deleteBatchIds(ids));
+        //删除报告模型与指标模型关系表数据
+        targetModelService.deleteReportTargetRelationByTargetId(ids);
+        //删除指标模型
+        targetModelService.deleteBatchIds(ids);
+        return AjaxResult.success();
     }
 }

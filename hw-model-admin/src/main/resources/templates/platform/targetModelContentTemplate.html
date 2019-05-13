@@ -13,16 +13,10 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            平台指标模型内容模型编号：<input type="text" name="targetModelTemplateId"/>
-                        </li>
-                        <li>
-                            平台指标模型编号：<input type="text" name="targetModelId"/>
+                            编号：<input type="text" name="targetModelTemplateId"/>
                         </li>
                         <li>
                             名称：<input type="text" name="name"/>
-                        </li>
-                        <li>
-                            展示顺序：<input type="text" name="sn"/>
                         </li>
                         <li>
                             展现形式：<select name="showWay" th:with="type=${@fangCloudDict.getType('TargetShowWay')}">
@@ -46,7 +40,7 @@
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editTab()" shiro:hasPermission="targetModelContentTemplate:edit">
                 <i class="fa fa-edit"></i> 修改
             </a>
-            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="targetModelContentTemplate:remove">
+            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="targetModelContentTemplate:remove" disabled>
                 <i class="fa fa-remove"></i> 删除
             </a>
         </div>
@@ -90,7 +84,7 @@
                 },
                 {
                     field: 'targetModelTemplateId',
-                    title: '平台指标模型内容模型编号',
+                    title: '平台指标展示模型编号',
                     visible: false
                 },
                 {
@@ -101,10 +95,6 @@
                 {
                     field: 'name',
                     title: '名称'
-                },
-                {
-                    field: 'sn',
-                    title: '展示顺序'
                 },
                 {
                     field: 'showWay',
@@ -118,6 +108,10 @@
                     title: '归属行或列'
                 },
                 {
+                    field: 'sn',
+                    title: '展示顺序'
+                },
+                {
                     field: 'templateContent',
                     title: '内容',
                     visible: false
@@ -128,7 +122,7 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.targetModelTemplateId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.targetModelTemplateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a disabled class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.targetModelTemplateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
                         return actions.join('');
                     }
                 }]

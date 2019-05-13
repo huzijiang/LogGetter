@@ -326,8 +326,8 @@
 			},
 
 			// 回显 checkbox
-			checkBoxDisplayCallback: function(dbExistTargetModelIds, row, value) {
-            	if (dbExistTargetModelIds.indexOf(row.targetModelId) != -1) {
+			checkBoxDisplayCallback: function(back2ServiceIds, row, value) {
+            	if (back2ServiceIds.indexOf(row.targetModelId) != -1) {
 					return {
 						//disabled : true, //设置是否可用
 						checked : true //设置选中
@@ -890,7 +890,7 @@
 			selectTargetModel: function(type, url) {
 				$.modal.open("选择" + type, ctx + url);
 			},
-			selectTargetModelSuccess: function(url, reportModelId) {
+			selectTargetModelSuccess: function(url, reportModelId, back2ServiceIds) {
 				var rows = $.table.selectFirstColumns();
 
 				if ($.common.isEmpty(rows)) {
@@ -919,7 +919,7 @@
 					})
 				} else {
 					//多个平台指标模型
-					var data = { "targetModelIds": rows.join(), "reportModelId": reportModelId};
+					var data = { "targetModelIds": back2ServiceIds.join(','), "reportModelId": reportModelId};
 					$.ajax({
 						url: ctx + url,
 						type: 'POST',

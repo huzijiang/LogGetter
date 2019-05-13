@@ -18,14 +18,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标模型展示内容模型：</label>
+                            <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标展示模型：</label>
                             <div class="col-sm-6">
                                 <input name="targetModelTemplateId" th:value="${id}" class="form-control templateId" type="hidden">
                                 <input th:value="${name}" class="form-control templateName" placeholder="请点击右侧按钮进行选择" readonly required>
                                 <input name="targetModelId" type="hidden" class="targetModelId">
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-success btn-sm" onclick="$.operate.selectTMCT('平台指标模型展示内容模型','toAddTMCTPage')">
+                                <a class="btn btn-success btn-sm" onclick="$.operate.selectTMCT('平台指标展示模型','toAddTMCTPage')">
                                     <i class="fa fa-plus"></i> 请选择
                                 </a>
                             </div>

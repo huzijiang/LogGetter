@@ -5,8 +5,8 @@ import com.suixingpay.hw.common.core.domain.AjaxResult;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.platform.domain.ReportTemplate;
-import com.suixingpay.hw.platform.mapper.TargetModelMapper;
 import com.suixingpay.hw.platform.service.IReportTemplateService;
+import com.suixingpay.hw.platform.service.ITargetModelService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class ReportTemplateController extends BaseController {
     private IReportTemplateService reportTemplateService;
 
     @Autowired
-    private TargetModelMapper targetModelMapper;
+    private ITargetModelService targetModelService;
 
     /**
      * 进入平台报告模型列表页面
@@ -80,8 +80,8 @@ public class ReportTemplateController extends BaseController {
      * 修改平台报告模型
      */
     @RequestMapping("/edit/{reportTemplateId}")
-    public String edit(@PathVariable("reportTemplateId") Integer reportTemplateId, ModelMap mmap) {
-        mmap.put("reportTemplate", reportTemplateService.findOneById(reportTemplateId));
+    public String edit(@PathVariable("reportTemplateId") Integer reportTemplateId, ModelMap modelMap) {
+        modelMap.put("reportTemplate", reportTemplateService.findOneById(reportTemplateId));
         return "platform/reportTemplateEdit";
     }
 
@@ -97,15 +97,17 @@ public class ReportTemplateController extends BaseController {
 
     /**
      * 删除平台报告模型
+     *
+     * @param ids 平台报告模型编号
      */
     @RequiresPermissions("reportTemplate:remove")
     @RequestMapping("/remove")
     @ResponseBody
     public AjaxResult remove(Integer ids) {
+        //删除该报告模型与报告指标关系表数据
+        targetModelService.deleteReportTargetRelationByReportId(ids);
+        //删除该报告模型
         reportTemplateService.deleteById(ids);
-        //删除对应的指标模板
-        List<Integer> reportTemplateIdList = reportTemplateService.selectTargetModelByReportTemplateId(ids);
-        targetModelMapper.deleteBatchIds(reportTemplateIdList.toArray(new Integer[]{reportTemplateIdList.size()}));
         return AjaxResult.success();
     }
 }

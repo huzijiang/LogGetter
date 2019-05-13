@@ -46,28 +46,22 @@ public class TargetModelServiceImpl implements ITargetModelService {
     }
 
     @Override
-    public int deleteRelationById(Integer targetModelId) {
-        return targetModelMapper.deleteRelationById(targetModelId);
-    }
-    @Override
     public int deleteBatchIds(String ids) {
-        Integer[] targetModelIds = Convert.toIntArray(ids);
-        return targetModelMapper.deleteBatchIds(targetModelIds);
-    }
-
-    @Override
-    public int deleteRelationIds(String ids) {
-        Integer[] targetModelIds = Convert.toIntArray(ids);
-        return targetModelMapper.deleteRelationIds(targetModelIds);
-    }
-
-    @Override
-    public int addReportTargetRelation(Integer reportTemplateId, Integer targetModelId) {
-        return targetModelMapper.addReportTargetRelation(reportTemplateId, targetModelId);
+        return targetModelMapper.deleteBatchIds(Convert.toIntArray(ids));
     }
 
     @Override
     public List<TargetModel> selectByIds(List<Integer> targetModelIds) {
         return targetModelMapper.selectByIds(targetModelIds);
+    }
+
+    @Override
+    public int deleteReportTargetRelationByReportId(Integer reportId) {
+        return targetModelMapper.deleteReportTargetRelationByReportId(reportId);
+    }
+
+    @Override
+    public int deleteReportTargetRelationByTargetId(String targetIds) {
+        return targetModelMapper.deleteReportTargetRelationByTargetId(Convert.toIntArray(targetIds));
     }
 }
