@@ -19,36 +19,39 @@
                             名称：<input type="text" name="name"/>
                         </li>
                         <li>
-                            描述：<input type="text" name="description"/>
+                            生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
-                            状态：<select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            是否首页展示：<select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            归属：<select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        <li>
-                            受众：<select name="audiences" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
-                        </li>
-
+                            类型(是否首页)：
+                            <select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
-                            生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
+                            状态：
+                            <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            归属层级：
+                            <select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            受众：
+                            <select name="audiences" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
                             <label>创建日期： </label>
@@ -121,7 +124,8 @@
                 },
                 {
                     field: 'description',
-                    title: '描述'
+                    title: '描述',
+                    visible: false
                 },
                 {
                     field: 'state',
@@ -132,14 +136,14 @@
                 },
                 {
                     field: 'type',
-                    title: '是否首页展示',
+                    title: '类型(是否首页)',
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(typeData, value);
                     }
                 },
                 {
                     field: 'belongOrgLevel',
-                    title: '归属',
+                    title: '归属层级',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
                     }
@@ -153,17 +157,16 @@
                     }
                 },
                 {
-                    field: 'createDate',
-                    title: '生成日期',
-                    visible: false
-                },
-                {
                     field: 'makeCycle',
                     title: '生成周期',
                     align: 'center',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(makeCycleData, value);
                     }
+                },
+                {
+                    field: 'createDate',
+                    title: '创建日期'
                 },
                 {
                     field: 'creater',

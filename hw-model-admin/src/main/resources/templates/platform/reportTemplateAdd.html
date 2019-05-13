@@ -55,7 +55,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属层级：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}" required>
@@ -68,7 +68,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>是否首页展示：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>类型(是否首页)：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
@@ -108,8 +108,8 @@
 <script>
     function submitHandler() {
         if ($.validate.form()) {
-                var data = $("#form-reportTemplate-add").serializeArray();
-                $.operate.saveTab(ctx + "reportTemplate/save", data);
+            var data = $("#form-reportTemplate-add").serializeArray();
+            $.operate.saveTab(ctx + "reportTemplate/save", data);
         }
     }
 </script>

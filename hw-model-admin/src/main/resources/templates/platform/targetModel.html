@@ -19,34 +19,31 @@
                             名称：<input type="text" name="name"/>
                         </li>
                         <li>
-                            描述：<input type="text" name="description"/>
-                        </li>
-                        <li>
-                            子指标模型编号：<input type="text" name="childModelId"/>
-                        </li>
-                        <li>
                             核对码：<input type="text" name="collationCode"/>
                         </li>
                         <li>
-                            状态：<select name="state" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
+                            状态：
+                            <select name="state" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
-                            抽象水平：<select name="level" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
+                            抽象水平：
+                            <select name="level" th:with="type=${@fangCloudDict.getType('TargetModelLevel')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
-                            生成周期：<select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                            <option value="">所有</option>
-                            <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                        </select>
+                            生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li class="select-time">
-                            <label>创建日期： </label>
+                            <label>创建日期：</label>
                             <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
                             <span>-</span>
                             <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
@@ -122,7 +119,8 @@
                 },
                 {
                     field: 'description',
-                    title: '描述'
+                    title: '描述',
+                    visible: false
                 },
                 {
                     field: 'childModelId',
@@ -131,7 +129,7 @@
                 },
                 {
                     field: 'collationCode',
-                    title: '核对码'
+                    title: '对照码'
                 },
                 {
                     field: 'state',
@@ -148,17 +146,16 @@
                     }
                 },
                 {
-                    field: 'createDate',
-                    title: '生成日期',
-                    visible: false
-                },
-                {
                     field: 'makeCycle',
                     title: '生成周期',
                     align: 'center',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(makeCycleData, value);
                     }
+                },
+                {
+                    field: 'createDate',
+                    title: '创建日期'
                 },
                 {
                     field: 'creater',

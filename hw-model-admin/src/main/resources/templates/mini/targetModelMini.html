@@ -60,6 +60,7 @@
     var targetModelLevelData = [[${@fangCloudDict.getType('TargetModelLevel')}]];
     var targetModelStateData = [[${@fangCloudDict.getType('TargetModelState')}]];
     var dbExistTargetModelIds = [[${targetModelList}]];
+    console.log("dbExistTargetModelIds = ", dbExistTargetModelIds);
     $(function() {
         var panehHidden = false;
         if ($(this).width() < 769) {
@@ -112,7 +113,8 @@
                 },
                 {
                     field: 'description',
-                    title: '描述'
+                    title: '描述',
+                    visible: false
                 },
                 {
                     field: 'collationCode',

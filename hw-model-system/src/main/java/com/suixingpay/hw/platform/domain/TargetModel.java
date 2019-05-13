@@ -33,7 +33,7 @@ public class TargetModel {
 
     private String makeCycle;
 
-    private String childModelId;
+    private Integer childModelId;
 
     private String collationCode;
 
