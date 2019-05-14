@@ -120,7 +120,7 @@
 			<if test="reportAlias != null and reportAlias != ''"> report_alias, </if>
 			<if test="description != null and description != ''"> description, </if>
 			<if test="creater != null and creater != ''"> creater, </if>
-			<if test="createDate != null and createDate != ''"> create_date, </if>
+			<if test="createDate != null"> create_date, </if>
 			<if test="state != null and state != ''"> state, </if>
 			<if test="audiences != null and audiences != ''"> audiences, </if>
 			<if test="type != null and type != ''"> type, </if>
@@ -136,7 +136,7 @@
 			<if test="reportAlias != null and reportAlias != ''"> #{reportAlias}, </if>
 			<if test="description != null and description != ''"> #{description}, </if>
 			 <if test="creater != null and creater != ''"> #{creater}, </if>
-			 <if test="createDate != null and createDate != ''"> #{createDate}, </if>
+			 <if test="createDate != null"> #{createDate}, </if>
 			<if test="state != null and state != ''"> #{state}, </if>
 			<if test="audiences != null and audiences != ''"> #{audiences}, </if>
 			<if test="type != null and type != ''"> #{type}, </if>
@@ -157,7 +157,7 @@
 			 <if test="reportAlias != null and reportAlias != ''">  report_alias = #{reportAlias}, </if>
 			 <if test="description != null and description != ''">  description = #{description}, </if>
 			 <if test="creater != null and creater != ''">  creater = #{creater} ,</if>
-			 <if test="createDate != null and createDate != ''">  create_date = #{createDate}, </if>
+			 <if test="createDate != null">  create_date = #{createDate}, </if>
 			 <if test="state != null and state != ''">  state = #{state}, </if>
 			 <if test="audiences != null and audiences != ''">  audiences = #{audiences} ,</if>
 			 <if test="type != null and type != ''">  type = #{type} ,</if>
