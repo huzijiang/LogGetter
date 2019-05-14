@@ -111,7 +111,7 @@
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属企业：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select class="form-control m-b" name="enterpriseId" th:with="enterpriseList=${@platformDict.getEnterpriseList()}" disabled>
+                            <select class="form-control m-b" name="enterpriseId" th:with="enterpriseList=${@platformDict.getEnterpriseList()}" readonly>
                                 <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}" th:selected="${enterpriseId eq enterprise.enterpriseId}"></option>
                             </select>
                         </div>
