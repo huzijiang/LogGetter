@@ -22,13 +22,13 @@
                         <li>
                             报告名称：
                             <select name="enterpriseReportTemplateId" id="entReportTempSelect">
-                                <option>所有</option>
+                                <option value="">所有</option>
                             </select>
                         </li>
                         <li>
                             指标名称：
                             <select name="enterpriseTargetTemplateId" id="entTargetTempSelect">
-                                <option>所有</option>
+                                <option value="">所有</option>
                             </select>
                         </li>
                         <li>
@@ -174,10 +174,6 @@
     //由 企业 触发 该企业的报告模板
     $('#enterpriseIdSelect').change(function () {
         var enterpriseId = $(this).children('option:selected').val();
-        if ($.common.isEmpty(enterpriseId)) {
-            $.modal.alertWarning("请选择企业");
-            return;
-        }
         $.ajax({
             url: ctx + "getEntReportTemp",
             type: "POST",
@@ -202,10 +198,6 @@
     //由 该企业的报告模板 触发 该企业的指标模板
     $('#entReportTempSelect').change(function () {
         var entReportTempId = $(this).children('option:selected').val();
-        if ($.common.isEmpty(entReportTempId)) {
-            $.modal.alertWarning("请选择企业报告模板");
-            return;
-        }
         $.ajax({
             url: ctx + "getEntTargetTemp",
             type: "POST",
