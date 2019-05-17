@@ -298,7 +298,7 @@
             };
             itemArray.push(item);
         }
-        var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":ue.getContent(), "paramData": itemArray};
+        var jsonData = {"enterpriseReportId": enterpriseReportId, "reportPublishContent":ueReportPublish.getContent(), "paramData": itemArray};
 
         $.operate.publishReport(ctx + "report/publish", jsonData);
     }
