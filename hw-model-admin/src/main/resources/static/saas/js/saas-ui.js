@@ -1027,6 +1027,14 @@
 				})
 			},
 
+			entUser3RDetailTab: function(id) {
+				$.modal.openTab("查看报告邮件信息", ctx + "report/mail/detail/" + id);
+			},
+
+			entUser3REditTab: function(id) {
+				$.modal.openTab("编辑报告邮件信息", ctx + "report/mail/edit/" + id);
+			},
+
 			//添加 企业报告模板页面
 			addEntReportTempTab: function(enterpriseId) {
 				$.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(enterpriseId));
