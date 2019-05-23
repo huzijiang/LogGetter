@@ -46,7 +46,7 @@ public class ReportManageController extends BaseController {
     private IEnterpriseReportTemplateService entReportTempService;
 
     //加载前端页面地址
-    @Value("fangcloud.saas.url")
+    @Value("${fangcloud.saas.url}")
     private String saasUrl;
 
     /**

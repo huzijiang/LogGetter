@@ -57,6 +57,12 @@ eureka:
     client:
         service-url:
             defaultZone: http://admin:123456@172.16.143.213:30525/eureka/
+#    instance:
+#        lease-renewal-interval-in-seconds: 10
+#        lease-expiration-duration-in-seconds: 30
+#        prefer-ip-address: true
+#        ip-address: 172.16.143.218
+#        non-secure-port: 30240
 
 fangcloud:
     saas:
