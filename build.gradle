@@ -47,12 +47,6 @@ subprojects {
   jar {
 	    enabled = true
   }
-  bootJar {
-	    enabled = false
-  }
-  artifacts {
-	    archives jar
-  }
 
   dependencyManagement {
     imports {
