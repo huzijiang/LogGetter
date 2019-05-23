@@ -14,7 +14,7 @@ saas:
 # 开发环境配置
 server:
   # 服务端口
-  port: 8088
+  port: 8080
   servlet:
     # 项目contextPath
     context-path: /
@@ -56,7 +56,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     
   profiles: 
-    active: test
+    active: rc
   # 文件上传
   servlet:
      multipart:
