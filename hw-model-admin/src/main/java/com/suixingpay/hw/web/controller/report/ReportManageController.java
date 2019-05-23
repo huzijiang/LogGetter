@@ -60,13 +60,6 @@ public class ReportManageController extends BaseController {
         return "report/reportPublishList";
     }
 
-    @RequestMapping("/test")
-    @ResponseBody
-    public void test(HttpServletResponse response) {
-        RpcResponseBean<Map<String, String>> demoToken = saasRemoteService.testLogin(response);
-        System.err.println(demoToken.getData().get("token"));
-    }
-
     /**
      * 获取报告列表
      *

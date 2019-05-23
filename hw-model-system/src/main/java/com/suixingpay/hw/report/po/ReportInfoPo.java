@@ -55,4 +55,9 @@ public class ReportInfoPo {
      * 报告发布时间
      */
     private Date publishDate;
+
+    /**
+     * 该报告是否需要发布（01-需要 00-否）
+     */
+    private String isNeedPublish;
 }

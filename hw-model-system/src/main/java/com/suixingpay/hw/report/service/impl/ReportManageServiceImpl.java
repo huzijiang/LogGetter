@@ -29,6 +29,11 @@ public class ReportManageServiceImpl implements IReportManageService {
     }
 
     @Override
+    public List<ReportInfo> findList(ReportInfo reportInfo) {
+        return reportManageMapper.findList(reportInfo);
+    }
+
+    @Override
     public List<ReportInfo> selectReportTargetDataList(Integer reportId) {
         return reportManageMapper.selectReportTargetDataList(reportId);
     }
