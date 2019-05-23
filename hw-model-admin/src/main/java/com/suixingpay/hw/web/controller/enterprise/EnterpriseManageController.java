@@ -43,7 +43,7 @@ public class EnterpriseManageController extends BaseController
     private SaasRemoteService saasRemoteService;
 
     //加载前端页面地址
-    @Value("fangcloud.saas.url")
+    @Value("${fangcloud.saas.url}")
     private String saasUrl;
 
     /**
