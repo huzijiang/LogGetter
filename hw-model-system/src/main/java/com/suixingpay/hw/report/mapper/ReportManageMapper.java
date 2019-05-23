@@ -22,6 +22,13 @@ public interface ReportManageMapper {
     List<ReportInfo> selectReportInfoList(ReportInfo reportInfo);
 
     /**
+     * 获取企业报告信息列表
+     * @param reportInfo 报告信息
+     * @return  报告信息列表
+     */
+    List<ReportInfo> findList(ReportInfo reportInfo);
+
+    /**
      * 获取报告指标数据
      * @param reportId 报告编号
      * @return  报告及其指标数据

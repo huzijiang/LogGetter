@@ -14,6 +14,7 @@
         <result property="makeDate"         column="make_date" />
         <result property="makeCycle"        column="make_cycle" />
         <result property="publishDate"      column="publish_date" />
+        <result property="isNeedPublish"      column="is_need_publish" />
     </resultMap>
 
     <resultMap id="targetDataList" type="com.suixingpay.hw.report.domain.ReportInfo">
@@ -28,13 +29,22 @@
     </resultMap>
 
     <sql id="listColumn">
-        report.enterprise_report_Id,report.publish_date,report.enterprise_report_template_id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id
+        report.enterprise_report_Id,report.publish_date,report.enterprise_report_template_id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id,temp.is_need_publish
+    </sql>
+
+    <sql id="findListChildColumn">
+        t1.enterprise_report_Id,t1.publish_date,t1.enterprise_report_template_id,t1.report_name,t1.publish_state,t1.state,t1.make_date,t1.make_cycle,t1.report_template_id,t1.enterprise_id
+    </sql>
+
+    <sql id="findListColumn">
+        t3.enterprise_report_Id,t3.publish_date,t3.enterprise_report_template_id,t3.report_name,t3.publish_state,t3.state,t3.make_date,t3.make_cycle,t3.report_template_id,t3.enterprise_id
     </sql>
 
     <select id="selectReportInfoList" parameterType="com.suixingpay.hw.report.domain.ReportInfo" resultMap="reportInfoList">
         select <include refid="listColumn"/>
         from t_enterprise_report report
-        where 1 = 1
+        left join t_enterprise_report_template temp on report.enterprise_report_template_id = temp.enterprise_report_template_id
+        where 1 = 1 and temp.is_need_publish = '01'
         <if test="reportId != null and reportId != ''">
              AND report.enterprise_report_id = #{reportId}
         </if>
@@ -61,6 +71,62 @@
         </if>
         <if test="makeCycle != null and makeCycle != ''">
             AND report.make_cycle = #{makeCycle}
+        </if>
+    </select>
+
+    <select id="findList" parameterType="com.suixingpay.hw.report.domain.ReportInfo" resultMap="reportInfoList">
+        SELECT <include refid="findListColumn"/> FROM (
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '研发度量趋势报告' and t1.make_cycle in ('07','12')
+            UNION
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '研发度量部门报告' and t1.make_cycle in ('07','12')
+            UNION
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '交付效率测评报告' and t1.make_cycle in ('06','07','12')
+            UNION
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '交付质量测评报告' and t1.make_cycle in ('06')
+            UNION
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '首页' and t1.make_cycle in ('07','12')
+            UNION
+            SELECT <include refid="findListChildColumn"/> from t_enterprise_report t1
+            LEFT join t_enterprise_report_template t2 ON t1.enterprise_report_template_id = t2.enterprise_report_template_id
+            WHERE t2.name = '首页App' and t1.make_cycle in ('07','12')
+        ) t3
+        where 1 = 1
+        <if test="reportId != null and reportId != ''">
+            AND t3.enterprise_report_id = #{reportId}
+        </if>
+        <if test="enterpriseId != null and enterpriseId != ''">
+            AND t3.enterprise_id = #{enterpriseId}
+        </if>
+        <if test="state != null and state != ''">
+            AND t3.state = #{state}
+        </if>
+        <if test="publishState != null and publishState != ''">
+            AND t3.publish_state = #{publishState}
+        </if>
+        <if test="params.makeBeginTime != null and params.makeBeginTime != ''"><!-- 生成时间：开始时间检索 -->
+            AND date_format(t3.make_date,'%Y-%m-%d') &gt;= date_format(#{params.makeBeginTime},'%Y-%m-%d')
+        </if>
+        <if test="params.makeEndTime != null and params.makeEndTime != ''"><!-- 生成时间：结束时间检索 -->
+            AND date_format(t3.make_date,'%Y-%m-%d') &lt;= date_format(#{params.makeEndTime},'%Y-%m-%d')
+        </if>
+        <if test="params.publishBeginTime != null and params.publishBeginTime != ''"><!-- 发布时间：开始时间检索 -->
+            AND date_format(t3.publish_date,'%Y-%m-%d') &gt;= date_format(#{params.publishBeginTime},'%Y-%m-%d')
+        </if>
+        <if test="params.publishEndTime != null and params.publishEndTime != ''"><!-- 发布时间：结束时间检索 -->
+            AND date_format(t3.publish_date,'%Y-%m-%d') &lt;= date_format(#{params.publishEndTime},'%Y-%m-%d')
+        </if>
+        <if test="makeCycle != null and makeCycle != ''">
+            AND t3.make_cycle = #{makeCycle}
         </if>
     </select>
 
