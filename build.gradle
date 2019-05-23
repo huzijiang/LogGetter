@@ -2,6 +2,10 @@ buildscript {
 
   ext {
     SpringBootVersionn = "2.1.1.RELEASE"
+//    netflixVersion= 'Edgware.SR4'
+    netflixVersion= 'Greenwich.SR1'
+    suixingpayCloudVersion = "1.0.0-SNAPSHOT" // Spring Cloud
+    suixingpayConfigVersion = "1.1.0-SNAPSHOT"
   }
 
   repositories {
@@ -50,11 +54,21 @@ subprojects {
 	    archives jar
   }
 
-
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${netflixVersion}"
+    }
+  }
   dependencies {
     // 是配置文件有提示
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testCompile "org.springframework.boot:spring-boot-starter-test"
     compileOnly('org.projectlombok:lombok')
+
+
+//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.6.RELEASE'
+//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.4.6.RELEASE'
+//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.1.1.RELEASE'
+
   }
 }

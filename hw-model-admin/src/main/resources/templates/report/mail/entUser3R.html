@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+<body class="gray-bg">
+<div class="container-div ui-layout-center">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="report-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            企业名称：
+                            <select name="enterpriseId" id="enterpriseIdSelect" th:with="enterpriseList=${@platformDict.getEnterpriseList()}">
+                                <option value="">所有</option>
+                                <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            生成周期：
+                            <select name="makeCycle" id="makeCycleSelect" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </li>
+                        <li>
+                            报告名称：
+                            <select name="enterpriseReportTemplateId" id="entReportTempSelect">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('report:mail:edit')}]];
+    var detailFlag = [[${@permission.hasPermi('report:mail:detail')}]];
+
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
+    var enterpriseData = [[${@platformDict.getEnterpriseList()}]];
+
+
+    $(function() {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({ initClosed: panehHidden, west__size: 185 });
+        queryReportList();
+    });
+
+    function queryReportList() {
+        var options = {
+            url: ctx + "enterprise/reportTemplate/list",
+            sortName: "name",
+            sortOrder: "desc",
+            modalName: "邮件管理",
+            columns: [
+                {
+                    field: 'enterpriseReportTemplateId',
+                    title: '企业报告模板编号',
+                    visible: false
+                },
+                {
+                    field: 'enterpriseId',
+                    title: '企业名称',
+                    formatter: function (value, row, index) {
+                        return $.table.exchangeEnterpriseDisplay(enterpriseData, value);
+                    }
+                },
+                {
+                    field: 'name',
+                    title: '报告名称'
+                },
+                {
+                    field: 'makeCycle',
+                    title: '生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="#" onclick="$.operate.entUser3REditTab(\'' + row.enterpriseReportTemplateId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + editFlag + '" href="#" onclick="$.operate.entUser3RDetailTab(\'' + row.enterpriseReportTemplateId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    $('#enterpriseIdSelect').change(function () {
+        var makeCycleSelect = document.getElementById('makeCycleSelect');
+        makeCycleSelect.options.selectedIndex = 0;
+        var entReportTempSelect = document.getElementById('entReportTempSelect');
+        entReportTempSelect.innerHTML = '';
+        entReportTempSelect.append(new Option("所有", ""));
+    });
+
+    //企业 + 周期 = 企业的指标模板
+    $('#makeCycleSelect').change(function () {
+        var makeCycle = $(this).children('option:selected').val();
+        var enterpriseId = $('#enterpriseIdSelect').children('option:selected').val();
+        var entReportTempSelect = document.getElementById('entReportTempSelect');
+        if ($.common.isEmpty(enterpriseId)) {
+            $.modal.alertWarning("请先选择企业！");
+        }
+        if ($.common.isEmpty(makeCycle)) {
+            entReportTempSelect.innerHTML = '';
+            entReportTempSelect.append(new Option("所有", ""));
+            return;
+        }
+
+        $.ajax({
+            url: ctx + "report/mail/getEntReportTemp",
+            type: "POST",
+            data: {"enterpriseId": enterpriseId, "makeCycle": makeCycle},
+            success: function (result) {
+                entReportTempSelect.innerHTML = '';
+                entReportTempSelect.append(new Option("未选择", ""));
+                $.each(result.entReportTempList,function (index, entReportTemp) {
+                    entReportTempSelect.options.add(new Option(entReportTemp.name, entReportTemp.enterpriseReportTemplateId));
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
