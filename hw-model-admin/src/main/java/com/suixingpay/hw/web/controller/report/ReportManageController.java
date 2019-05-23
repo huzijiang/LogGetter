@@ -168,8 +168,8 @@ public class ReportManageController extends BaseController {
 
 
     @RequiresPermissions("report:iframePublishOrEmail")
-    @RequestMapping("/iframePublishOrEmail/{reportId}&&{entReportTempId}&&{from}&&{enterpriseId}")
-    public String iframePublish(@PathVariable("reportId") Integer reportId, @PathVariable("entReportTempId") Integer entReportTempId,
+    @RequestMapping("/iframePublishOrEmail/{reportId}&&{reportName}&&{from}&&{enterpriseId}")
+    public String iframePublish(@PathVariable("reportId") Integer reportId, @PathVariable("reportName") String reportName,
                                 @PathVariable("from") String from, @PathVariable("enterpriseId") Integer enterpriseId,
             ModelMap modelMap, HttpServletResponse response) {
         RpcResponseBean<Map<String, String>> demoToken = saasRemoteService.testLogin(response);
@@ -177,7 +177,7 @@ public class ReportManageController extends BaseController {
         //企业报告编号
         modelMap.put("reportId", reportId);
         //企业报告模板名称
-        modelMap.put("entReportName", entReportTempService.findOneById(entReportTempId).getName());
+        modelMap.put("entReportName", reportName);
         modelMap.put("token", demoToken.getData().get("token"));
         modelMap.put("from", from);
         modelMap.put("enterpriseId", enterpriseId);

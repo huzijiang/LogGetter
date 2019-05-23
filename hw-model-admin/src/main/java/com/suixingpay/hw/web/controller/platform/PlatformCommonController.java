@@ -11,6 +11,7 @@ import com.suixingpay.hw.platform.service.IReportTemplateService;
 import com.suixingpay.hw.platform.service.ITargetMakeLineModelService;
 import com.suixingpay.hw.platform.service.ITargetModelContentTemplateService;
 import com.suixingpay.hw.platform.service.ITargetModelService;
+import com.suixingpay.hw.report.domain.ReportInfo;
 import com.suixingpay.hw.report.service.IReportManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -252,8 +253,11 @@ public class PlatformCommonController {
      */
     @RequestMapping("/getEntReport")
     @ResponseBody
-    public AjaxResult getEntReport(@RequestParam("enterpriseId")  Integer enterpriseId) {
-        return AjaxResult.success().put("entReportTempList", reportManageService.selectEntReportByEntId(enterpriseId));
+    public AjaxResult getEntReport(@RequestParam("enterpriseId") Integer enterpriseId, @RequestParam("makeCycle") String makeCycle) {
+        ReportInfo reportInfo = new ReportInfo();
+        reportInfo.setEnterpriseId(enterpriseId);
+        reportInfo.setMakeCycle(makeCycle);
+        return AjaxResult.success().put("entReportList", reportManageService.selectReportInfoList(reportInfo));
     }
 
     /**
