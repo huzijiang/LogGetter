@@ -279,6 +279,7 @@ public class EnterpriseManageController extends BaseController
         modelMap.put("enterpriseId", enterpriseId);
         modelMap.put("saasUrl", saasUrl);
         modelMap.put("token", saasRemoteService.testLogin(response).getData().get("token"));
+        logger.info("员工管理：[{}]", modelMap);
         return "/enterprise/enterpriseUser";
     }
 
