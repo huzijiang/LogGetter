@@ -32,14 +32,7 @@
                         <!--<h1><img alt="[ 随行付 ]" src="" th:src="@{/saas.png}"></h1>-->
                     </div>
                     <div class="m-b"></div>
-                    <h4>欢迎使用 <strong>海外随行付后台管理系统</strong></h4>
-                    <ul class="m-b">
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> SpringBoot</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Mybatis</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Shiro</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Thymeleaf</li>
-                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> Bootstrap</li>
-                    </ul>
+                    <h4>欢迎使用 <strong>方云后台管理系统</strong></h4>
                     <!--<strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>-->
                 </div>
             </div>
@@ -47,8 +40,8 @@
                 <form id="signupForm">
                     <h4 class="no-margins">登录：</h4>
                     <!--<p class="m-t-md">海外随行付后台管理系统</p>-->
-                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名" value="admin"    />
-                    <input type="password" name="password" class="form-control pword"     placeholder="密码"   value="admin123" />
+                    <input type="text"     name="username" class="form-control uname"     placeholder="用户名"     />
+                    <input type="password" name="password" class="form-control pword"     placeholder="密码"       />
 					<div class="row m-t" th:if="${captchaEnabled==true}">
 						<div class="col-xs-6">
 						    <input type="text" name="validateCode" class="form-control code" placeholder="验证码" maxlength="5" autocomplete="off">

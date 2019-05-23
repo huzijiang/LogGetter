@@ -110,7 +110,7 @@ public class EnterpriseServiceImpl implements IEnterpriseService
      */
     private String encoderPassword(String passWord) {
         PasswordEncoder encoder = new PasswordEncoder(PasswordEncoder.DEFAULT_SALT, "SHA");
-        return encoder.encode(encoder.encode(StringUtils.isEmpty(passWord) ? DEFAULT_PASSWORD : passWord));
+        return encoder.encode(StringUtils.isEmpty(passWord) ? DEFAULT_PASSWORD : passWord);
     }
 }
 
