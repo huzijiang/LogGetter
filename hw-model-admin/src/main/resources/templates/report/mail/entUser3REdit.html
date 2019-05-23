@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body>
+<div class="form-content">
+    <div style="margin-bottom: 20px" class="col-sm-12 select-table table-striped">
+        <form class="form-horizontal">
+            <h4 class="form-header h2">报告信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告名称：</label>
+                        <input name="enterpriseReportTemplateId" type="hidden">
+                        <div class="col-sm-8">
+                            <input name="name" autocomplete="off" class="form-control" type="text" th:value="${entReportTemp.name}" readonly>
+                            <input id="enterpriseReportTemplateId" name="enterpriseReportTemplateId" type="hidden" th:value="${entReportTemp.enterpriseReportTemplateId}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group" style="width: 100%">
+                                <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}" disabled>
+                                    <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:selected="${entReportTemp.makeCycle eq fangCloudDict.value}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <form class="form-horizontal">
+        <h4 class="form-header h2">邮件信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>收件人：</label>
+                    <div class="col-sm-6">
+                        <div class="input-group" style="width: 100%">
+                            <select id="receiverSelect" name="receiver" class="form-control m-b" th:with="entUser=${entUserList}">
+                                <option value="">未选择</option>
+                                <option th:each="entUser : ${entUser}" th:text="${entUser.name}" th:value="${entUser.userId}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>自定义收件人：</label>
+                    <input name="enterpriseReportTemplateId" type="hidden">
+                    <div class="col-sm-6">
+                        <input id="customReceiver" placeholder="添加自定义收件人" autocomplete="off" class="form-control" type="email">
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-success btn-sm" onclick="addReceiver('00')">
+                            <i class="fa fa-plus"></i> 添加
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>抄送人：</label>
+                    <div class="col-sm-6">
+                        <div class="input-group" style="width: 100%">
+                            <select id="copySelect" class="form-control m-b" th:with="entUser=${entUserList}">
+                                <option value="">未选择</option>
+                                <option th:each="entUser : ${entUser}" th:text="${entUser.name}" th:value="${entUser.userId}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>自定义抄送人：</label>
+                    <input name="enterpriseReportTemplateId" type="hidden">
+                    <div class="col-sm-6">
+                        <input id="customCopy" placeholder="添加自定义抄送人" autocomplete="off" class="form-control" type="text">
+                    </div>
+                    <div class="col-sm-2">
+                        <a class="btn btn-success btn-sm" onclick="addReceiver('01')">
+                            <i class="fa fa-plus"></i> 添加
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </form>
+    <div class="col-sm-12 select-table table-striped" style="float: bottom;text-align: center;margin-bottom: 10px;">
+        <button class="btn btn-danger" onclick="closeItem()">退出</button>
+    </div>
+</div>
+
+<div th:include="include::footer"></div>
+<script th:src="@{/ajax/libs/select/select2.js}"></script>
+<script th:inline="javascript">
+
+    var removeFlag = [[${@permission.hasPermi('report:mail:remove')}]];
+
+    $(function() {
+        var entReportTempId = document.getElementById("enterpriseReportTemplateId").value;
+        queryEntUser3RList(entReportTempId);
+    });
+
+    function queryEntUser3RList(entReportTempId) {
+        var options = {
+            url: ctx + "report/mail/getEntUser3RList/" + entReportTempId,
+            removeUrl: ctx + "report/mail/remove",
+            sortName: "userType",
+            // sortOrder: "desc",
+            modalName: "邮件",
+            columns: [
+                {
+                    field: 'id',
+                    title: '编号'
+                },
+                {
+                    field: 'enterpriseUserName',
+                    title: '姓名'
+                },
+                {
+                    field: 'enterpriseUserId',
+                    title: '员工编号'
+                },
+                {
+                    field: 'email',
+                    title: '邮箱地址'
+                },
+                {
+                    field: 'userType',
+                    title: '接收类型',
+                    formatter: function(value, row, index) {
+                        return exchangeUserTypeDisplay(row);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    function addReceiver(userType) {
+        var data = {};
+        var receiverId = "";
+        var receiverEmail = "";
+        var entReportTempId = document.getElementById("enterpriseReportTemplateId").value;
+        if ("00" == userType) {
+            receiverId = $('#receiverSelect').val();
+            receiverEmail = $('#customReceiver').val();
+            if ($.common.isEmpty(receiverId) && $.common.isEmpty(receiverEmail)) {
+                $.modal.alertWarning("请先选择或自定义填写收件人！");
+            }
+            if (!$.common.isEmpty(receiverEmail)) {
+                var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (!reg.test(receiverEmail)) {
+                    $.modal.alertWarning("自定义收件人邮箱格式不正确！");
+                }
+            }
+        } else {
+            receiverId = $('#copySelect').val();
+            receiverEmail = $('#customCopy').val();
+            if ($.common.isEmpty(receiverId) && $.common.isEmpty(receiverEmail)) {
+                $.modal.alertWarning("请先选择或自定义填写收件人！");
+            }
+
+            if (!$.common.isEmpty(receiverEmail)) {
+                var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (!reg.test(receiverEmail)) {
+                    $.modal.alertWarning("自定义收件人邮箱格式不正确！");
+                }
+            }
+        }
+
+        data = {"receiverId": receiverId, "receiverEmail": receiverEmail, "userType": userType, "enterpriseReportTemplateId": entReportTempId};
+        $.ajax({
+            url: ctx + "report/mail/add",
+            data: data,
+            type: "POST",
+            success: function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    if (userType == '00') {
+                        $("#receiverSelect").val(null).trigger("change");
+                        $('#customReceiver').val('');
+                    } else {
+                        $("#copySelect").val(null).trigger("change");
+                        $('#customCopy').val('');
+                    }
+                    $.table.refresh();
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+            }
+        })
+    }
+
+    //00-收件人 01-抄送人
+    function exchangeUserTypeDisplay(row) {
+        if (row.userType == 00) {
+            return '<span> 收件人 </span>';
+        } else {
+            return '<span> 抄送人 </span>';
+        }
+    }
+
+</script>
+</body>
+</html>

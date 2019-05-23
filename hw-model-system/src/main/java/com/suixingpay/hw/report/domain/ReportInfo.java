@@ -22,6 +22,11 @@ public class ReportInfo extends ReportInfoPo implements Serializable {
     private Integer enterpriseTargetDataId;
 
     /**
+     * 企业报告模板编号
+     */
+    private Integer entReportTempId;
+
+    /**
      * 报告描述内容
      */
     private String reportDescContent;
