@@ -780,6 +780,19 @@
             },
 
 			// 报告分析：页面展示
+			publishTab: function(reportId, entReportTempId, enterpriseId, from) {
+				$.modal.openTab( "发布报告", "/report/iframePublishOrEmail/"+reportId+"&&"+entReportTempId+"&&"+from+"&&"+enterpriseId);
+			},
+
+			emailTab: function(reportId, entReportTempId, enterpriseId, from) {
+				$.modal.openTab( "发送邮件", "/report/iframePublishOrEmail/"+reportId+"&&"+entReportTempId+"&&"+from+"&&"+enterpriseId);
+			},
+
+			enterpriseUserTab: function(enterpriseId) {
+				$.modal.openTab( "成员管理", "/enterprise/iframeEnterpriseUser/"+enterpriseId);
+			},
+
+			// 报告分析：页面展示
 			analysisTab: function(id, type) {
 				var title = (type == "detail") ? "查看" : "分析";
 				$.modal.openTab( title + $.table._option.modalName, "/report/analysis/"+ id + "/" + type);

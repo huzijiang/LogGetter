@@ -7,9 +7,11 @@ import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.enterprise.domain.Enterprise;
 import com.suixingpay.hw.enterprise.domain.EnterpriseUser;
 import com.suixingpay.hw.enterprise.service.IEnterpriseService;
+import com.suixingpay.hw.web.service.SaasRemoteService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sun.misc.BASE64Encoder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,13 @@ public class EnterpriseManageController extends BaseController
 
     @Autowired
     private IEnterpriseService enterpriseService;
+
+    @Autowired
+    private SaasRemoteService saasRemoteService;
+
+    //加载前端页面地址
+    @Value("fangcloud.saas.url")
+    private String saasUrl;
 
     /**
      * 跳转到企业录入页面
@@ -262,4 +272,15 @@ public class EnterpriseManageController extends BaseController
             enterpriseService.deleteEnterpriseUserByEnterpriseId(id);
             return toAjax(enterpriseService.deleteEnterpriseByEnterpriseId(id));
     }
+
+    @RequiresPermissions("enterprise:iframeEnterpriseUser")
+    @RequestMapping("/iframeEnterpriseUser/{enterpriseId}")
+    public String iframeEnterpriseUser(@PathVariable("enterpriseId") Integer enterpriseId, ModelMap modelMap, HttpServletResponse response) {
+        modelMap.put("enterpriseId", enterpriseId);
+        modelMap.put("saasUrl", saasUrl);
+        modelMap.put("token", saasRemoteService.testLogin(response).getData().get("token"));
+        return "/enterprise/enterpriseUser";
+    }
+
+
 }

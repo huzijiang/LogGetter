@@ -8,6 +8,7 @@
         <result property="reportName"       column="report_name" />
         <result property="enterpriseId"     column="enterprise_id" />
         <result property="reportTemplateId" column="report_template_id" />
+        <result property="entReportTempId" column="enterprise_report_template_id" />
         <result property="state"            column="state" />
         <result property="publishState"     column="publish_state" />
         <result property="makeDate"         column="make_date" />
@@ -27,7 +28,7 @@
     </resultMap>
 
     <sql id="listColumn">
-        report.enterprise_report_Id,report.publish_date,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id
+        report.enterprise_report_Id,report.publish_date,report.enterprise_report_template_id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id
     </sql>
 
     <select id="selectReportInfoList" parameterType="com.suixingpay.hw.report.domain.ReportInfo" resultMap="reportInfoList">

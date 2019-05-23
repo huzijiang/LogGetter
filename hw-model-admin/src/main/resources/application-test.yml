@@ -52,3 +52,12 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+eureka:
+    client:
+        service-url:
+            defaultZone: http://admin:123456@172.16.143.213:30525/eureka/
+
+fangcloud:
+    saas:
+        url: http://172.16.143.213:30522

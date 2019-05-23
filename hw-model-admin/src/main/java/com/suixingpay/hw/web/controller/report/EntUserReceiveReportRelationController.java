@@ -91,89 +91,56 @@ public class EntUserReceiveReportRelationController extends BaseController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public AjaxResult add(@RequestParam("userIds") String userIds
-            ,@RequestParam("enterpriseReportTemplateId") Integer entReportTempId
-            ,@RequestParam("userType") String userType) {
+    public AjaxResult addReceiver(@RequestParam("receiverId") Integer receiverId
+            ,@RequestParam("receiverEmail") String receiverEmail
+            ,@RequestParam("userType") String userType
+            ,@RequestParam("enterpriseReportTemplateId") Integer entReportTempId) {
+
         try {
-            //临时的邮件
-            if (!StringUtils.isEmpty(userIds)) {
-                //内部人员
-                List<Integer> inUserIdList = new ArrayList<>();
-                //外部人员邮箱
-                List<String> outUserEmailList = new ArrayList<>();
-                String[] strArr = userIds.split(",");
-                for (String s : strArr) {
-                    //判断字符串中是否含有@
-                    if (s.matches(".*@.*")) {
-                        outUserEmailList.add(s);
-                    } else {
-                        inUserIdList.add(Integer.parseInt(s));
-                    }
-                }
+            //入库数据
+            List<EntUserReceiveReportRelation> resultList = new ArrayList<>();
 
-                //入库数据
-                List<EntUserReceiveReportRelation> resultList = new ArrayList<>();
+            if (receiverId != null) {
+                //判断 收件人(抄送人) 是否 库中已经存在
+                EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
+                entUser3R.setEnterpriseUserId(receiverId);
+                entUser3R.setEnterpriseReportTemplateId(entReportTempId);
+                entUser3R.setUserType(userType);
 
-                //筛选入库的内部人员ID
-                List<Integer> inUserIdList2DB = new ArrayList<>();
-                //筛选入库的外部人员邮箱
-                List<String> outUserEmailList2DB = new ArrayList<>();
-
-                //内部人员
-                for (Integer entUserId : inUserIdList) {
-                    //去除 已经与该报告创建了联系的 （收件人/抄送人）用户ID
-                    EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
-                    entUser3R.setEnterpriseUserId(entUserId);
-                    entUser3R.setEnterpriseReportTemplateId(entReportTempId);
-                    entUser3R.setUserType(userType);
-                    if (entUser3RService.find(entUser3R).size() == 0) {
-                        inUserIdList2DB.add(entUserId);
-                    }
-                }
-
-                inUserIdList2DB.forEach(entUserId -> {
-                    EnterpriseUser entUser = enterpriseUserService.findByUserId(entUserId);
-                    EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
+                if (entUser3RService.find(entUser3R).size() == 0) {
+                    EnterpriseUser entUser = enterpriseUserService.findByUserId(receiverId);
                     entUser3R.setId((Integer) IdUtil.getManyId("t_et_user_receive_report_relation",1).get(0));
                     entUser3R.setEnterpriseId(entUser.getEnterpriseId());
-                    entUser3R.setEnterpriseReportTemplateId(entReportTempId);
-                    entUser3R.setEnterpriseUserId(entUserId);
-                    entUser3R.setEmail(entUser.getAccount()); // 账号就是邮箱
+                    //账号就是邮箱
+                    entUser3R.setEmail(entUser.getAccount());
                     entUser3R.setCreater(ShiroUtils.getUserId().intValue());
                     entUser3R.setCreateDate(new Date());
-                    entUser3R.setUserType(userType);
                     resultList.add(entUser3R);
-                });
-
-                //外部人员邮箱
-                for (String outUserEmail : outUserEmailList) {
-                    //去除 已经与该报告创建了联系的 （收件人/抄送人）用户ID
-                    EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
-                    entUser3R.setEmail(outUserEmail);
-                    entUser3R.setEnterpriseReportTemplateId(entReportTempId);
-                    entUser3R.setUserType(userType);
-                    if (entUser3RService.find(entUser3R).size() == 0) {
-                        outUserEmailList2DB.add(outUserEmail);
-                    }
                 }
+            }
 
-                outUserEmailList2DB.forEach(outUserEmail -> {
-                    EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
+            if (!StringUtils.isEmpty(receiverEmail)) {
+                //判断 自定义收件人(抄送人) 是否 库中已经存在
+                EntUserReceiveReportRelation entUser3R = new EntUserReceiveReportRelation();
+                entUser3R.setEmail(receiverEmail);
+                entUser3R.setEnterpriseReportTemplateId(entReportTempId);
+                entUser3R.setUserType(userType);
+
+                if (entUser3RService.find(entUser3R).size() == 0) {
                     entUser3R.setId((Integer) IdUtil.getManyId("t_et_user_receive_report_relation",1).get(0));
-                    entUser3R.setEnterpriseReportTemplateId(entReportTempId);
                     entUser3R.setCreater(ShiroUtils.getUserId().intValue());
-                    entUser3R.setEmail(outUserEmail);
                     entUser3R.setCreateDate(new Date());
-                    entUser3R.setUserType(userType);
                     resultList.add(entUser3R);
-                });
+                }
+            }
+
+            if (resultList.size() != 0) {
                 entUser3RService.batchInsert(resultList);
             }
         } catch (Exception e) {
             logger.error("添加邮件人出错：[{}]", e.getMessage());
-            return AjaxResult.error("添加出错，请联系管理员处理！");
+            return AjaxResult.error("添加出错，请联系相关人员处理！");
         }
-
         return AjaxResult.success();
     }
 

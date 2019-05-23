@@ -79,4 +79,6 @@ public interface IReportManageService {
      * @param targetIds 指标编号
      */
     void deleteTargetPublishInfoByTargetIds(List<Integer> targetIds);
+
+
 }

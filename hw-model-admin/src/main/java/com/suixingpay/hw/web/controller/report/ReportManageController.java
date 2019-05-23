@@ -4,19 +4,24 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.suixingpay.hw.common.core.controller.BaseController;
 import com.suixingpay.hw.common.core.domain.AjaxResult;
+import com.suixingpay.hw.common.core.domain.RpcResponseBean;
 import com.suixingpay.hw.common.core.page.TableDataInfo;
 import com.suixingpay.hw.common.utils.JsonUtils;
+import com.suixingpay.hw.enterprise.service.IEnterpriseReportTemplateService;
 import com.suixingpay.hw.framework.util.ShiroUtils;
 import com.suixingpay.hw.report.domain.ReportInfo;
 import com.suixingpay.hw.report.domain.TargetDataInfo;
 import com.suixingpay.hw.report.service.IReportManageService;
+import com.suixingpay.hw.web.service.SaasRemoteService;
 import com.suixingpay.hw.web.util.IdUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +39,16 @@ public class ReportManageController extends BaseController {
     @Autowired
     private IReportManageService reportManageService;
 
+    @Autowired
+    private SaasRemoteService saasRemoteService;
+
+    @Autowired
+    private IEnterpriseReportTemplateService entReportTempService;
+
+    //加载前端页面地址
+    @Value("fangcloud.saas.url")
+    private String saasUrl;
+
     /**
      * 进入报告列表页面
      *
@@ -42,7 +57,14 @@ public class ReportManageController extends BaseController {
     @RequiresPermissions("report:view")
     @RequestMapping("/view")
     public String toReportListPage() {
-        return "report/reportList";
+        return "report/reportPublishList";
+    }
+
+    @RequestMapping("/test")
+    @ResponseBody
+    public void test(HttpServletResponse response) {
+        RpcResponseBean<Map<String, String>> demoToken = saasRemoteService.testLogin(response);
+        System.err.println(demoToken.getData().get("token"));
     }
 
     /**
@@ -142,5 +164,25 @@ public class ReportManageController extends BaseController {
     @ResponseBody
     public AjaxResult publishAgain(@PathVariable("id") Integer reportId) {
         return toAjax(reportManageService.updateReportPublishState(ShiroUtils.getLoginName(), "00", reportId));
+    }
+
+
+    @RequiresPermissions("report:iframePublishOrEmail")
+    @RequestMapping("/iframePublishOrEmail/{reportId}&&{entReportTempId}&&{from}&&{enterpriseId}")
+    public String iframePublish(@PathVariable("reportId") Integer reportId, @PathVariable("entReportTempId") Integer entReportTempId,
+                                @PathVariable("from") String from, @PathVariable("enterpriseId") Integer enterpriseId,
+            ModelMap modelMap, HttpServletResponse response) {
+        RpcResponseBean<Map<String, String>> demoToken = saasRemoteService.testLogin(response);
+
+        //企业报告编号
+        modelMap.put("reportId", reportId);
+        //企业报告模板名称
+        modelMap.put("entReportName", entReportTempService.findOneById(entReportTempId).getName());
+        modelMap.put("token", demoToken.getData().get("token"));
+        modelMap.put("from", from);
+        modelMap.put("enterpriseId", enterpriseId);
+        modelMap.put("saasUrl", saasUrl);
+
+        return "report/reportPublishOrEmail";
     }
 }
