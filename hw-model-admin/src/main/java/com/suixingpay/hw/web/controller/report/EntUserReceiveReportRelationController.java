@@ -162,7 +162,7 @@ public class EntUserReceiveReportRelationController extends BaseController {
         EnterpriseReportTemplate template = new EnterpriseReportTemplate();
         template.setEnterpriseId(enterpriseId);
         template.setMakeCycle(makeCycle);
-        template.setIsNeedPublish("00");
+        template.setIsNeedPublish("01");
         return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
     }
 
