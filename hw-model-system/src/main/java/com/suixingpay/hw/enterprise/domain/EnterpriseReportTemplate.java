@@ -44,6 +44,8 @@ public class EnterpriseReportTemplate {
 
     private String makeCycle;
 
+    private String isNeedPublish;
+
     /** 请求参数 */
     private Map<String, Object> params;
 

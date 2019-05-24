@@ -19,6 +19,7 @@
 		<result property="belongOrg" column="belongOrg" />
 		<result property="belongOrgLevel" column="belong_org_level" />
 		<result property="makeCycle" column="make_cycle" />
+		<result property="isNeedPublish" column="is_need_publish" />
 	</resultMap>
 
 	<!--表名-->
@@ -29,7 +30,7 @@
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
 		enterprise_report_template_id,enterprise_id,report_template_id,name,report_alias,description,creater,
-		create_date,state,audiences,type,belongOrg,belong_org_level,make_cycle
+		create_date,state,audiences,type,belongOrg,belong_org_level,make_cycle,is_need_publish
 	</sql>
 
 	<!-- 通用查询条件-->
@@ -54,6 +55,7 @@
 			<if test="belongOrgLevel != null and belongOrgLevel != ''"> AND belong_org_level = #{belongOrgLevel} </if>
 			<if test="type != null and type != ''"> AND type = #{type} </if>
 			<if test="makeCycle != null and makeCycle != ''"> AND make_cycle = #{makeCycle} </if>
+			<if test="isNeedPublish != null and isNeedPublish != ''"> AND is_need_publish = #{isNeedPublish} </if>
 		</where>
 	</sql>
 

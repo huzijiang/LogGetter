@@ -50,6 +50,19 @@ public class EntUserReceiveReportRelationController extends BaseController {
     }
 
     /**
+     * 获取报告模板列表
+     */
+    @RequiresPermissions("report:mail:reportTemplate:list")
+    @RequestMapping("/reportTemplate/list")
+    @ResponseBody
+    public TableDataInfo list(EnterpriseReportTemplate template) {
+        template.setIsNeedPublish("01");
+        startPage();
+        List<EnterpriseReportTemplate> reportTemplateList = entReportTempService.find(template);
+        return getDataTable(reportTemplateList);
+    }
+
+    /**
      * 获取：企业用户邮箱接收 报告信息关系列表
      */
     @RequiresPermissions("report:mail:list")
@@ -72,7 +85,6 @@ public class EntUserReceiveReportRelationController extends BaseController {
     @RequestMapping("/getEntUser3RList/{entReportTempId}")
     @ResponseBody
     public TableDataInfo getEntUser3RList(@PathVariable("entReportTempId") Integer entReportTempId) {
-        logger.info("数据 = [{}]", entReportTempId);
         startPage();
         List<EntUserReceiveReportRelation> entUser3RList = entUser3RService.findByEntReportTempId(entReportTempId);
         return getDataTable(entUser3RList);
@@ -150,6 +162,7 @@ public class EntUserReceiveReportRelationController extends BaseController {
         EnterpriseReportTemplate template = new EnterpriseReportTemplate();
         template.setEnterpriseId(enterpriseId);
         template.setMakeCycle(makeCycle);
+        template.setIsNeedPublish("00");
         return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
     }
 
