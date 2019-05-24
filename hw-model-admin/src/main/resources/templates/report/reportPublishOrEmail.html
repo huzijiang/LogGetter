@@ -24,11 +24,13 @@
 
     $(function () {
         if ("email" == from) {
+            parent.document.title = entReportName;
             document.getElementById("myFrame").src = saasUrl + "/report?reportName=" + entReportName + "&&reportId=" + reportId + "&&token=" + token + "&&from=" + from + "&&enterpriseId=" + enterpriseId;
         } else {
             document.getElementById("myFrame").src = saasUrl + "/report?reportName=" + entReportName + "&&reportId=" + reportId + "&&token=" + token + "&&from=" + from;
         }
     });
+
 </script>
 </body>
 </html>
