@@ -11,6 +11,10 @@
        <iframe id="myFrame" src="" width="100%" height="100%" frameborder="0" scrolling="auto"></iframe>
     </div>
 </div>
+
+<div style="float: bottom;margin-bottom: 10px;text-align: center;">
+    <button class="btn btn-danger" onclick="reportPublishOrEmail()">退出</button>
+</div>
 <div th:include="include :: footer"></div>
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
 
@@ -30,6 +34,22 @@
             document.getElementById("myFrame").src = saasUrl + "/report?reportName=" + entReportName + "&&reportId=" + reportId + "&&token=" + token + "&&from=" + from;
         }
     });
+
+    function reportPublishOrEmail() {
+        if ("send" == from) {
+            var topWindow = $(window.parent.document);
+            var currentId = $('.page-tabs-content', topWindow).find('.active').attr('data-panel');
+            var $contentWindow = $('.RuoYi_iframe[data-id="' + currentId + '"]', topWindow)[0].contentWindow;
+            $.modal.close();
+            $contentWindow.$(".layui-layer-padding").removeAttr("style");
+            if ($contentWindow.$.table._option.type == table_type.bootstrapTable) {
+                $contentWindow.$.table.refresh();
+            }
+        } else {
+            parent.document.title = "随行付管理系统首页";
+        }
+        closeItem();
+    }
 
 </script>
 </body>
