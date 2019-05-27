@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.enterprise.mapper.EnterpriseJoinApplyMapper">
+
+    <!--实体映射-->
+    <resultMap id="enterpriseJoinApply" type="com.suixingpay.hw.enterprise.domain.EnterpriseJoinApply">
+        <!---->
+        <id property="enterpriseJoinApplyId" column="enterprise_join_apply_id"/>
+        <!---->
+        <result property="enterpriseName" column="enterprise_name"/>
+        <!---->
+        <result property="linkMan" column="link_man"/>
+        <!---->
+        <result property="duty" column="duty"/>
+        <!---->
+        <result property="phone" column="phone"/>
+        <!---->
+        <result property="email" column="email"/>
+        <!---->
+        <result property="followState" column="follow_state"/>
+        <!---->
+        <result property="acceptor" column="acceptor"/>
+        <!---->
+        <result property="applyDate" column="apply_date"/>
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_enterprise_join_apply
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		enterprise_join_apply_id,enterprise_name,link_man,duty,phone,email,follow_state,
+		acceptor,apply_date
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            <if test="enterpriseJoinApplyId != null and enterpriseJoinApplyId != ''">AND enterprise_join_apply_id =
+                #{enterpriseJoinApplyId}
+            </if>
+            <if test="enterpriseName != null and enterpriseName != ''">AND enterprise_name = #{enterpriseName}</if>
+            <if test="linkMan != null and linkMan != ''"> AND link_man = #{linkMan}</if>
+            <if test="duty != null and duty != ''">  AND duty = #{duty}</if>
+            <if test="phone != null and phone != ''"> AND phone = #{phone}</if>
+            <if test="email != null and email != ''"> AND email = #{email}</if>
+            <if test="followState != null and followState != ''"> AND follow_state = #{followState}</if>
+            <if test="acceptor != null and acceptor != ''">AND acceptor = #{acceptor}</if>
+            <if test="applyDate != null"> AND apply_date = #{applyDate}</if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="enterpriseJoinApply">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="enterpriseJoinApply" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        WHERE enterprise_join_apply_id = #{enterpriseJoinApplyId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="enterpriseJoinApply">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="enterpriseJoinApply" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table"/>
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_join_apply_id = #{enterpriseJoinApplyId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE enterprise_join_apply_id in
+        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseJoinApply">
+        INSERT INTO
+        <include refid="table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enterpriseJoinApplyId != null and enterpriseJoinApplyId != ''">enterprise_join_apply_id,</if>
+            <if test="enterpriseName != null and enterpriseName != ''"> enterprise_name,</if>
+            <if test="enterpriseJoinApplyId != null and enterpriseJoinApplyId != ''">link_man,</if>
+            <if test="linkMan != null and linkMan != ''"> duty,</if>
+            <if test="phone != null and phone != ''"> phone,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="followState != null and followState != ''">follow_state,</if>
+            <if test="acceptor != null and acceptor != ''"> acceptor,</if>
+            <if test="applyDate != null">apply_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enterpriseJoinApplyId != null and enterpriseJoinApplyId != ''">#{enterpriseJoinApplyId},</if>
+            <if test="enterpriseName != null and enterpriseName != ''"> #{enterpriseName},</if>
+            <if test="linkMan != null and linkMan != ''">#{linkMan},</if>
+            <if test="duty != null and duty != ''"> #{duty},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="followState != null and followState != ''">#{followState},</if>
+            <if test="acceptor != null and acceptor != ''"> #{acceptor},</if>
+            <if test="applyDate != null">  #{applyDate},</if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseJoinApply">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="enterpriseJoinApplyId != null and enterpriseJoinApplyId != ''">enterprise_name = #{enterpriseName},</if>
+            <if test="enterpriseName != null and enterpriseName != ''"> link_man = #{linkMan},</if>
+            <if test="duty != null and duty != ''">  duty = #{duty},</if>
+            <if test="phone != null and phone != ''"> phone = #{phone},</if>
+            <if test="email != null and email != ''"> email = #{email},</if>
+            <if test="followState != null and followState != ''"> follow_state = #{followState},</if>
+            <if test="acceptor != null">  acceptor = #{acceptor},</if>
+        </set>
+        WHERE enterprise_join_apply_id = #{enterpriseJoinApplyId}
+    </update>
+
+</mapper>
