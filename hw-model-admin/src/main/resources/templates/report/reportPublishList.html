@@ -29,7 +29,7 @@
                         </li>
                         <li>
                             报告名称：
-                            <select name="reportId" id="entReportSelect">
+                            <select name="entReportTempId" id="entReportTempSelect">
                                 <option value="">所有</option>
                             </select>
                         </li>
@@ -169,35 +169,34 @@
     $('#enterpriseIdSelect').change(function () {
         var makeCycleSelect = document.getElementById('makeCycleSelect');
         makeCycleSelect.options.selectedIndex = 0;
-        var entReportSelect = document.getElementById('entReportSelect');
-        entReportSelect.innerHTML = '';
-        entReportSelect.append(new Option("所有", ""));
+        var entReportTempSelect = document.getElementById('entReportTempSelect');
+        entReportTempSelect.innerHTML = '';
+        entReportTempSelect.append(new Option("所有", ""));
     });
 
     //企业 + 周期 = 企业的指标模板
     $('#makeCycleSelect').change(function () {
         var makeCycle = $(this).children('option:selected').val();
         var enterpriseId = $('#enterpriseIdSelect').children('option:selected').val();
-        var entReportSelect = document.getElementById('entReportSelect');
+        var entReportTempSelect = document.getElementById('entReportTempSelect');
         if ($.common.isEmpty(enterpriseId)) {
             $.modal.alertWarning("请先选择企业！");
         }
         if ($.common.isEmpty(makeCycle)) {
-            entReportSelect.innerHTML = '';
-            entReportSelect.append(new Option("所有", ""));
+            entReportTempSelect.innerHTML = '';
+            entReportTempSelect.append(new Option("所有", ""));
             return;
         }
 
         $.ajax({
-            url: ctx + "getEntReport",
+            url: ctx + "report/mail/getEntReportTemp",
             type: "POST",
             data: {"enterpriseId": enterpriseId, "makeCycle": makeCycle},
             success: function (result) {
-                entReportSelect.innerHTML = '';
-                entReportSelect.append(new Option("未选择", ""));
-                $.each(result.entReportList,function (index, entReport) {
-                    console.log("entReport = ", entReport);
-                    entReportSelect.options.add(new Option(entReport.reportName, entReport.reportId));
+                entReportTempSelect.innerHTML = '';
+                entReportTempSelect.append(new Option("未选择", ""));
+                $.each(result.entReportTempList,function (index, entReportTemp) {
+                    entReportTempSelect.options.add(new Option(entReportTemp.name, entReportTemp.enterpriseReportTemplateId));
                 });
             }
         });

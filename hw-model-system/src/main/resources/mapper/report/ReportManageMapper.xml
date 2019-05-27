@@ -72,6 +72,9 @@
         <if test="makeCycle != null and makeCycle != ''">
             AND report.make_cycle = #{makeCycle}
         </if>
+        <if test="entReportTempId != null and entReportTempId != ''">
+            AND temp.enterprise_report_template_id = #{entReportTempId}
+        </if>
     </select>
 
     <select id="findList" parameterType="com.suixingpay.hw.report.domain.ReportInfo" resultMap="reportInfoList">
