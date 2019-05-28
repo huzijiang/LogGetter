@@ -55,7 +55,7 @@ public class EnterpriseJoinApplyController extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(EnterpriseJoinApply enterpriseJoinApply) {
-        enterpriseJoinApply.setEnterpriseJoinApplyId((Integer) IdUtil.getManyId("t_enterprise_report_template",1).get(0));
+        enterpriseJoinApply.setEnterpriseJoinApplyId((Integer) IdUtil.getManyId("t_enterprise_join_apply",1).get(0));
         enterpriseJoinApply.setApplyDate(new Date());
         enterpriseJoinApply.setAcceptor(ShiroUtils.getUserId().intValue());
         return toAjax(enterpriseJoinApplyService.add(enterpriseJoinApply));
