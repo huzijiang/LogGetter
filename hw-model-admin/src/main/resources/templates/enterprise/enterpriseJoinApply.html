@@ -116,10 +116,7 @@
                 },
                 {
                     field: 'applyDate',
-                    title: '申请时间',
-                    formatter: function(value, item, index) {
-                        return crtTimeFtt(value);
-                    }
+                    title: '申请时间'
                 },
                 {
                     title: '操作',
@@ -133,13 +130,6 @@
                 }]
         };
         $.table.init(options);
-    }
-
-    function crtTimeFtt(val) {
-        if (val != null) {
-            var date = new Date(val);
-            return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-        }
     }
 </script>
 </body>
