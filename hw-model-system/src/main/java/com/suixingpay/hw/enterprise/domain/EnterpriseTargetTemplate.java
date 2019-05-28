@@ -35,20 +35,6 @@ public class EnterpriseTargetTemplate {
 
     private String groupName;
 
-    /** 请求参数 */
-    private Map<String, Object> params;
+    private String makeCycle;
 
-    public Map<String, Object> getParams()
-    {
-        if (params == null)
-        {
-            params = new HashMap<>();
-        }
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params)
-    {
-        this.params = params;
-    }
 }

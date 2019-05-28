@@ -15,6 +15,7 @@
         <result property="belongQueue" column="belong_queue"/>
         <result property="sn" column="sn"/>
         <result property="groupName" column="group_name"/>
+        <result property="makeCycle" column="make_cycle"/>
     </resultMap>
 
     <!--表名-->
@@ -28,20 +29,25 @@
 		belong_queue,sn,group_name
 	</sql>
 
+    <sql id="columnList">
+		target.enterprise_target_template_Id,target.enterprise_report_template_id,target.target_model_template_id,target.enterprise_id,
+		target.show_way,target.name,target.template_content,target.belong_queue,target.sn,target.group_name,report.make_cycle
+	</sql>
+
     <!-- 通用查询条件-->
     <sql id="dynamicWhere">
         <where>
           1=1
-            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">AND enterprise_target_template_Id
-                like concat('%', #{enterpriseTargetTemplateId}, '%')
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">
+                AND enterprise_target_template_Id = #{enterpriseTargetTemplateId}
             </if>
-            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">AND enterprise_report_template_id
-                like concat('%', #{enterpriseReportTemplateId}, '%')
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">
+                AND enterprise_report_template_id = #{enterpriseReportTemplateId}
             </if>
-            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id
-                like concat('%', #{targetModelTemplateId}, '%')
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">
+                AND target_model_template_id = #{targetModelTemplateId}
             </if>
-            <if test="enterpriseId != null and enterpriseId != ''">AND enterprise_id like concat('%', #{enterpriseId}, '%')</if>
+            <if test="enterpriseId != null and enterpriseId != ''">AND enterprise_id = #{enterpriseId}</if>
             <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
             <if test="name != null and name != ''">AND name like concat('%', #{name}, '%')</if>
             <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
@@ -49,6 +55,28 @@
             <if test="groupName != null and groupName != ''">AND group_name like concat('%', #{groupName}, '%')</if>
         </where>
     </sql>
+
+    <sql id="dynamicWhereForFindList">
+        <where>
+            1=1
+            <if test="enterpriseId != null and enterpriseId != ''">AND target.enterprise_id = #{enterpriseId}</if>
+            <if test="makeCycle != null and makeCycle != ''">AND report.make_cycle = #{makeCycle}</if>
+            <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''">
+                AND target.enterprise_report_template_id = #{enterpriseReportTemplateId}
+            </if>
+            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''">
+                AND target.enterprise_target_template_Id = #{enterpriseTargetTemplateId}
+            </if>
+            <if test="showWay != null and showWay != ''">AND target.show_way = #{showWay}</if>
+        </where>
+    </sql>
+
+    <select id="findList" resultMap="enterpriseTargetTemplate">
+        select <include refid="columnList"/>
+        from t_enterprise_target_template target
+        left join t_enterprise_report_template report on report.enterprise_report_template_id = target.enterprise_report_template_id
+        <include refid="dynamicWhereForFindList"/>
+    </select>
 
     <!-- 查询所有数据 -->
     <select id="findAll" resultMap="enterpriseTargetTemplate">

@@ -240,9 +240,10 @@ public class PlatformCommonController {
      */
     @RequestMapping("/getEntReportTemp")
     @ResponseBody
-    public AjaxResult getEntReportTemp(@RequestParam("enterpriseId")  Integer enterpriseId) {
+    public AjaxResult getEntReportTemp(@RequestParam("enterpriseId")  Integer enterpriseId, @RequestParam("makeCycle")  String makeCycle) {
         EnterpriseReportTemplate template = new EnterpriseReportTemplate();
         template.setEnterpriseId(enterpriseId);
+        template.setMakeCycle(makeCycle);
         return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
     }
 

@@ -68,6 +68,7 @@
     </div>
 </div>
 <div th:include="include :: footer"></div>
+<script th:src="@{/ajax/libs/select/select2.js}"></script>
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
 
 <script th:inline="javascript">
@@ -212,10 +213,11 @@
             return;
         }
         $.ajax({
-            url: ctx + "/getOrgList",
+            url: ctx + "getOrgList",
             type: "POST",
             data: "platformEntId=" +  enterpriseId,
             success: function (result) {
+                console.log("result = ", result);
                 var belongOrgSelect = document.getElementById('belongOrgSelect');
                 belongOrgSelect.innerHTML = '';
                 belongOrgSelect.append(new Option("所有", ""));

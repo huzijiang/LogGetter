@@ -66,7 +66,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseTargetTemplate template) {
         startPage();
-        List<EnterpriseTargetTemplate> targetTemplateList = entTargetTempService.find(template);
+        List<EnterpriseTargetTemplate> targetTemplateList = entTargetTempService.findList(template);
         return getDataTable(targetTemplateList);
     }
 

@@ -26,6 +26,11 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
     }
 
     @Override
+    public List<EnterpriseTargetTemplate> findList(EnterpriseTargetTemplate template) {
+        return targetTemplateMapper.findList(template);
+    }
+
+    @Override
     public int add(EnterpriseTargetTemplate template) {
         return targetTemplateMapper.add(template);
     }
