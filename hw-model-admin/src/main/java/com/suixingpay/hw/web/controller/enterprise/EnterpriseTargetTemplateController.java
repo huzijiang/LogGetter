@@ -103,6 +103,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
         TargetModelContentTemplate tmct = tmctService.findOneById(template.getTargetModelTemplateId());
         template.setEnterpriseTargetTemplateId((Integer) IdUtil.getManyId("t_enterprise_target_template",1).get(0));
         template.setTemplateContent(tmct.getTemplateContent());
+        template.setFullTemplateContent(tmct.getFullTemplateContent());
         template.setSn(tmct.getSn());
         template.setBelongQueue(tmct.getBelongQueue());
     }

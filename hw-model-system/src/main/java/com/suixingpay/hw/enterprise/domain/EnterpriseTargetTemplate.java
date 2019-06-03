@@ -29,6 +29,8 @@ public class EnterpriseTargetTemplate {
 
     private String templateContent;
 
+    private String fullTemplateContent;
+
     private String belongQueue;
 
     private Integer sn;

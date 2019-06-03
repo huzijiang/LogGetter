@@ -12,6 +12,7 @@
         <result property="showWay" column="show_way"/>
         <result property="name" column="name"/>
         <result property="templateContent" column="template_content"/>
+        <result property="fullTemplateContent" column="full_template_content"/>
         <result property="belongQueue" column="belong_queue"/>
         <result property="sn" column="sn"/>
         <result property="groupName" column="group_name"/>
@@ -26,12 +27,12 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
 		enterprise_target_template_Id,enterprise_report_template_id,target_model_template_id,enterprise_id,show_way,name,template_content,
-		belong_queue,sn,group_name
+		full_template_content,belong_queue,sn,group_name
 	</sql>
 
     <sql id="columnList">
 		target.enterprise_target_template_Id,target.enterprise_report_template_id,target.target_model_template_id,target.enterprise_id,
-		target.show_way,target.name,target.template_content,target.belong_queue,target.sn,target.group_name,report.make_cycle
+		target.show_way,target.name,target.template_content,target.full_template_content,target.belong_queue,target.sn,target.group_name,report.make_cycle
 	</sql>
 
     <!-- 通用查询条件-->
@@ -140,6 +141,7 @@
             <if test="showWay != null and showWay != ''">show_way,</if>
             <if test="name != null and name != ''">name,</if>
             <if test="templateContent != null and templateContent != ''">template_content,</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">full_template_content,</if>
             <if test="belongQueue != null and belongQueue != ''">belong_queue,</if>
             <if test="sn != null and sn != ''">sn,</if>
             <if test="groupName != null and groupName != ''">group_name,</if>
@@ -152,6 +154,7 @@
             <if test="showWay != null and showWay != ''">#{showWay},</if>
             <if test="name != null and name != ''">#{name},</if>
             <if test="templateContent != null and templateContent != ''">#{templateContent},</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">#{fullTemplateContent},</if>
             <if test="belongQueue != null and belongQueue != ''">#{belongQueue},</if>
             <if test="sn != null and sn != ''">#{sn},</if>
             <if test="groupName != null and groupName != ''">#{groupName},</if>

@@ -11,6 +11,7 @@
         <result property="name" column="name"/>
         <result property="showWay" column="show_way"/>
         <result property="templateContent" column="template_content"/>
+        <result property="fullTemplateContent" column="full_template_content"/>
         <result property="belongQueue" column="belong_queue"/>
         <result property="sn" column="sn"/>
     </resultMap>
@@ -22,7 +23,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		target_model_template_id,target_model_id,name,show_way,template_content,belong_queue,sn
+		target_model_template_id,target_model_id,name,show_way,template_content,full_template_content,belong_queue,sn
 	</sql>
 
     <!-- 通用查询条件-->
