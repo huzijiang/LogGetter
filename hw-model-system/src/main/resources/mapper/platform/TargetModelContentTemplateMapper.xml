@@ -29,10 +29,11 @@
     <!-- 通用查询条件-->
     <sql id="dynamicWhere">
         <where>
-            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">AND target_model_template_id
-                like concat('%', #{targetModelTemplateId}, '%')
+            1=1
+            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">
+                AND target_model_template_id = #{targetModelTemplateId}
             </if>
-            <if test="targetModelId != null and targetModelId != ''">AND target_model_id like concat('%', #{targetModelId}, '%')</if>
+            <if test="targetModelId != null and targetModelId != ''">AND target_model_id = #{targetModelId}</if>
             <if test="name != null and name != ''">AND name like concat('%', #{name}, '%')</if>
             <if test="showWay != null and showWay != ''">AND show_way = #{showWay}</if>
             <if test="belongQueue != null and belongQueue != ''">AND belong_queue = #{belongQueue}</if>
@@ -99,7 +100,8 @@
             <if test="targetModelId != null and targetModelId != ''">target_model_id,</if>
             <if test="name != null and name != ''">name,</if>
             <if test="showWay != null and showWay != ''">show_way,</if>
-            <if test="targetModelTemplateId != null and targetModelTemplateId != ''">template_content,</if>
+            <if test="templateContent != null and templateContent != ''">template_content,</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">full_template_content,</if>
             <if test="belongQueue != null and belongQueue != ''">belong_queue,</if>
             <if test="sn != null and sn != ''">sn,</if>
         </trim>
@@ -109,6 +111,7 @@
             <if test="name != null and name != ''">#{name},</if>
             <if test="showWay != null and showWay != ''">#{showWay},</if>
             <if test="templateContent != null and templateContent != ''">#{templateContent},</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">#{fullTemplateContent},</if>
             <if test="belongQueue != null and belongQueue != ''">#{belongQueue},</if>
             <if test="sn != null and sn != ''">#{sn},</if>
         </trim>
@@ -123,6 +126,7 @@
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="showWay != null and showWay != ''">show_way = #{showWay},</if>
             <if test="templateContent != null and templateContent != ''">template_content = #{templateContent},</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">full_template_content = #{fullTemplateContent},</if>
             <if test="belongQueue != null and belongQueue != ''">belong_queue = #{belongQueue},</if>
             <if test="sn != null and sn != ''">sn = #{sn},</if>
         </set>

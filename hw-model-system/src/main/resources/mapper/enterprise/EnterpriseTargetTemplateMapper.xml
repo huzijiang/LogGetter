@@ -129,6 +129,13 @@
         </foreach>
     </delete>
 
+    <!--删除：根据平台指标展示模型编号删除-->
+    <delete id="deleteByTargetModelTemplateId">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE target_model_template_id = #{targetModelTemplateId}
+    </delete>
+
     <!-- 添加 （匹配有值的字段）-->
     <insert id="add" parameterType="com.suixingpay.hw.enterprise.domain.EnterpriseTargetTemplate">
         INSERT INTO
@@ -166,9 +173,6 @@
         UPDATE
         <include refid="table"/>
         <set>
-            <if test="enterpriseTargetTemplateId != null and enterpriseTargetTemplateId != ''"> enterprise_target_template_Id =
-                #{enterpriseTargetTemplateId},
-            </if>
             <if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> enterprise_report_template_id =
                 #{enterpriseReportTemplateId},
             </if>
@@ -178,6 +182,8 @@
             <if test="enterpriseId != null and enterpriseId != ''"> enterprise_id = #{enterpriseId},</if>
             <if test="showWay != null and showWay != ''"> show_way = #{showWay},</if>
             <if test="name != null and name != ''"> name = #{name},</if>
+            <if test="templateContent != null and templateContent != ''">template_content = #{templateContent},</if>
+            <if test="fullTemplateContent != null and fullTemplateContent != ''">full_template_content = #{fullTemplateContent},</if>
             <if test="belongQueue != null and belongQueue != ''"> belong_queue = #{belongQueue},</if>
             <if test="sn != null and sn != ''"> sn = #{sn},</if>
             <if test="groupName != null and groupName != ''"> group_name = #{groupName},</if>

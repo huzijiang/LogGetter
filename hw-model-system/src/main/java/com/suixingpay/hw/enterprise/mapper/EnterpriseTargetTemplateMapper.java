@@ -69,4 +69,12 @@ public interface EnterpriseTargetTemplateMapper {
      * @return List<EnterpriseTargetTemplate>
      */
     List<EnterpriseTargetTemplate> findAll();
+
+    /**
+     * 删除：根据平台指标展示模型编号
+     *
+     * @param targetModelTemplateId 平台指标展示模型编号
+     * @return 变更数
+     */
+    int deleteByTargetModelTemplateId(Integer targetModelTemplateId);
 }

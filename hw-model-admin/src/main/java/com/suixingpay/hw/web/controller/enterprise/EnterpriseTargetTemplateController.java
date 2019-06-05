@@ -118,13 +118,12 @@ public class EnterpriseTargetTemplateController extends BaseController {
         EnterpriseReportTemplate entReportTemp = entReportTempService
                 .findOneById(entTargetTemp.getEnterpriseReportTemplateId());
 
-        List<Integer> targetModelIds = reportTemplateService
-                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
-
         TargetModelContentTemplate tmct = tmctService.findOneById(entTargetTemp.getTargetModelTemplateId());
 
         mmap.put("targetModelId", tmct.getTargetModelId());
-        mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+        mmap.put("targetModelTempName", tmct.getName());
+
+        mmap.put("targetModelName", targetModelService.findOneById(tmct.getTargetModelId()).getName());
         mmap.put("targetModelTempList", tmctService.selectByTargetModelId(tmct.getTargetModelId()));
         mmap.put("targetTemplate", entTargetTempService.findOneById(enterpriseTargetTemplateId));
         return "enterprise/template/enterpriseTargetTemplateEdit";

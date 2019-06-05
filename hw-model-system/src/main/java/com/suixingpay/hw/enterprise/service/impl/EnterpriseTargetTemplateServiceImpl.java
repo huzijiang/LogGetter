@@ -60,4 +60,9 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
     public List<EnterpriseTargetTemplate> findAll() {
         return targetTemplateMapper.findAll();
     }
+
+    @Override
+    public int deleteByTargetModelTemplateId(Integer targetModelTemplateId) {
+        return targetTemplateMapper.deleteByTargetModelTemplateId(targetModelTemplateId);
+    }
 }
