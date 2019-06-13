@@ -240,9 +240,10 @@ public class PlatformCommonController {
      */
     @RequestMapping("/getEntReportTemp")
     @ResponseBody
-    public AjaxResult getEntReportTemp(@RequestParam("enterpriseId")  Integer enterpriseId) {
+    public AjaxResult getEntReportTemp(@RequestParam("enterpriseId")  Integer enterpriseId, @RequestParam("makeCycle")  String makeCycle) {
         EnterpriseReportTemplate template = new EnterpriseReportTemplate();
         template.setEnterpriseId(enterpriseId);
+        template.setMakeCycle(makeCycle);
         return AjaxResult.success().put("entReportTempList", entReportTempService.find(template));
     }
 
@@ -293,8 +294,12 @@ public class PlatformCommonController {
      */
     @RequestMapping("/getTargetModelTempList")
     @ResponseBody
-    public AjaxResult getTargetModelTempList(@RequestParam("targetModelId")  Integer targetModelId) {
-        return AjaxResult.success().put("targetModelTempList", tmctService.selectByTargetModelId(targetModelId));
+    public AjaxResult getTargetModelTempList(@RequestParam("targetModelId") Integer targetModelId, @RequestParam("showWay") String showWay) {
+        TargetModelContentTemplate tmctCondition = new TargetModelContentTemplate();
+        tmctCondition.setTargetModelId(targetModelId);
+        tmctCondition.setShowWay(showWay);
+        List<TargetModelContentTemplate> list = tmctService.find(tmctCondition);
+        return AjaxResult.success().put("targetModelTemp", list.size() == 0 ? null : list.get(0));
     }
 
     /**

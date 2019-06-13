@@ -26,6 +26,11 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
     }
 
     @Override
+    public List<EnterpriseTargetTemplate> findList(EnterpriseTargetTemplate template) {
+        return targetTemplateMapper.findList(template);
+    }
+
+    @Override
     public int add(EnterpriseTargetTemplate template) {
         return targetTemplateMapper.add(template);
     }
@@ -54,5 +59,10 @@ public class EnterpriseTargetTemplateServiceImpl implements IEnterpriseTargetTem
     @Override
     public List<EnterpriseTargetTemplate> findAll() {
         return targetTemplateMapper.findAll();
+    }
+
+    @Override
+    public int deleteByTargetModelTemplateId(Integer targetModelTemplateId) {
+        return targetTemplateMapper.deleteByTargetModelTemplateId(targetModelTemplateId);
     }
 }

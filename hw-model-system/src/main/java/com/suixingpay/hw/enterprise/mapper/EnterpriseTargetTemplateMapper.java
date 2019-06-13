@@ -16,6 +16,14 @@ public interface EnterpriseTargetTemplateMapper {
     List<EnterpriseTargetTemplate> find(EnterpriseTargetTemplate template);
 
     /**
+     * 查询（根据实体查询）
+     *
+     * @param template 企业指标模板
+     * @return 企业指标模板列表
+     */
+    List<EnterpriseTargetTemplate> findList(EnterpriseTargetTemplate template);
+
+    /**
      * 添加 （匹配有值的字段）
      *
      * @param template 企业指标模板
@@ -61,4 +69,12 @@ public interface EnterpriseTargetTemplateMapper {
      * @return List<EnterpriseTargetTemplate>
      */
     List<EnterpriseTargetTemplate> findAll();
+
+    /**
+     * 删除：根据平台指标展示模型编号
+     *
+     * @param targetModelTemplateId 平台指标展示模型编号
+     * @return 变更数
+     */
+    int deleteByTargetModelTemplateId(Integer targetModelTemplateId);
 }

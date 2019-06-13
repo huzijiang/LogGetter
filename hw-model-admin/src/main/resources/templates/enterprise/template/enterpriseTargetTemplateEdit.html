@@ -12,28 +12,31 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标模型：</label>
                     <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select id="targetModelSelect" name="targetModelId" class="form-control m-b" th:with="targetModelList=${targetModelList}" required>
-                                <option th:each="targetModel : ${targetModelList}" th:text="${targetModel.name}" th:value="${targetModel.targetModelId}" th:selected="${targetModelId eq targetModel.targetModelId}"></option>
-                            </select>
-                        </div>
+                        <input autocomplete="off" class="form-control targetModelChinese" type="text" th:value="${targetModelName}" readonly>
+                        <input name="targetModelId" type="text" th:value="${targetModelId}" hidden>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标展示模型：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展现形式：</label>
                     <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select id="targetModelTempSelect" name="targetModelTemplateId" class="form-control m-b" th:with="targetModelTempList=${targetModelTempList}" required>
-                                <option th:each="targetModelTemp : ${targetModelTempList}" th:text="${targetModelTemp.showWay + '-' + targetModelTemp.name}" th:value="${targetModelTemp.targetModelTemplateId}" th:field="*{targetModelTemplateId}"></option>
-                            </select>
-                        </div>
+                        <input autocomplete="off" class="form-control showWayChinese" type="text" readonly>
+                        <input name="showWay" class="showWay" type="text" th:field="*{showWay}" hidden>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标展示模型：</label>
+                    <div class="col-sm-8">
+                        <input id="targetModelTemplateName" autocomplete="off" placeholder="请先选择平台指标模型和展示形式" class="form-control" type="text" th:value="${targetModelTempName}" required readonly>
+                        <input id="targetModelTemplateId" name="targetModelTemplateId" type="text" th:field="*{targetModelTemplateId}" hidden>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>指标名称：</label>
@@ -42,26 +45,23 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>展现形式：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}" required>
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{showWay}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">主题：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板内容：</label>
                     <div class="col-sm-8">
-                        <input autocomplete="off" placeholder="请输入主题" class="form-control" type="text" maxlength="20">
+                        <textarea id="templateContentArea" rows="20" cols="50%" style="resize: none"></textarea>
+                        <input id="templateContent" name="templateContent" type="text" th:field="*{templateContent}" hidden>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板全量内容：</label>
+                    <div class="col-sm-8">
+                        <textarea id="fullTemplateContentArea" rows="20" cols="50%" style="resize: none"></textarea>
+                        <input id="fullTemplateContent" name="fullTemplateContent" type="text" th:field="*{fullTemplateContent}" hidden>
                     </div>
                 </div>
             </div>
@@ -77,44 +77,63 @@
 <div th:include="include::footer"></div>
 <script th:src="@{/ajax/libs/select/select2.js}"></script>
 <script th:inline="javascript">
+    var entTargetTemplate = [[${targetTemplate}]];
+    $(function () {
+
+        changeDisplay(entTargetTemplate);
+
+        var templateContent = $('#templateContent').val();
+        var fullTemplateContent = $('#fullTemplateContent').val();
+        try {
+            $('#templateContentArea').val(JSON.stringify(JSON.parse(templateContent), null, 4));
+        }catch (e) {
+            $('#templateContentArea').val(templateContent);
+        }
+        try {
+            $('#fullTemplateContentArea').val(JSON.stringify(JSON.parse(fullTemplateContent), null, 4));
+        }catch (e) {
+            $('#fullTemplateContentArea').val(fullTemplateContent);
+        }
+    });
+
     var targetShowWayData = [[${@fangCloudDict.getType('TargetShowWay')}]];
+
     function submitHandler() {
         if ($.validate.form()) {
+            var templateContent = $('#templateContentArea').val();
+            var fullTemplateContent = $('#fullTemplateContentArea').val();
+            try {
+                $('#templateContent').val(JSON.stringify(JSON.parse(templateContent)));
+            }catch (e) {
+                $.modal.alertWarning("模板内容不符合json格式");
+                return;
+            }
+            try {
+                $('#fullTemplateContent').val(JSON.stringify(JSON.parse(fullTemplateContent)));
+            }catch (e) {
+                $.modal.alertWarning("模板全量内容不符合json格式");
+                return;
+            }
+
             var data = $("#form-targetModel-edit").serializeArray();
             $.operate.saveTab(ctx + "enterprise/targetTemplate/editSave", data);
         }
     }
 
-    $('#targetModelSelect').change(function () {
-        var currentTargetModelId = $(this).children('option:selected').val();
-        console.log("currentTargetModelId", currentTargetModelId);
-        if ($.common.isEmpty(currentTargetModelId)) {
-            $.modal.alertWarning("请先选择平台指标模型");
-            return;
-        }
-        $.ajax({
-            url: ctx + "getTargetModelTempList",
-            type: "POST",
-            data: "targetModelId=" +  currentTargetModelId,
-            success: function (result) {
-                console.log("result = ", result);
-                var targetModelTempSelect = document.getElementById('targetModelTempSelect');
-                targetModelTempSelect.removeAttribute("disabled");
-                targetModelTempSelect.innerHTML = '';
-                targetModelTempSelect.append(new Option("未选择", ""));
-                $.each(result.targetModelTempList,function (index, targetModelTemp) {
-                    var showWay = targetModelTemp.showWay;
-                    $.each(targetShowWayData, function(index, fangCloudDict) {
-                        if (fangCloudDict.value == ('' + showWay)) {
-                            showWay = fangCloudDict.valueDesc;
-                        }
-                    });
-                    $('.targetName').attr("value", targetModelTemp.name);
-                    targetModelTempSelect.options.add(new Option(showWay + "-" + targetModelTemp.name,targetModelTemp.targetModelTemplateId));
-                });
+    function changeDisplay(entTargetTemplate) {
+        $('.showWayChinese').attr("value", formatterData(targetShowWayData, entTargetTemplate.showWay));
+    }
+
+    function formatterData(data, value) {
+        var actions = [];
+        $.each(data, function(index, item) {
+            if (item.value == ('' + value)) {
+                actions.push(item.valueDesc);
+                return false;
             }
         });
-    });
+        return actions.join(value);
+    }
 </script>
 </body>
 </html>
