@@ -27,4 +27,8 @@ public class TargetModelContentTemplate {
     private String belongQueue;
 
     private Integer sn;
+
+    private String makeCycle;
+
+    private String targetModelName;
 }

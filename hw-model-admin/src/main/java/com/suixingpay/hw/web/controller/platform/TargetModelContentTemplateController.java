@@ -52,7 +52,7 @@ public class TargetModelContentTemplateController extends BaseController {
     @ResponseBody
     public TableDataInfo list(TargetModelContentTemplate tmct) {
         startPage();
-        List<TargetModelContentTemplate> tmctList = tmctService.find(tmct);
+        List<TargetModelContentTemplate> tmctList = tmctService.findList(tmct);
         return getDataTable(tmctList);
     }
 

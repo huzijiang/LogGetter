@@ -66,4 +66,6 @@ public interface ITargetModelContentTemplateService {
      * @return List<TargetModelContentTemplate>
      */
     List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId);
+
+    List<TargetModelContentTemplate> findList(TargetModelContentTemplate targetModelContentTemplate);
 }

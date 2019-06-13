@@ -49,6 +49,16 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label">group_name：</label>
+                    <div class="col-sm-8">
+                        <input name="groupName" autocomplete="off" placeholder="请输入group_name" class="form-control" type="text" th:field="*{groupName}" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板内容：</label>
                     <div class="col-sm-8">
                         <textarea id="templateContentArea" rows="20" cols="50%" style="resize: none"></textarea>
