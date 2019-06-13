@@ -68,7 +68,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板内容：</label>
                     <div class="col-sm-8">
-                        <textarea id="templateContentArea" rows="10" cols="50%" style="resize: none"></textarea>
+                        <textarea id="templateContentArea" rows="20" cols="50%" style="resize: none"></textarea>
                         <input id="templateContent" name="templateContent" type="text" th:field="*{templateContent}" hidden>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>模板全量内容：</label>
                     <div class="col-sm-8">
-                        <textarea id="fullTemplateContentArea" rows="10" cols="50%" style="resize: none"></textarea>
+                        <textarea id="fullTemplateContentArea" rows="20" cols="50%" style="resize: none"></textarea>
                         <input id="fullTemplateContent" name="fullTemplateContent" type="text" th:field="*{fullTemplateContent}" hidden>
                     </div>
                 </div>
@@ -100,9 +100,12 @@
         var fullTemplateContent = $('#fullTemplateContent').val();
         try {
             $('#templateContentArea').val(JSON.stringify(JSON.parse(templateContent), null, 4));
-            $('#fullTemplateContentArea').val(JSON.stringify(JSON.parse(fullTemplateContent), null, 4));
         }catch (e) {
             $('#templateContentArea').val(templateContent);
+        }
+        try {
+            $('#fullTemplateContentArea').val(JSON.stringify(JSON.parse(fullTemplateContent), null, 4));
+        }catch (e) {
             $('#fullTemplateContentArea').val(fullTemplateContent);
         }
     });

@@ -86,9 +86,12 @@
         var fullTemplateContent = $('#fullTemplateContent').val();
         try {
             $('#templateContentArea').val(JSON.stringify(JSON.parse(templateContent), null, 4));
-            $('#fullTemplateContentArea').val(JSON.stringify(JSON.parse(fullTemplateContent), null, 4));
         }catch (e) {
             $('#templateContentArea').val(templateContent);
+        }
+        try {
+            $('#fullTemplateContentArea').val(JSON.stringify(JSON.parse(fullTemplateContent), null, 4));
+        }catch (e) {
             $('#fullTemplateContentArea').val(fullTemplateContent);
         }
     });
