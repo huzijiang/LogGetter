@@ -165,8 +165,7 @@
     function submitHandler() {
         if ($.validate.form()) {
             var data = $("#form-reportTemplate-add").serializeArray();
-            console.log("data = ", data);
-            // $.operate.saveTab(ctx + "enterprise/reportTemplate/save", data);
+            $.operate.saveTab(ctx + "enterprise/reportTemplate/save", data);
         }
     }
 
