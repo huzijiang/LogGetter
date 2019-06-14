@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suixingpay.hw.platform.mapper.TargetWarehouseMapper">
+
+    <!--实体映射-->
+    <resultMap id="targetWarehouse" type="com.suixingpay.hw.platform.domain.TargetWarehouse">
+        <id property="targetId" column="target_id" />
+        <result property="classify" column="classify" />
+        <result property="level" column="level" />
+        <result property="name" column="name" />
+        <result property="defineDesc" column="define_desc" />
+        <result property="designFormulas" column="design_formulas" />
+        <result property="unitDesc" column="unit_desc" />
+        <result property="dataSource" column="data_source" />
+        <result property="collationCode" column="collation_code" />
+        <result property="drillOrgLevel" column="drill_org_level" />
+        <result property="isTimeInterval" column="is_time_interval" />
+    </resultMap>
+
+    <!--表名-->
+    <sql id="table">
+		t_target_warehouse
+	</sql>
+
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		target_id,classify,level,name,define_desc,design_formulas,unit_desc,collation_code,
+		data_source,drill_org_level,is_time_interval
+	</sql>
+
+    <!-- 通用查询条件-->
+    <sql id="dynamicWhere">
+        <where>
+            1=1
+            <if test="targetId != null and targetId != ''"> AND target_id = #{targetModelId} </if>
+            <if test="classify != null and classify != ''"> AND classify = #{classify} </if>
+            <if test="level != null and level != ''"> AND level = #{level} </if>
+            <if test="name != null and name != ''"> AND name = #{name} </if>
+            <if test="defineDesc != null and defineDesc != ''"> AND define_desc = #{defineDesc} </if>
+            <if test="designFormulas != null and designFormulas != ''"> AND design_formulas = #{designFormulas} </if>
+            <if test="unitDesc != null and unitDesc != ''"> AND unit_desc = #{unitDesc} </if>
+            <if test="dataSource != null and dataSource != ''"> AND data_source = #{dataSource} </if>
+            <if test="collationCode != null and collationCode != ''"> AND collation_code = #{collationCode} </if>
+            <if test="drillOrgLevel != null and drillOrgLevel != ''"> AND drill_org_level = #{drillOrgLevel} </if>
+            <if test="isTimeInterval != null and isTimeInterval != ''"> AND is_time_interval = #{isTimeInterval} </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有数据 -->
+    <select id="findAll" resultMap="targetWarehouse">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="findOneById" resultMap="targetWarehouse" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        WHERE target_id = #{targetId}
+    </select>
+
+    <!-- 查询（根据实体查询） -->
+    <select id="find" resultMap="targetWarehouse">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!-- 查询总数（根据实体查询） -->
+    <select id="count" resultMap="targetWarehouse" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM
+        <include refid="table" />
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <!--删除：根据主键ID删除-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_id = #{targetId}
+    </delete>
+
+    <!--批量删除：根据主键ID删除-->
+    <delete id="deleteBatchIds">
+        DELETE FROM
+        <include refid="table" />
+        WHERE target_id in
+        <foreach collection="pkList" item="i" open="(" separator="," close=")">
+            #{i}
+        </foreach>
+    </delete>
+
+    <!-- 添加 （匹配有值的字段）-->
+    <insert id="add" parameterType="com.suixingpay.hw.platform.domain.TargetWarehouse">
+        INSERT INTO
+        <include refid="table" />
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(targetId) "> target_id, </if>
+            <if test="@Ognl@isNotEmpty(classify) "> classify, </if>
+            <if test="@Ognl@isNotEmpty(level) "> level, </if>
+            <if test="@Ognl@isNotEmpty(name) "> name, </if>
+            <if test="@Ognl@isNotEmpty(defineDesc) "> define_desc, </if>
+            <if test="@Ognl@isNotEmpty(designFormulas) "> design_formulas, </if>
+            <if test="@Ognl@isNotEmpty(unitDesc) "> unit_desc, </if>
+            <if test="@Ognl@isNotEmpty(dataSource) "> data_source, </if>
+            <if test="@Ognl@isNotEmpty(collationCode) "> collation_code, </if>
+            <if test="@Ognl@isNotEmpty(drillOrgLevel) "> drill_org_level, </if>
+            <if test="@Ognl@isNotEmpty(isTimeInterval) "> is_time_interval, </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(targetId) "> #{targetId}, </if>
+            <if test="@Ognl@isNotEmpty(classify) "> #{classify}, </if>
+            <if test="@Ognl@isNotEmpty(level) "> #{level}, </if>
+            <if test="@Ognl@isNotEmpty(name) "> #{name}, </if>
+            <if test="@Ognl@isNotEmpty(defineDesc) "> #{defineDesc}, </if>
+            <if test="@Ognl@isNotEmpty(designFormulas) "> #{designFormulas}, </if>
+            <if test="@Ognl@isNotEmpty(unitDesc) "> #{unitDesc}, </if>
+            <if test="@Ognl@isNotEmpty(dataSource) "> #{dataSource}, </if>
+            <if test="@Ognl@isNotEmpty(collationCode) "> #{collationCode}, </if>
+            <if test="@Ognl@isNotEmpty(drillOrgLevel) "> #{drillOrgLevel}, </if>
+            <if test="@Ognl@isNotEmpty(isTimeInterval) "> #{isTimeInterval}, </if>
+        </trim>
+    </insert>
+
+    <!-- 修 改-->
+    <update id="updateById" parameterType="com.suixingpay.hw.platform.domain.TargetWarehouse">
+        UPDATE
+        <include refid="table" />
+        <set>
+            <if test="@Ognl@isNotEmpty(classify) "> classify = #{classify}, </if>
+            <if test="@Ognl@isNotEmpty(level) "> level = #{level}, </if>
+            <if test="@Ognl@isNotEmpty(name) "> name = #{name}, </if>
+            <if test="@Ognl@isNotEmpty(defineDesc) "> define_desc = #{defineDesc}, </if>
+            <if test="@Ognl@isNotEmpty(designFormulas) "> design_formulas = #{designFormulas}, </if>
+            <if test="@Ognl@isNotEmpty(unitDesc) "> unit_desc = #{unitDesc}, </if>
+            <if test="@Ognl@isNotEmpty(dataSource) "> data_source = #{dataSource}, </if>
+            <if test="@Ognl@isNotEmpty(collationCode) "> collation_code = #{collationCode}, </if>
+            <if test="@Ognl@isNotEmpty(drillOrgLevel) "> drill_org_level = #{drillOrgLevel}, </if>
+            <if test="@Ognl@isNotEmpty(isTimeInterval) "> is_time_interval = #{isTimeInterval}, </if>
+        </set>
+        WHERE target_id = #{targetId}
+    </update>
+</mapper>

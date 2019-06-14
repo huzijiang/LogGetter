@@ -9,14 +9,6 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
-                    <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="请输入平台指标展示模型名称" class="form-control" type="text" maxlength="20" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>平台指标模型：</label>
                     <div class="col-sm-6">
                         <input name="targetModelId" th:value="${id}" class="form-control templateId" type="hidden">
@@ -29,6 +21,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
+                    <div class="col-sm-8">
+                        <input name="name" id="targetModelContentName" autocomplete="off" placeholder="与平台指标模型名称一致" class="form-control" type="text"  readonly>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
@@ -37,7 +37,6 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="showWay" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetShowWay')}" required>
-                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -113,13 +112,15 @@
             }
 
             var data = $("#form-targetModel-add").serializeArray();
-            $.operate.saveTab(ctx + "targetModelContentTemplate/save", data);
+            console.log("data ==", data);
+            //$.operate.saveTab(ctx + "targetModelContentTemplate/save", data);
         }
     }
 
     function changeDisplay(id, name) {
         $('.templateId').attr("value",id);
         $('.templateName').attr("value",name);
+        $('#targetModelContentName').attr("value", name);
     }
 
 </script>

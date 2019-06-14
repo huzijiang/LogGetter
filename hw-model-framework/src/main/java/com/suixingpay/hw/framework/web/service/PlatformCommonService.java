@@ -3,6 +3,8 @@ package com.suixingpay.hw.framework.web.service;
 import com.suixingpay.hw.common.utils.StringUtils;
 import com.suixingpay.hw.enterprise.domain.*;
 import com.suixingpay.hw.enterprise.service.*;
+import com.suixingpay.hw.platform.domain.TargetWarehouse;
+import com.suixingpay.hw.platform.mapper.TargetWarehouseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,9 @@ public class PlatformCommonService {
 
     @Autowired
     private IEnterpriseTargetMakeLineModelService entTMLModelService;
+
+    @Autowired
+    private TargetWarehouseMapper targetWarehouseMapper;
 
     /**
      * 获取所有企业
@@ -69,5 +74,10 @@ public class PlatformCommonService {
      */
     public List<EnterpriseTargetMakeLineModel> getEntMakeLineList() {
         return entTMLModelService.findAll();
+    }
+
+
+    public List<TargetWarehouse> getAllTargetWarehouse() {
+        return targetWarehouseMapper.findAll();
     }
 }

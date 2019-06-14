@@ -1,6 +1,7 @@
 package com.suixingpay.hw.enterprise.service;
 
 import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface IEnterpriseOrgTreeService {
      * @return List<EnterpriseOrgTree>
      */
     List<EnterpriseOrgTree> findByPlatformEntId(Integer platformEntId);
+
+    List<EnterpriseOrgTree> findEntAndDept(@Param("platformEnterpriseId") Integer platformEntId);
 }
