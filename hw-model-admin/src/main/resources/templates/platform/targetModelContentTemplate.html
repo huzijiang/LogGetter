@@ -13,7 +13,14 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            编号：<input type="text" name="targetModelTemplateId"/>
+                            平台指标模型名称：<input type="text" name="targetModelName"/>
+                        </li>
+                        <li>
+                            生成周期:
+                            <select name="makeCycle" id="makeCycleSelect" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
                             名称：<input type="text" name="name"/>
@@ -55,7 +62,7 @@
     var removeFlag = [[${@permission.hasPermi('targetModelContentTemplate:remove')}]];
 
     var targetShowWayData = [[${@fangCloudDict.getType('TargetShowWay')}]];
-
+    var makeCycleData = [[${@fangCloudDict.getType('TargetModelMakeCycle')}]];
 
     $(function() {
         var panehHidden = false;
@@ -78,6 +85,14 @@
             columns: [
                 {
                     checkbox: true
+                },
+                {
+                    field: 'makeCycle',
+                    title: '生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
+                    }
                 },
                 {
                     field: 'targetModelTemplateId',

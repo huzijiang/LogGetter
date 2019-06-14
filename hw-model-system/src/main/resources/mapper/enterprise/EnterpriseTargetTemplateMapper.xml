@@ -186,7 +186,7 @@
             <if test="fullTemplateContent != null and fullTemplateContent != ''">full_template_content = #{fullTemplateContent},</if>
             <if test="belongQueue != null and belongQueue != ''"> belong_queue = #{belongQueue},</if>
             <if test="sn != null and sn != ''"> sn = #{sn},</if>
-            <if test="groupName != null and groupName != ''"> group_name = #{groupName},</if>
+            group_name = #{groupName}
         </set>
         WHERE enterprise_target_template_Id = #{enterpriseTargetTemplateId}
     </update>
