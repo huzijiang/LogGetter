@@ -7,11 +7,24 @@
     <form id="form-targetModel-add" class="form-horizontal">
         <h4 class="form-header h4">平台指标模型基本信息</h4>
         <div class="row">
-            <div class="col-sm-6">
+            <!--<div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
                     <div class="col-sm-8">
                         <input name="name" autocomplete="off" placeholder="请输入指标模板名称" class="form-control" type="text" maxlength="20" required>
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="name" id="nameSelect" class="form-control m-b" th:with="targetWarehouseList=${@platformDict.getAllTargetWarehouse()}" required>
+                                <option value="">未选择</option>
+                                <option th:each="target : ${targetWarehouseList}" th:text="${target.name}" th:value="${target.name}" th:attr="code=${target.collationCode},level=${target.level}" ></option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -24,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!--<div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>抽象水平：</label>
@@ -40,13 +53,13 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">对照码：</label>
+                    <label class="col-sm-4 control-label">指标代码：</label>
                     <div class="col-sm-8">
                         <input name="collationCode" autocomplete="off" placeholder="请输入对照码" class="form-control" type="text" maxlength="40">
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -54,7 +67,6 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelState')}" required>
-                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -83,7 +95,6 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="makeCycle" class="form-control m-b" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}" required>
-                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -105,7 +116,13 @@
 
     function submitHandler() {
         if ($.validate.form()) {
+            var collationCode = $("#nameSelect").find("option:selected").attr("code");
+            var level = $("#nameSelect").find("option:selected").attr("level");
+
             var data = $("#form-targetModel-add").serializeArray();
+            data.push({"name" : "collationCode", "value" : (typeof collationCode) == 'undefined' ? '':collationCode});
+            data.push({"name" : "level", "value" : (typeof level) == 'undefined' ? '1':level});
+
             $.operate.saveTab(ctx + "targetModel/save", data);
         }
     }

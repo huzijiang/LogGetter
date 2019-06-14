@@ -28,4 +28,9 @@ public class EnterpriseOrgTreeServiceImpl implements IEnterpriseOrgTreeService {
     public List<EnterpriseOrgTree> findByPlatformEntId(Integer platformEntId) {
         return enterpriseOrgTreeMapper.findByPlatformEntId(platformEntId);
     }
+
+    @Override
+    public List<EnterpriseOrgTree> findEntAndDept(Integer platformEntId) {
+        return enterpriseOrgTreeMapper.findEntAndDept(platformEntId);
+    }
 }

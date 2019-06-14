@@ -67,7 +67,8 @@ public class EnterpriseReportTemplateController  extends BaseController {
      */
     @RequestMapping("/add/{enterpriseId}")
     public String add(@PathVariable("enterpriseId") Integer enterpriseId, ModelMap mmap) {
-        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseId));
+
+        mmap.put("orgList", enterpriseOrgTreeService.findEntAndDept(enterpriseId));
         mmap.put("enterpriseId", enterpriseId);
         return "enterprise/template/enterpriseReportTemplateAdd";
     }

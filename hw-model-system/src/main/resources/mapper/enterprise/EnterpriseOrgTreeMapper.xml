@@ -77,6 +77,14 @@
         </where>
     </select>
 
+    <!-- 获取公司+部门 -->
+    <select id="findEntAndDept" resultMap="enterpriseOrgTree">
+        select <include refid="Base_Column_List"/>
+        from
+        <include refid="table"/>
+        where platform_enterprise_id = #{platformEnterpriseId} and org_level in('00','01')
+    </select>
+
     <!-- 查询总数（根据实体查询） -->
     <select id="count" resultMap="enterpriseOrgTree" resultType="java.lang.Long">
         SELECT COUNT(*) FROM

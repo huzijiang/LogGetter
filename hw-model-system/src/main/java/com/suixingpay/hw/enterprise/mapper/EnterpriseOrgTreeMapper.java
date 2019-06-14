@@ -21,4 +21,6 @@ public interface EnterpriseOrgTreeMapper {
      * @return List<EnterpriseOrgTree>
      */
     List<EnterpriseOrgTree> findByPlatformEntId(@Param("platformEnterpriseId") Integer platformEntId);
+
+    List<EnterpriseOrgTree> findEntAndDept(@Param("platformEnterpriseId") Integer platformEntId);
 }
