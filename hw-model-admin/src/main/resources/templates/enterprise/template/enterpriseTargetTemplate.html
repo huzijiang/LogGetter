@@ -19,6 +19,11 @@
                                 <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
                             </select>
                         </li>
+                        <li>归属组织：
+                            <select id="belongOrgSelect" name="belongOrg">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
                         <li>
                             生成周期:
                             <select name="makeCycle" id="makeCycleSelect" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
@@ -98,8 +103,8 @@
             createUrl: ctx + "enterprise/targetTemplate/add",
             updateUrl: ctx + "enterprise/targetTemplate/edit/{id}",
             removeUrl: ctx + "enterprise/targetTemplate/remove",
-            sortName: "makeCycle",
-            sortOrder: "desc",
+            sortName: "sn",
+            sortOrder: "asc",
             modalName: "企业指标模板",
             columns: [
                 {
@@ -155,12 +160,12 @@
                 },
                 {
                     field: 'sn',
-                    title: '在行和列的排序序号',
-                    visible: false
+                    title: '顺序'
                 },
                 {
                     field: 'groupName',
-                    title: 'groupName'
+                    title: 'groupName',
+                    visible: false
                 },
                 {
                     field: 'templateContent',
@@ -191,16 +196,34 @@
         var entTargetTempSelect = document.getElementById('entTargetTempSelect');
         entTargetTempSelect.innerHTML = '';
         entTargetTempSelect.append(new Option("所有", ""));
+        var enterpriseId = $(this).children('option:selected').val();
+        if ($.common.isEmpty(enterpriseId)) {
+            return;
+        }
+        $.ajax({
+            url: ctx + "getOrgList",
+            type: "POST",
+            data: "platformEntId=" +  enterpriseId,
+            success: function (result) {
+                var belongOrgSelect = document.getElementById('belongOrgSelect');
+                belongOrgSelect.innerHTML = '';
+                belongOrgSelect.append(new Option("所有", ""));
+                $.each(result.orgList,function (index, org) {
+                    belongOrgSelect.options.add(new Option(org.name,org.orgId));
+                });
+            }
+        });
     });
 
-    //企业 + 周期 = 企业的指标模板
+    //企业 + 归属组织 + 周期 = 企业的指标模板
     $('#makeCycleSelect').change(function () {
         var makeCycle = $(this).children('option:selected').val();
+        var belongOrg = $('#belongOrgSelect').children('option:selected').val();
         var enterpriseId = $('#enterpriseIdSelect').children('option:selected').val();
         var entReportTempSelect = document.getElementById('entReportTempSelect');
         var entTargetTempSelect = document.getElementById('entTargetTempSelect');
-        if ($.common.isEmpty(enterpriseId)) {
-            $.modal.alertWarning("若需要选择报告，请先选择企业！");
+        if ($.common.isEmpty(enterpriseId) && $.common.isEmpty(belongOrg)) {
+            $.modal.alertWarning("若需要选择报告，请先选择企业和归属组织！");
         }
         if ($.common.isEmpty(makeCycle)) {
             entReportTempSelect.innerHTML = '';
@@ -214,7 +237,7 @@
         $.ajax({
             url: ctx + "getEntReportTemp",
             type: "POST",
-            data: {"enterpriseId": enterpriseId, "makeCycle": makeCycle},
+            data: {"enterpriseId": enterpriseId, "makeCycle": makeCycle, "belongOrg": belongOrg},
             success: function (result) {
                 entReportTempSelect.innerHTML = '';
                 entReportTempSelect.append(new Option("未选择", ""));

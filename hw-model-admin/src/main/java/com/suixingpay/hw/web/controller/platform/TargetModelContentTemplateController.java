@@ -103,14 +103,14 @@ public class TargetModelContentTemplateController extends BaseController {
     public AjaxResult editSave(TargetModelContentTemplate tmct) {
         Integer targetModelTemplateId = tmct.getTargetModelTemplateId();
         //唯一性判断
-        TargetModelContentTemplate tmctCondition = new TargetModelContentTemplate();
-        tmctCondition.setTargetModelId(tmct.getTargetModelId());
-        tmctCondition.setShowWay(tmct.getShowWay());
-        List<TargetModelContentTemplate> tmctList = tmctService.find(tmctCondition);
-        tmctList.removeIf(tmctFromDb -> targetModelTemplateId.equals(tmctFromDb.getTargetModelTemplateId()));
-        if (tmctList.size() > 0) {
-            return AjaxResult.error("已存在平台指标模型与展示方式相同的平台指标展示模型");
-        }
+//        TargetModelContentTemplate tmctCondition = new TargetModelContentTemplate();
+//        tmctCondition.setTargetModelId(tmct.getTargetModelId());
+//        tmctCondition.setShowWay(tmct.getShowWay());
+//        List<TargetModelContentTemplate> tmctList = tmctService.find(tmctCondition);
+//        tmctList.removeIf(tmctFromDb -> targetModelTemplateId.equals(tmctFromDb.getTargetModelTemplateId()));
+//        if (tmctList.size() > 0) {
+//            return AjaxResult.error("已存在平台指标模型与展示方式相同的平台指标展示模型");
+//        }
 
         return toAjax(tmctService.updateById(tmct));
     }

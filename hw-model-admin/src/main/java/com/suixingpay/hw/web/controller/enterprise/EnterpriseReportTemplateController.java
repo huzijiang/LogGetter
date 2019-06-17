@@ -58,7 +58,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseReportTemplate template) {
         startPage();
-        List<EnterpriseReportTemplate> reportTemplateList = entReportTemplateService.find(template);
+        List<EnterpriseReportTemplate> reportTemplateList = entReportTemplateService.findList(template);
         return getDataTable(reportTemplateList);
     }
 

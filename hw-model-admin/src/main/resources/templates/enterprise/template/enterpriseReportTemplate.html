@@ -19,6 +19,11 @@
                                 <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
                             </select>
                         </li>
+                        <li>归属组织：
+                            <select id="belongOrgSelect" name="belongOrg">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
                         <li>
                             报告名称：<input type="text" name="name"/>
                         </li>
@@ -40,11 +45,6 @@
                             <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
                                 <option value="">所有</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </li>
-                        <li>归属组织：
-                            <select id="belongOrgSelect" name="belongOrg">
-                                <option value="">所有</option>
                             </select>
                         </li>
                         <li>
@@ -116,6 +116,10 @@
                     }
                 },
                 {
+                    field: 'deptName',
+                    title: '归属组织'
+                },
+                {
                     field: 'reportTemplateId',
                     title: '平台报告模型编号',
                     visible: false
@@ -146,14 +150,6 @@
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(typeData, value);
                     }
-                },
-                {
-                    field: 'belongOrg',
-                    title: '归属组织',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    },
-                    visible: false
                 },
                 {
                     field: 'belongOrgLevel',
@@ -205,6 +201,27 @@
         $.table.init(options);
     }
 
+    function displayChange(belongOrg, enterpriseId) {
+        console.log("belongOrg = ", belongOrg);
+        var actions = [];
+        $.ajax({
+            url: ctx + "getOrgList",
+            type: "POST",
+            data: "platformEntId=" +  enterpriseId,
+            success: function (result) {
+
+                $.each(result.orgList, function (org, index) {
+                    console.log("org = ", org);
+                    if (org.orgId == belongOrg) {
+                        actions.push("<span>" + result.orgList.name + "</span>");
+                        return false;
+                    }
+                });
+            }
+        });
+        return actions.join('');
+    }
+
     //由 归属企业 触发 归属组织
     $('#enterpriseIdSelect').change(function () {
         var enterpriseId = $(this).children('option:selected').val();
@@ -217,7 +234,6 @@
             type: "POST",
             data: "platformEntId=" +  enterpriseId,
             success: function (result) {
-                console.log("result = ", result);
                 var belongOrgSelect = document.getElementById('belongOrgSelect');
                 belongOrgSelect.innerHTML = '';
                 belongOrgSelect.append(new Option("所有", ""));

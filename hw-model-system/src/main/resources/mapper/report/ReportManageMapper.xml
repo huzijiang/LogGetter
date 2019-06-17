@@ -15,6 +15,7 @@
         <result property="makeCycle"        column="make_cycle" />
         <result property="publishDate"      column="publish_date" />
         <result property="isNeedPublish"      column="is_need_publish" />
+        <result property="belongOrg"      column="belongOrg" />
     </resultMap>
 
     <resultMap id="targetDataList" type="com.suixingpay.hw.report.domain.ReportInfo">
@@ -29,7 +30,7 @@
     </resultMap>
 
     <sql id="listColumn">
-        report.enterprise_report_Id,report.publish_date,report.enterprise_report_template_id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id,temp.is_need_publish
+        report.enterprise_report_Id,report.publish_date,report.enterprise_report_template_id,report.report_name,report.publish_state,report.state,report.make_date,report.make_cycle,report.report_template_id,report.enterprise_id,temp.is_need_publish,temp.belongOrg
     </sql>
 
     <sql id="findListChildColumn">

@@ -48,8 +48,8 @@ public class PlatformCommonService {
      * 获取某个企业下所有部门，包括该企业自身
      * @return List<EnterpriseOrgTree>
      */
-    public List<EnterpriseOrgTree> getEntOrgList(String platformEntId) {
-        return entOrgTreeService.findByPlatformEntId(StringUtils.isEmpty(platformEntId) ? null : Integer.parseInt(platformEntId));
+    public List<EnterpriseOrgTree> findByPlatformEntId(Integer platformEntId) {
+        return entOrgTreeService.findByPlatformEntId(platformEntId);
     }
 
     /**

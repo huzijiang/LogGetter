@@ -14,6 +14,8 @@ public interface IEnterpriseReportTemplateService {
      */
     List<EnterpriseReportTemplate> find(EnterpriseReportTemplate template);
 
+    List<EnterpriseReportTemplate> findList(EnterpriseReportTemplate template);
+
     /**
      * 添加 （匹配有值的字段）
      *
