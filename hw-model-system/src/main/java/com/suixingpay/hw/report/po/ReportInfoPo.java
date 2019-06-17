@@ -62,4 +62,6 @@ public class ReportInfoPo {
     private String isNeedPublish;
 
     private Integer belongOrg;
+
+    private String deptName;
 }

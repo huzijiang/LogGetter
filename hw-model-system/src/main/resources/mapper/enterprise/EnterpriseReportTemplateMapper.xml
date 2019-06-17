@@ -94,7 +94,7 @@
 
 	<sql id="dynamicWhereForFindList">
 		<where>
-			1=1
+			1=1 and t2.org_level in('00', '01')
 			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> AND t1.enterprise_report_template_id = #{enterpriseReportTemplateId} </if>
 			<if test="enterpriseId != null and enterpriseId != ''"> AND t1.enterprise_id = #{enterpriseId} </if>
 			<if test="reportTemplateId != null and reportTemplateId != ''"> AND t1.report_template_id = #{reportTemplateId} </if>

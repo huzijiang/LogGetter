@@ -20,6 +20,11 @@
                                 <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
                             </select>
                         </li>
+                        <li>归属组织：
+                            <select id="belongOrgSelect" name="belongOrg">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
                         <li>
                             生成周期：
                             <select name="makeCycle" id="makeCycleSelect" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
@@ -106,6 +111,10 @@
                     formatter: function (value, row, index) {
                         return $.table.exchangeEnterpriseDisplay(enterpriseData, value);
                     }
+                },
+                {
+                    field: 'deptName',
+                    title: '归属组织'
                 },
                 {
                     field: 'reportId',
@@ -197,6 +206,28 @@
                 entReportTempSelect.append(new Option("未选择", ""));
                 $.each(result.entReportTempList,function (index, entReportTemp) {
                     entReportTempSelect.options.add(new Option(entReportTemp.name, entReportTemp.enterpriseReportTemplateId));
+                });
+            }
+        });
+    });
+
+    //由 归属企业 触发 归属组织
+    $('#enterpriseIdSelect').change(function () {
+        var enterpriseId = $(this).children('option:selected').val();
+        if ($.common.isEmpty(enterpriseId)) {
+            $.modal.alertWarning("请先选择企业");
+            return;
+        }
+        $.ajax({
+            url: ctx + "getOrgList",
+            type: "POST",
+            data: "platformEntId=" +  enterpriseId,
+            success: function (result) {
+                var belongOrgSelect = document.getElementById('belongOrgSelect');
+                belongOrgSelect.innerHTML = '';
+                belongOrgSelect.append(new Option("所有", ""));
+                $.each(result.orgList,function (index, org) {
+                    belongOrgSelect.options.add(new Option(org.name,org.orgId));
                 });
             }
         });
