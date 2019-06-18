@@ -215,6 +215,14 @@
         });
     });
 
+    $('#belongOrgSelect').change(function () {
+        var makeCycleSelect = document.getElementById('makeCycleSelect');
+        makeCycleSelect.options.selectedIndex = 0;
+        var entReportTempSelect = document.getElementById('entReportTempSelect');
+        entReportTempSelect.innerHTML = '';
+        entReportTempSelect.append(new Option("未选择", ""));
+    });
+
     //企业 + 归属组织 + 周期 = 企业的指标模板
     $('#makeCycleSelect').change(function () {
         var makeCycle = $(this).children('option:selected').val();
@@ -233,7 +241,6 @@
 
         entTargetTempSelect.innerHTML = '';
         entTargetTempSelect.append(new Option("所有", ""));
-
         $.ajax({
             url: ctx + "getEntReportTemp",
             type: "POST",

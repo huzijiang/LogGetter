@@ -23,7 +23,7 @@
                             </select>
                         </li>
                         <li>
-                            类型(是否首页)：
+                            类型：
                             <select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
                                 <option value="">所有</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
@@ -32,20 +32,6 @@
                         <li>
                             状态：
                             <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
-                                <option value="">所有</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            归属层级：
-                            <select name="belongOrgLevel" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}">
-                                <option value="">所有</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </li>
-                        <li>
-                            受众：
-                            <select name="audiences" th:with="type=${@fangCloudDict.getType('ReportAudiences')}">
                                 <option value="">所有</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
@@ -120,6 +106,14 @@
                     title: '名称'
                 },
                 {
+                    field: 'makeCycle',
+                    title: '生成周期',
+                    align: 'center',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
+                    }
+                },
+                {
                     field: 'description',
                     title: '描述',
                     visible: false
@@ -133,7 +127,7 @@
                 },
                 {
                     field: 'type',
-                    title: '类型(是否首页)',
+                    title: '类型',
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(typeData, value);
                     }
@@ -143,7 +137,8 @@
                     title: '归属层级',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    }
+                    },
+                    visible: false
                 },
                 {
                     field: 'audiences',
@@ -151,15 +146,8 @@
                     align: 'center',
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(audiencesData, value);
-                    }
-                },
-                {
-                    field: 'makeCycle',
-                    title: '生成周期',
-                    align: 'center',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(makeCycleData, value);
-                    }
+                    },
+                    visible: false
                 },
                 {
                     field: 'createDate',
