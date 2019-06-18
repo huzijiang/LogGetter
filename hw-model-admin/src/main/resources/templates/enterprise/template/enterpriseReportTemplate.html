@@ -116,6 +116,13 @@
                     }
                 },
                 {
+                    field: 'belongOrgLevel',
+                    title: '归属层级',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
+                    }
+                },
+                {
                     field: 'deptName',
                     title: '归属组织'
                 },
@@ -150,14 +157,6 @@
                     formatter: function (value, row, index) {
                         return $.table.selectFangCloudDictLabel(typeData, value);
                     }
-                },
-                {
-                    field: 'belongOrgLevel',
-                    title: '归属层级',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    },
-                    visible: false
                 },
                 {
                     field: 'audiences',
