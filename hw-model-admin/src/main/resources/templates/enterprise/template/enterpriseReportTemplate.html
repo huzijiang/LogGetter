@@ -28,18 +28,19 @@
                             报告名称：<input type="text" name="name"/>
                         </li>
                         <li>
+                            生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
+                        </li>
+                        <li>
                             报告类型：
                             <select name="type" th:with="type=${@fangCloudDict.getType('ReportType')}">
                                 <option value="">所有</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </li>
-                        <li>
-                            生成周期：
-                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                                <option value="">所有</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
                         <li>
                             报告状态：
                             <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
@@ -179,6 +180,11 @@
                     formatter: function(value, item, index) {
                         return $.table.selectFangCloudDictLabel(makeCycleData, value);
                     }
+                },
+                {
+                    field: 'isNeedPublish',
+                    title: '是否需发布',
+                    visible: false
                 },
                 {
                     field: 'creater',

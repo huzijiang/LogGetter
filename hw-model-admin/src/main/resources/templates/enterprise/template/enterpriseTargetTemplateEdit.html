@@ -49,6 +49,24 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label">归属行或列：</label>
+                    <div class="col-sm-8">
+                        <input name="belongQueue" autocomplete="off" class="form-control" type="text" th:field="*{belongQueue}" >
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">展示顺序：</label>
+                    <div class="col-sm-8">
+                        <input name="sn" autocomplete="off" class="form-control" type="text" th:field="*{sn}" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label">group_name：</label>
                     <div class="col-sm-8">
                         <input name="groupName" autocomplete="off" placeholder="请输入group_name" class="form-control" type="text" th:field="*{groupName}" >

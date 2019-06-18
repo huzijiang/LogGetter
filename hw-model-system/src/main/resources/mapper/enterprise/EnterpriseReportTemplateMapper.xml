@@ -101,6 +101,8 @@
 			<if test="belongOrg != null and belongOrg != ''"> AND t1.belongOrg = #{belongOrg} </if>
 			<if test="name != null and name != ''"> AND t1.name like concat('%', #{name}, '%') </if>
 			<if test="makeCycle != null and makeCycle != ''"> AND t1.make_cycle = #{makeCycle} </if>
+			<if test="state != null and state != ''"> AND t1.state = #{state} </if>
+			<if test="type != null and type != ''"> AND t1.type = #{type} </if>
 		</where>
 	</sql>
 
@@ -155,6 +157,7 @@
 			<if test="belongOrg != null and belongOrg != ''"> belongOrg, </if>
 			<if test="belongOrgLevel != null and belongOrgLevel != ''"> belong_org_level, </if>
 			<if test="makeCycle != null and makeCycle != ''"> make_cycle, </if>
+			<if test="isNeedPublish != null and isNeedPublish != ''"> is_need_publish, </if>
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> #{enterpriseReportTemplateId}, </if>
@@ -171,6 +174,7 @@
 			 <if test="belongOrg != null and belongOrg != ''"> #{belongOrg}, </if>
 			<if test="belongOrgLevel != null and belongOrgLevel != ''"> #{belongOrgLevel}, </if>
 			<if test="makeCycle != null and makeCycle != ''"> #{makeCycle}, </if>
+			<if test="isNeedPublish != null and isNeedPublish != ''"> #{isNeedPublish}, </if>
 		 </trim>
 	</insert>
 
@@ -192,6 +196,7 @@
 			 <if test="belongOrg != null and belongOrg != ''">  belongOrg = #{belongOrg} ,</if>
 			 <if test="belongOrgLevel != null and belongOrgLevel != ''">  belong_org_level = #{belongOrgLevel}, </if>
 			 <if test="makeCycle != null and makeCycle != ''">  make_cycle = #{makeCycle}, </if>
+			 <if test="isNeedPublish != null and isNeedPublish != ''"> is_need_publish = #{isNeedPublish}, </if>
  		 </set>
 		 WHERE enterprise_report_template_id = #{enterpriseReportTemplateId}
 	</update>

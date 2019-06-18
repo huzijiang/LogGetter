@@ -177,6 +177,7 @@
     function submitHandler() {
         if ($.validate.form()) {
             var data = $("#form-reportTemplate-edit").serializeArray();
+            console.log("data = ", data);
             $.operate.saveTab(ctx + "enterprise/reportTemplate/editSave", data);
         }
     }
@@ -210,7 +211,6 @@
         }
 
         //TODO 后期修改获取组织结构方式
-        //var orgList = [[${@platformDict.getEntOrgList(enterpriseIdSelected)}]];
         $.ajax({
             url: ctx + "getOrgList",
             type: "POST",

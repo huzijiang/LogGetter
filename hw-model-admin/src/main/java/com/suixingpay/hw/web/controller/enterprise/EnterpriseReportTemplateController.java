@@ -97,7 +97,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
         mmap.put("reportTempName", reportTemplate.getName());
 //        mmap.put("id", reportTemplate);
 
-        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseReportTemplate.getEnterpriseId()));
+        mmap.put("orgList", enterpriseOrgTreeService.findEntAndDept(enterpriseReportTemplate.getEnterpriseId()));
 
         return "enterprise/template/enterpriseReportTemplateEdit";
     }
