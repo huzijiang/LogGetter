@@ -33,18 +33,18 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">报告别名：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
                     <div class="col-sm-8">
-                        <input name="reportAlias" autocomplete="off" placeholder="请输入企业报告模板别名" class="form-control" type="text" maxlength="40">
+                        <input autocomplete="off" placeholder="与平台报告模型生成周期一致" class="form-control entReportMakeCycleChinese" type="text" readonly>
+                        <input name="makeCycle" class="entReportMakeCycle" type="text" hidden>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>生成周期：</label>
+                    <label class="col-sm-4 control-label">报告别名：</label>
                     <div class="col-sm-8">
-                        <input autocomplete="off" placeholder="与平台报告模型生成周期一致" class="form-control entReportMakeCycleChinese" type="text" readonly>
-                        <input name="makeCycle" class="entReportMakeCycle" type="text" hidden>
+                        <input id="reportAliasInput" name="reportAlias" autocomplete="off" placeholder="请输入企业报告模板别名" class="form-control" type="text" maxlength="40">
                     </div>
                 </div>
             </div>
@@ -56,7 +56,6 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="belongOrgLevel" class="form-control m-b" th:with="type=${@fangCloudDict.getType('EnterpriseBelongOrgLevel')}" required>
-                                <option value="">未选择</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -68,36 +67,7 @@
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告状态：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
-                            <select name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}" required>
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告受众：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="audiences" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportAudiences')}" required>
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告类型(是否首页)：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
-                                <option value="">未选择</option>
+                            <select id="stateSelect" name="state" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTypeState')}" required>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
@@ -121,12 +91,37 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告受众：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="audiences" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportAudiences')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:selected="${'03' eq fangCloudDict.value}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属组织：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select class="form-control m-b" name="belongOrg" th:with="orgList=${orgList}" required>
-                                <option value="">未选择</option>
-                                <option th:each="org : ${orgList}" th:text="${org.name}" th:value="${org.orgId}">
+                                <option th:each="org : ${orgList}" th:text="${org.name}" th:value="${org.orgId}" th:selected="${org.orgId eq enterpriseId}">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报告类型(是否首页)：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select id="typeSelect" name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
                             </select>
                         </div>
                     </div>
@@ -140,8 +135,7 @@
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
                             <select name="isNeedPublish" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportTemplateType')}" required>
-                                <option value="">未选择</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:selected="${'01' eq fangCloudDict.value}"></option>
                             </select>
                         </div>
                     </div>
@@ -182,6 +176,11 @@
         $('.entReportTempName').attr("value", obj.name);
         $('.entReportMakeCycleChinese').attr("value", formatterData(makeCycleData, obj.makeCycle));
         $('.entReportMakeCycle').attr("value", obj.makeCycle);
+
+        $('#stateSelect').val(obj.state).trigger("change");
+        $('#typeSelect').val(obj.type).trigger("change");
+
+        $('#reportAliasInput').attr("value", obj.name);
     }
 
     function formatterData(data, value) {

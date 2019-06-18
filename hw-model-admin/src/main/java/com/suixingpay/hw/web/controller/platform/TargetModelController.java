@@ -66,11 +66,23 @@ public class TargetModelController extends BaseController {
     @RequestMapping("/save")
     @ResponseBody
     public AjaxResult addSave(TargetModel targetModel) {
+        //校验唯一性
+        if (!checkIsOnly(targetModel)) {
+            return AjaxResult.error("已存在该周期的指标");
+        }
+
         targetModel.setTargetModelId((Integer) IdUtil.getManyId("t_target_model",1).get(0));
         targetModel.setCreateDate(new Date());
         targetModel.setCreater(ShiroUtils.getUserId().intValue());
         targetModelService.add(targetModel);
         return AjaxResult.success();
+    }
+
+    private boolean checkIsOnly(TargetModel targetModel) {
+        TargetModel tm = new TargetModel();
+        tm.setName(targetModel.getName());
+        tm.setMakeCycle(targetModel.getMakeCycle());
+        return targetModelService.find(tm).size() == 0;
     }
 
     /**

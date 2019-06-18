@@ -67,4 +67,6 @@ public interface TargetModelContentTemplateMapper {
      * @return List<TargetModelContentTemplate>
      */
     List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId);
+
+    List<TargetModelContentTemplate> findList(TargetModelContentTemplate targetModelContentTemplate);
 }

@@ -29,26 +29,14 @@ public class EnterpriseTargetTemplate {
 
     private String templateContent;
 
+    private String fullTemplateContent;
+
     private String belongQueue;
 
     private Integer sn;
 
     private String groupName;
 
-    /** 请求参数 */
-    private Map<String, Object> params;
+    private String makeCycle;
 
-    public Map<String, Object> getParams()
-    {
-        if (params == null)
-        {
-            params = new HashMap<>();
-        }
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params)
-    {
-        this.params = params;
-    }
 }

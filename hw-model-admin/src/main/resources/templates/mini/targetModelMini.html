@@ -19,7 +19,7 @@
                             描述：<input type="text" name="description"/>
                         </li>
                         <li>
-                            核对码：<input type="text" name="collationCode"/>
+                            指标代码：<input type="text" name="collationCode"/>
                         </li>
                         <li>
                             状态：<select name="state" th:with="type=${@fangCloudDict.getType('TargetModelState')}">
@@ -118,7 +118,7 @@
                 },
                 {
                     field: 'collationCode',
-                    title: '核对码'
+                    title: '指标代码'
                 },
                 {
                     field: 'state',

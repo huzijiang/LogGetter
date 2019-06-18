@@ -19,8 +19,20 @@
                                 <option th:each="enterprise : ${enterpriseList}" th:text="${enterprise.name}" th:value="${enterprise.enterpriseId}"></option>
                             </select>
                         </li>
+                        <li>归属组织：
+                            <select id="belongOrgSelect" name="belongOrg">
+                                <option value="">所有</option>
+                            </select>
+                        </li>
                         <li>
                             报告名称：<input type="text" name="name"/>
+                        </li>
+                        <li>
+                            生成周期：
+                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
+                                <option value="">所有</option>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
+                            </select>
                         </li>
                         <li>
                             报告类型：
@@ -30,21 +42,10 @@
                             </select>
                         </li>
                         <li>
-                            生成周期：
-                            <select name="makeCycle" th:with="type=${@fangCloudDict.getType('TargetModelMakeCycle')}">
-                                <option value="">所有</option>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        <li>
                             报告状态：
                             <select name="state" th:with="type=${@fangCloudDict.getType('ReportTypeState')}">
                                 <option value="">所有</option>
                                 <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}"></option>
-                            </select>
-                        </li>
-                        <li>归属组织：
-                            <select id="belongOrgSelect" name="belongOrg">
-                                <option value="">所有</option>
                             </select>
                         </li>
                         <li>
@@ -68,6 +69,7 @@
     </div>
 </div>
 <div th:include="include :: footer"></div>
+<script th:src="@{/ajax/libs/select/select2.js}"></script>
 <script th:src="@{/ajax/libs/jquery-layout/jquery.layout-latest.js}"></script>
 
 <script th:inline="javascript">
@@ -115,6 +117,17 @@
                     }
                 },
                 {
+                    field: 'belongOrgLevel',
+                    title: '归属层级',
+                    formatter: function(value, item, index) {
+                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
+                    }
+                },
+                {
+                    field: 'deptName',
+                    title: '归属组织'
+                },
+                {
                     field: 'reportTemplateId',
                     title: '平台报告模型编号',
                     visible: false
@@ -147,22 +160,6 @@
                     }
                 },
                 {
-                    field: 'belongOrg',
-                    title: '归属组织',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    },
-                    visible: false
-                },
-                {
-                    field: 'belongOrgLevel',
-                    title: '归属层级',
-                    formatter: function(value, item, index) {
-                        return $.table.selectFangCloudDictLabel(belongOrgLevelData, value);
-                    },
-                    visible: false
-                },
-                {
                     field: 'audiences',
                     title: '受众',
                     align: 'center',
@@ -185,6 +182,11 @@
                     }
                 },
                 {
+                    field: 'isNeedPublish',
+                    title: '是否需发布',
+                    visible: false
+                },
+                {
                     field: 'creater',
                     title: '创建人',
                     visible: false
@@ -204,6 +206,27 @@
         $.table.init(options);
     }
 
+    function displayChange(belongOrg, enterpriseId) {
+        console.log("belongOrg = ", belongOrg);
+        var actions = [];
+        $.ajax({
+            url: ctx + "getOrgList",
+            type: "POST",
+            data: "platformEntId=" +  enterpriseId,
+            success: function (result) {
+
+                $.each(result.orgList, function (org, index) {
+                    console.log("org = ", org);
+                    if (org.orgId == belongOrg) {
+                        actions.push("<span>" + result.orgList.name + "</span>");
+                        return false;
+                    }
+                });
+            }
+        });
+        return actions.join('');
+    }
+
     //由 归属企业 触发 归属组织
     $('#enterpriseIdSelect').change(function () {
         var enterpriseId = $(this).children('option:selected').val();
@@ -212,7 +235,7 @@
             return;
         }
         $.ajax({
-            url: ctx + "/getOrgList",
+            url: ctx + "getOrgList",
             type: "POST",
             data: "platformEntId=" +  enterpriseId,
             success: function (result) {

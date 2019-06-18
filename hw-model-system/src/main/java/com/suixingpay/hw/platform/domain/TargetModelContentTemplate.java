@@ -22,7 +22,13 @@ public class TargetModelContentTemplate {
 
     private String templateContent;
 
+    private String fullTemplateContent;
+
     private String belongQueue;
 
     private Integer sn;
+
+    private String makeCycle;
+
+    private String targetModelName;
 }

@@ -46,6 +46,8 @@ public class EnterpriseReportTemplate {
 
     private String isNeedPublish;
 
+    private String deptName;
+
     /** 请求参数 */
     private Map<String, Object> params;
 

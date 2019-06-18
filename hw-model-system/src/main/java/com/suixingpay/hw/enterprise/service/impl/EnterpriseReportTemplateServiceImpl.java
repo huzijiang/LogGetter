@@ -25,6 +25,11 @@ public class EnterpriseReportTemplateServiceImpl implements IEnterpriseReportTem
     }
 
     @Override
+    public List<EnterpriseReportTemplate> findList(EnterpriseReportTemplate template) {
+        return enterpriseReportTemplateMapper.findList(template);
+    }
+
+    @Override
     public int add(EnterpriseReportTemplate template) {
         return enterpriseReportTemplateMapper.add(template);
     }

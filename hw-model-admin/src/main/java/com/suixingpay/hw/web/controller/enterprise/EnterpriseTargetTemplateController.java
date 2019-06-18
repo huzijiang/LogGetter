@@ -66,7 +66,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseTargetTemplate template) {
         startPage();
-        List<EnterpriseTargetTemplate> targetTemplateList = entTargetTempService.find(template);
+        List<EnterpriseTargetTemplate> targetTemplateList = entTargetTempService.findList(template);
         return getDataTable(targetTemplateList);
     }
 
@@ -103,8 +103,7 @@ public class EnterpriseTargetTemplateController extends BaseController {
         TargetModelContentTemplate tmct = tmctService.findOneById(template.getTargetModelTemplateId());
         template.setEnterpriseTargetTemplateId((Integer) IdUtil.getManyId("t_enterprise_target_template",1).get(0));
         template.setTemplateContent(tmct.getTemplateContent());
-        template.setSn(tmct.getSn());
-        template.setBelongQueue(tmct.getBelongQueue());
+        template.setFullTemplateContent(tmct.getFullTemplateContent());
     }
 
     /**
@@ -117,13 +116,12 @@ public class EnterpriseTargetTemplateController extends BaseController {
         EnterpriseReportTemplate entReportTemp = entReportTempService
                 .findOneById(entTargetTemp.getEnterpriseReportTemplateId());
 
-        List<Integer> targetModelIds = reportTemplateService
-                .selectTargetModelByReportTemplateId(entReportTemp.getReportTemplateId());
-
         TargetModelContentTemplate tmct = tmctService.findOneById(entTargetTemp.getTargetModelTemplateId());
 
         mmap.put("targetModelId", tmct.getTargetModelId());
-        mmap.put("targetModelList", targetModelService.selectByIds(targetModelIds));
+        mmap.put("targetModelTempName", tmct.getName());
+
+        mmap.put("targetModelName", targetModelService.findOneById(tmct.getTargetModelId()).getName());
         mmap.put("targetModelTempList", tmctService.selectByTargetModelId(tmct.getTargetModelId()));
         mmap.put("targetTemplate", entTargetTempService.findOneById(enterpriseTargetTemplateId));
         return "enterprise/template/enterpriseTargetTemplateEdit";

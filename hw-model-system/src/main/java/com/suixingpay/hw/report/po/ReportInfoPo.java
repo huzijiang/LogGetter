@@ -60,4 +60,8 @@ public class ReportInfoPo {
      * 该报告是否需要发布（01-需要 00-否）
      */
     private String isNeedPublish;
+
+    private Integer belongOrg;
+
+    private String deptName;
 }

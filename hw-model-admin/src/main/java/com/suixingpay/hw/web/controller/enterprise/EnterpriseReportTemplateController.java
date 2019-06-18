@@ -58,7 +58,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
     @ResponseBody
     public TableDataInfo list(EnterpriseReportTemplate template) {
         startPage();
-        List<EnterpriseReportTemplate> reportTemplateList = entReportTemplateService.find(template);
+        List<EnterpriseReportTemplate> reportTemplateList = entReportTemplateService.findList(template);
         return getDataTable(reportTemplateList);
     }
 
@@ -67,7 +67,8 @@ public class EnterpriseReportTemplateController  extends BaseController {
      */
     @RequestMapping("/add/{enterpriseId}")
     public String add(@PathVariable("enterpriseId") Integer enterpriseId, ModelMap mmap) {
-        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseId));
+
+        mmap.put("orgList", enterpriseOrgTreeService.findEntAndDept(enterpriseId));
         mmap.put("enterpriseId", enterpriseId);
         return "enterprise/template/enterpriseReportTemplateAdd";
     }
@@ -96,7 +97,7 @@ public class EnterpriseReportTemplateController  extends BaseController {
         mmap.put("reportTempName", reportTemplate.getName());
 //        mmap.put("id", reportTemplate);
 
-        mmap.put("orgList", enterpriseOrgTreeService.findByPlatformEntId(enterpriseReportTemplate.getEnterpriseId()));
+        mmap.put("orgList", enterpriseOrgTreeService.findEntAndDept(enterpriseReportTemplate.getEnterpriseId()));
 
         return "enterprise/template/enterpriseReportTemplateEdit";
     }

@@ -20,6 +20,7 @@
 		<result property="belongOrgLevel" column="belong_org_level" />
 		<result property="makeCycle" column="make_cycle" />
 		<result property="isNeedPublish" column="is_need_publish" />
+		<result property="deptName" column="dept_Name" />
 	</resultMap>
 
 	<!--表名-->
@@ -86,6 +87,33 @@
 		 order by make_cycle
 	</select>
 
+	<sql id="ColumnFindList">
+		t1.enterprise_report_template_id,t1.enterprise_id,t1.report_template_id,t1.name,t1.report_alias,t1.description,t1.creater,
+		t1.create_date,t1.state,t1.audiences,t1.type,t1.belongOrg,t1.belong_org_level,t1.make_cycle,t1.is_need_publish,t2.name as dept_Name
+	</sql>
+
+	<sql id="dynamicWhereForFindList">
+		<where>
+			1=1 and t2.org_level in('00', '01')
+			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> AND t1.enterprise_report_template_id = #{enterpriseReportTemplateId} </if>
+			<if test="enterpriseId != null and enterpriseId != ''"> AND t1.enterprise_id = #{enterpriseId} </if>
+			<if test="reportTemplateId != null and reportTemplateId != ''"> AND t1.report_template_id = #{reportTemplateId} </if>
+			<if test="belongOrg != null and belongOrg != ''"> AND t1.belongOrg = #{belongOrg} </if>
+			<if test="name != null and name != ''"> AND t1.name like concat('%', #{name}, '%') </if>
+			<if test="makeCycle != null and makeCycle != ''"> AND t1.make_cycle = #{makeCycle} </if>
+			<if test="state != null and state != ''"> AND t1.state = #{state} </if>
+			<if test="type != null and type != ''"> AND t1.type = #{type} </if>
+		</where>
+	</sql>
+
+	<select id="findList" resultMap="enterpriseReportTemplate">
+		SELECT <include refid="ColumnFindList"/>
+		FROM
+		t_enterprise_report_template t1
+		LEFT JOIN t_enterprise_org_tree t2 ON t1.enterprise_id = t2.platform_enterprise_id and t1.belongOrg = t2.org_id
+		<include refid="dynamicWhereForFindList"/>
+	</select>
+
 	<!-- 查询总数（根据实体查询） -->
 	<select id="count" resultMap="enterpriseReportTemplate" resultType="java.lang.Long">
 		 SELECT COUNT(*) FROM 
@@ -129,6 +157,7 @@
 			<if test="belongOrg != null and belongOrg != ''"> belongOrg, </if>
 			<if test="belongOrgLevel != null and belongOrgLevel != ''"> belong_org_level, </if>
 			<if test="makeCycle != null and makeCycle != ''"> make_cycle, </if>
+			<if test="isNeedPublish != null and isNeedPublish != ''"> is_need_publish, </if>
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="enterpriseReportTemplateId != null and enterpriseReportTemplateId != ''"> #{enterpriseReportTemplateId}, </if>
@@ -145,6 +174,7 @@
 			 <if test="belongOrg != null and belongOrg != ''"> #{belongOrg}, </if>
 			<if test="belongOrgLevel != null and belongOrgLevel != ''"> #{belongOrgLevel}, </if>
 			<if test="makeCycle != null and makeCycle != ''"> #{makeCycle}, </if>
+			<if test="isNeedPublish != null and isNeedPublish != ''"> #{isNeedPublish}, </if>
 		 </trim>
 	</insert>
 
@@ -166,6 +196,7 @@
 			 <if test="belongOrg != null and belongOrg != ''">  belongOrg = #{belongOrg} ,</if>
 			 <if test="belongOrgLevel != null and belongOrgLevel != ''">  belong_org_level = #{belongOrgLevel}, </if>
 			 <if test="makeCycle != null and makeCycle != ''">  make_cycle = #{makeCycle}, </if>
+			 <if test="isNeedPublish != null and isNeedPublish != ''"> is_need_publish = #{isNeedPublish}, </if>
  		 </set>
 		 WHERE enterprise_report_template_id = #{enterpriseReportTemplateId}
 	</update>

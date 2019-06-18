@@ -53,4 +53,9 @@ public class TargetModelContentTemplateServiceImpl implements ITargetModelConten
     public List<TargetModelContentTemplate> selectByTargetModelId(Integer targetModelId) {
         return targetModelContentTemplateMapper.selectByTargetModelId(targetModelId);
     }
+
+    @Override
+    public List<TargetModelContentTemplate> findList(TargetModelContentTemplate targetModelContentTemplate) {
+        return targetModelContentTemplateMapper.findList(targetModelContentTemplate);
+    }
 }

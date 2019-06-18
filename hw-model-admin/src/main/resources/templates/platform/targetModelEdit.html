@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>名称：</label>
                     <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="请输入平台指标模型名称" class="form-control" type="text" maxlength="20" th:field="*{name}" required>
+                        <input name="name" autocomplete="off" class="form-control" type="text" maxlength="20" th:field="*{name}" required>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label">描述：</label>
                     <div class="col-sm-8">
-                        <input name="description" autocomplete="off" placeholder="请输入平台指标模型描述信息" class="form-control" type="text" maxlength="40" th:field="*{description}">
+                        <input name="description" autocomplete="off" class="form-control" type="text" maxlength="40" th:field="*{description}">
                     </div>
                 </div>
             </div>
@@ -40,9 +40,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label">对照码：</label>
+                    <label class="col-sm-4 control-label">指标代码：</label>
                     <div class="col-sm-8">
-                        <input name="collationCode" autocomplete="off" placeholder="请输入对照码" class="form-control" type="text" maxlength="40" th:field="*{collationCode}">
+                        <input name="collationCode" autocomplete="off" class="form-control" type="text" maxlength="40" th:field="*{collationCode}">
                     </div>
                 </div>
             </div>

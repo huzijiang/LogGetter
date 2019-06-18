@@ -1,5 +1,6 @@
 package com.suixingpay.hw.enterprise.mapper;
 
+import com.suixingpay.hw.enterprise.domain.EnterpriseOrgTree;
 import com.suixingpay.hw.enterprise.domain.EnterpriseReportTemplate;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface EnterpriseReportTemplateMapper {
      * @return 企业报告模板列表
      */
     List<EnterpriseReportTemplate> find(EnterpriseReportTemplate template);
+
+    List<EnterpriseReportTemplate> findList(EnterpriseReportTemplate template);
 
     /**
      * 添加 （匹配有值的字段）

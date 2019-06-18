@@ -40,6 +40,20 @@
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label">类型：</label>
+                    <div class="col-sm-8">
+                        <div class="input-group" style="width: 100%">
+                            <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
+                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{type}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label">受众：</label>
                     <div class="col-sm-8">
                         <div class="input-group" style="width: 100%">
@@ -50,8 +64,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">归属层级：</label>
@@ -64,19 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">类型(是否首页)：</label>
-                    <div class="col-sm-8">
-                        <div class="input-group" style="width: 100%">
-                            <select name="type" class="form-control m-b" th:with="type=${@fangCloudDict.getType('ReportType')}" required>
-                                <option th:each="fangCloudDict : ${type}" th:text="${fangCloudDict.valueDesc}" th:value="${fangCloudDict.value}" th:field="*{type}"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div>-->
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
