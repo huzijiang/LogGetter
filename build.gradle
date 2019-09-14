@@ -2,14 +2,12 @@ buildscript {
 
   ext {
     SpringBootVersionn = "2.1.1.RELEASE"
-//    netflixVersion= 'Edgware.SR4'
     netflixVersion= 'Greenwich.SR1'
-    suixingpayCloudVersion = "1.0.0-SNAPSHOT" // Spring Cloud
-    suixingpayConfigVersion = "1.1.0-SNAPSHOT"
+    hqCloudVersion = "1.0.0-SNAPSHOT" // Spring Cloud
+    hqConfigVersion = "1.1.0-SNAPSHOT"
   }
 
   repositories {
-    maven { url "http://172.16.60.188:8081/nexus/content/groups/public" }
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
   }
   dependencies {
@@ -29,9 +27,9 @@ subprojects {
   // 依赖 和  buildscript 中 classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE") 配合使用呢
   apply plugin: 'io.spring.dependency-management'
 
-  group = 'com.suixingpay.hw'
+  group = 'com.hq.hw'
   version = '1.0.0'
-  description = '随行付 凡云 平台   后台管理系统 '
+  description = '日志抓取者 '
 
   sourceCompatibility = JavaVersion.VERSION_1_8
   targetCompatibility = JavaVersion.VERSION_1_8
@@ -39,7 +37,6 @@ subprojects {
   repositories {
     mavenLocal()
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-    maven { url "http://172.16.60.188:8081/nexus/content/groups/public" }
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 
@@ -58,11 +55,6 @@ subprojects {
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testCompile "org.springframework.boot:spring-boot-starter-test"
     compileOnly('org.projectlombok:lombok')
-
-
-//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.6.RELEASE'
-//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: '1.4.6.RELEASE'
-//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.1.1.RELEASE'
 
   }
 }
