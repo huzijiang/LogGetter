@@ -5,9 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.hq.loggetter.mapper.MachineMapper">
     
     <resultMap type="Machine" id="MachineResult">
-        <result property="id"             column="id"/>
-        <result property="groupName"    column="group_name"/>
-        <result property="ip"     column="ip"     />
+        <result property="noticeId"       column="notice_id"       />
+        <result property="noticeTitle"    column="notice_title"    />
+        <result property="noticeType"     column="notice_type"     />
+        <result property="noticeContent"  column="notice_content"  />
+        <result property="status"         column="status"          />
         <result property="createBy"       column="create_by"       />
         <result property="createTime"     column="create_time"     />
         <result property="updateBy"       column="update_by"       />
@@ -15,31 +17,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"         column="remark"          />
     </resultMap>
     
-    <sql id="selectMachine">
-        select id, group_name, ip, create_by, create_time, update_by, update_time, remark 
-        
-		from biz_machine_group_info
+    <sql id="selectMachineVo">
+        select notice_id, notice_title, notice_type, notice_content, status, create_by, create_time, update_by, update_time, remark 
+		from biz_machine_info
     </sql>
     
     <select id="selectMachineById" parameterType="Long" resultMap="MachineResult">
-        <include refid="selectMachine"/>
-        where id = #{id}
+        <include refid="selectMachineVo"/>
+        where notice_id = #{noticeId}
     </select>
     
     <select id="selectMachineList" parameterType="Machine" resultMap="MachineResult">
-        <include refid="selectMachine"/>
+        <include refid="selectMachineVo"/>
         <where>
-			<if test="groupName != null and groupName != ''">
-				AND group_name like concat('%',#{groupName},'%')
+			<if test="noticeTitle != null and noticeTitle != ''">
+				AND notice_title like concat('%', #{noticeTitle}, '%')
 			</if>
-			<if test="ip != null and ip != ''">
-				AND ip like #{ip}
+			<if test="noticeType != null and noticeType != ''">
+				AND notice_type = #{noticeType}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND create_by like concat('%', #{createBy}, '%')
 			</if>
 		</where>
     </select>
     
-<!--     <insert id="insertNotice" parameterType="SysNotice">
-        insert into sys_notice (
+    <insert id="insertMachine" parameterType="Machine">
+        insert into biz_machine_info(
 			<if test="noticeTitle != null and noticeTitle != '' ">notice_title, </if>
 			<if test="noticeType != null and noticeType != '' ">notice_type, </if>
 			<if test="noticeContent != null and noticeContent != '' ">notice_content, </if>
@@ -58,8 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
     </insert>
 	 
-    <update id="updateNotice" parameterType="SysNotice">
-        update sys_notice 
+    <update id="updateMachine" parameterType="Machine">
+        update biz_machine_info 
         <set>
             <if test="noticeTitle != null and noticeTitle != ''">notice_title = #{noticeTitle}, </if>
             <if test="noticeType != null and noticeType != ''">notice_type = #{noticeType}, </if>
@@ -71,11 +75,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where notice_id = #{noticeId}
     </update>
 	
-    <delete id="deleteNoticeByIds" parameterType="String">
-        delete from sys_notice where notice_id in 
+    <delete id="deleteMachineByIds" parameterType="String">
+        delete from biz_machine_info where notice_id in 
         <foreach item="noticeId" collection="array" open="(" separator="," close=")">
             #{noticeId}
         </foreach>
-    </delete> -->
+    </delete>
     
 </mapper>
