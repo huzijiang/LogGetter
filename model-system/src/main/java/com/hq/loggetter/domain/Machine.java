@@ -14,62 +14,54 @@ public class Machine extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 公告ID */
-    private Long noticeId;
+
+    private Long id;
     
-    /** 公告标题 */
-    private String noticeTitle;
+
+    private String groupName;
+
     
-    /** 公告类型（1通知 2公告） */
-    private String noticeType;
+    private String ip;
     
-    /** 公告内容 */
-    private String noticeContent;
+
+    private String content;
     
-    /** 公告状态（0正常 1关闭） */
+
     private String status;
 
-    public Long getNoticeId()
-    {
-        return noticeId;
-    }
+    public Long getId() {
+		return id;
+	}
 
-    public void setNoticeId(Long noticeId)
-    {
-        this.noticeId = noticeId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setNoticeTitle(String noticeTitle)
-    {
-        this.noticeTitle = noticeTitle;
-    }
+	public String getGroupName() {
+		return groupName;
+	}
 
-    public String getNoticeTitle()
-    {
-        return noticeTitle;
-    }
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 
-    public void setNoticeType(String noticeType)
-    {
-        this.noticeType = noticeType;
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    public String getNoticeType()
-    {
-        return noticeType;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public void setNoticeContent(String noticeContent)
-    {
-        this.noticeContent = noticeContent;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public String getNoticeContent()
-    {
-        return noticeContent;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public void setStatus(String status)
+	public void setStatus(String status)
     {
         this.status = status;
     }
@@ -82,10 +74,10 @@ public class Machine extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("noticeId", getNoticeId())
-            .append("noticeTitle", getNoticeTitle())
-            .append("noticeType", getNoticeType())
-            .append("noticeContent", getNoticeContent())
+            .append("id", getId())
+            .append("groupName", getGroupName())
+            .append("ip", getIp())
+            .append("content", getContent())
             .append("status", getStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

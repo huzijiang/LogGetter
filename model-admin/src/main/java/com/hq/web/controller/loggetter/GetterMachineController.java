@@ -76,12 +76,12 @@ public class GetterMachineController extends BaseController
     }
 
     /**
-     * 修改机器信息
+     * 修改机器信息,前后端绑定
      */
-    @GetMapping("/edit/{noticeId}")
-    public String edit(@PathVariable("noticeId") Long machineId, ModelMap mmap)
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap)
     {
-        mmap.put("notice", machineService.selectMachineById(machineId));
+        mmap.put("machine", machineService.selectMachineById(id));
         return prefix + "/edit";
     }
 
