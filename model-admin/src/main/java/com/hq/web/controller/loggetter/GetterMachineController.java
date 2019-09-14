@@ -107,4 +107,16 @@ public class GetterMachineController extends BaseController
     {
         return toAjax(machineService.deleteMachineByIds(ids));
     }
+    
+    
+    /**
+     * 执行命令
+     */
+    @Log(title = "执行命令返回结果", businessType = BusinessType.OTHER)
+    @GetMapping("/detail/{id}")
+    @ResponseBody
+    public String saveModal(@PathVariable("id") Long id){
+    	System.out.println("************************"+id);
+        return  machineService.excuteCommand(id);
+    }
 }

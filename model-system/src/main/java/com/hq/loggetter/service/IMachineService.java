@@ -52,4 +52,12 @@ public interface IMachineService
      * @return 结果
      */
     public int deleteMachineByIds(String ids);
+    
+    
+    
+    /**
+     * 执行命令
+     * @return
+     */
+    public String excuteCommand(Long id);
 }

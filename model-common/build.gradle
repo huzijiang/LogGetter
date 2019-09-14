@@ -23,19 +23,3 @@ description = '功能公共包'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-
-version '1.0.1-SNAPSHOT'
-uploadArchives {
-    repositories {
-        def deployer =   mavenDeployer {
-            def configureAuth = {
-                authentication(userName: 'deployment', password: 'lemon888')
-            }
-            snapshotRepository(url: "http://172.16.60.188:8081/nexus/content/repositories/snapshots/", configureAuth)
-            repository(url: "http://172.16.60.188:8081/nexus/content/repositories/releases/", configureAuth)
-            
-            pom.groupId = 'com.hw_saas.model.common'
-            pom.artifactId = 'hw-model-common'
-        }
-    }  
-}

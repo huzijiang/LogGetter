@@ -4,6 +4,7 @@ dependencies {
         exclude(module: 'protobuf-java')
     }
     //compile group: 'com.hw_saas.model.common', name: 'hw-model-common', version: '1.0.1-SNAPSHOT'
+    compile group: 'ch.ethz.ganymed', name: 'ganymed-ssh2', version: '262'
     
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compile 'org.projectlombok:lombok:1.18.2'
@@ -17,19 +18,3 @@ description = '管理系统代码'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-
-version '1.0.1-SNAPSHOT'
-uploadArchives {
-    repositories {
-        def deployer =   mavenDeployer {
-            def configureAuth = {
-                authentication(userName: 'deployment', password: 'lemon888')
-            }
-            snapshotRepository(url: "http://172.16.60.188:8081/nexus/content/repositories/snapshots/", configureAuth)
-            repository(url: "http://172.16.60.188:8081/nexus/content/repositories/releases/", configureAuth)
-            
-            pom.groupId = 'com.hw_saas.model.system'
-            pom.artifactId = 'hw-model-system'
-        }
-    }  
-}
