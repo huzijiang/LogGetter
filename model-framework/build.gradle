@@ -1,5 +1,6 @@
 dependencies {
     compile project(':model-system')
+    
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.1.1.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version:'2.1.1.RELEASE'
     compile group: 'com.alibaba', name: 'druid-spring-boot-starter', version:'1.1.13'
@@ -14,12 +15,13 @@ dependencies {
     compile group: 'net.java.dev.jna', name: 'jna', version:'4.5.2'
     compile group: 'net.java.dev.jna', name: 'jna-platform', version:'4.5.2'
     
-    //compile group: 'com.hw_saas.model.system', name: 'hw-model-system', version: '1.0.1-SNAPSHOT'
-    
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     compile 'org.projectlombok:lombok:1.18.2'
     compileOnly 'org.projectlombok:lombok:1.18.2'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
-description = 'shiro配置'
+
+jar{
+	 enabled = true
+}

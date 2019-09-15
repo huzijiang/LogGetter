@@ -73,12 +73,12 @@ public class CommandUtil {
 		return sb.toString();
 	}
 
-	public static void main(String[] args) {
-
-		String[] commands = { "cd /;", "ls;", "pwd;", "ls -a;","java -version;" };
-
-		System.out.println(executeLongDistanceCommand(MachineElement.allMachineElement.get(0), commands));
-
-	}
+//	public static void main(String[] args) {
+//
+//		String[] commands = { "cd /;", "ls;", "pwd;", "ls -a;","java -version;" };
+//
+//		System.out.println(executeLongDistanceCommand(MachineElement.allMachineElement.get(0), commands));
+//
+//	}
 
 }

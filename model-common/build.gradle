@@ -19,7 +19,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.2'
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
 }
-description = '功能公共包'
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
+jar{
+	 enabled = true
+}

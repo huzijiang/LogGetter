@@ -3,7 +3,7 @@ buildscript {
   ext {
     SpringBootVersionn = "2.1.1.RELEASE"
     netflixVersion= 'Greenwich.SR1'
-    hqCloudVersion = "1.0.0-SNAPSHOT" // Spring Cloud
+    hqCloudVersion = "1.0.0-SNAPSHOT" 
     hqConfigVersion = "1.1.0-SNAPSHOT"
   }
 
@@ -16,7 +16,7 @@ buildscript {
 }
 
 
-subprojects {
+allprojects {
   
   apply plugin: 'java'
 
@@ -24,11 +24,10 @@ subprojects {
 
   apply plugin: 'org.springframework.boot'
 
-  // 依赖 和  buildscript 中 classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE") 配合使用呢
   apply plugin: 'io.spring.dependency-management'
 
-  group = 'com.hq.hw'
-  version = '1.0.0'
+  group = 'com.hq.LogGetter'
+  version = '1.0.1'
   description = '日志抓取者 '
 
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -39,19 +38,30 @@ subprojects {
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
     maven { url "http://repo.maven.apache.org/maven2" }
   }
-
-  //这里一定得要。在多模块下，不然编译失败，因为不会把信赖模块给打包。
+  
   jar {
-	    enabled = true
+        enabled = true
+        
+		baseName = "LogGetter"
+        version = "1.0.1"
+        
+        manifest {
+            attributes "Manifest-Version": 1.0,
+                       'Main-Class': 'org.springframework.boot.loader.JarLauncher',
+                       'Start-Class': 'com.hq.Starter'
+        }
   }
+
 
   dependencyManagement {
     imports {
       mavenBom "org.springframework.cloud:spring-cloud-dependencies:${netflixVersion}"
     }
   }
+  
+  
+  
   dependencies {
-    // 是配置文件有提示
     compileOnly('org.springframework.boot:spring-boot-configuration-processor')
     testCompile "org.springframework.boot:spring-boot-starter-test"
     compileOnly('org.projectlombok:lombok')
