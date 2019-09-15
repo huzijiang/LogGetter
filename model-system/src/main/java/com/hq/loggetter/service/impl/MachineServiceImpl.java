@@ -111,7 +111,7 @@ public class MachineServiceImpl implements IMachineService {
 		String commands = machine.getContent();
 		System.out.println(commands);
 		
-		String[] command_elements=commands.replace("<p>", "").replace("&nbsp;", "").split("</p>");
+		String[] command_elements=commands.replace("<p>", "").replace("&nbsp;", "").replace("<br>", "").split("</p>");
 		
 		System.out.println("等待执行语句:"+commands);
 		/**

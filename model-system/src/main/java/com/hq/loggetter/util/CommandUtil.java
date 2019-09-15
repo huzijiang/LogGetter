@@ -33,6 +33,7 @@ public class CommandUtil {
 				for (int i = 0; i < commands.length; i++) {
 					session = conn.openSession();
 					command = commands[i];
+					System.out.println("命令:"+command);
 					session.execCommand(command);
 					//执行结果
 					result+= consumeInputStream(session.getStdout());
