@@ -22,12 +22,4 @@ dependencies {
   jar {
         enabled = true
         
-		baseName = "LogGetter"
-        version = "1.0.1"
-        
-        manifest {
-            attributes "Manifest-Version": 1.0,
-                       'Main-Class': 'org.springframework.boot.loader.JarLauncher',
-                       'Start-Class': 'com.hq.Starter'
-        }
   }
