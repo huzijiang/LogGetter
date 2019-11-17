@@ -26,7 +26,7 @@ allprojects {
 
   apply plugin: 'io.spring.dependency-management'
 
-  group = 'com.hq.LogGetter'
+  group = 'com.hq.loggetter'
   version = '1.0.1'
   description = '日志抓取者 '
 
